@@ -20,5 +20,6 @@
         "System.Threading": "4.0.11-beta-23516"
       }
     }
-  }
+  },
+  "dependencies": {  }
 }
