@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.AspNetCore", "Stormpath.AspNetCore\Stormpath.AspNetCore.xproj", "{BFBC0BAE-281E-40E9-9BCA-6EFBF6DBBCF6}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.FrameworkConfiguration", "Stormpath.FrameworkConfiguration\Stormpath.FrameworkConfiguration.xproj", "{838C6109-A8C3-4E5C-936C-8B90B7567210}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{BFBC0BAE-281E-40E9-9BCA-6EFBF6DBBCF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFBC0BAE-281E-40E9-9BCA-6EFBF6DBBCF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFBC0BAE-281E-40E9-9BCA-6EFBF6DBBCF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{838C6109-A8C3-4E5C-936C-8B90B7567210}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{838C6109-A8C3-4E5C-936C-8B90B7567210}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{838C6109-A8C3-4E5C-936C-8B90B7567210}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{838C6109-A8C3-4E5C-936C-8B90B7567210}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

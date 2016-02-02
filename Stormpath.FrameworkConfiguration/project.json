@@ -1,12 +1,12 @@
 {
   "version": "0.1.0-*",
-  "description": "Stormpath Middleware for ASP.NET Core",
+  "description": "Stormpath .NET Framework Configuration",
   "authors": [ "Nate Barbettini" ],
   "tags": [""],
   "projectUrl": "https://github.com/stormpath/stormpath-aspnet",
   "licenseUrl": "https://github.com/stormpath/stormpath-aspnet/blob/master/LICENSE",
   "tooling": {
-    "defaultNamespace": "Stormpath.AspNet"
+    "defaultNamespace": "Stormpath.Framework.Configuration"
   },
 
   "frameworks": {
