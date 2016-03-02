@@ -27,12 +27,14 @@ namespace Stormpath.AspNetCore
         /// <param name="app"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static IApplicationBuilder UseStormpath(this IApplicationBuilder app, object configuration)
+        public static IApplicationBuilder UseStormpath(this IApplicationBuilder app)
         {
             if (app == null)
             {
                 throw new ArgumentNullException(nameof(app));
             }
+
+            // Get Stormpath client from DI
 
             // todo construct framework user-agent string
 
