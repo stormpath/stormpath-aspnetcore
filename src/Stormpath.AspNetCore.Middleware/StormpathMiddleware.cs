@@ -15,11 +15,11 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
+using Microsoft.Extensions.Logging;
+using Stormpath.SDK.Client;
 
 namespace Stormpath.AspNetCore
 {
@@ -27,9 +27,10 @@ namespace Stormpath.AspNetCore
     {
         private readonly RequestDelegate _next;
         private readonly ILogger _logger;
-        private readonly StormpathWebConfig _config;
+        private readonly IClient client;
+        //private readonly StormpathWebConfig _config;
 
-        public StormpathMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, StormpathWebConfig config)
+        public StormpathMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, IClient client)
         {
             if (next == null)
             {
@@ -41,64 +42,69 @@ namespace Stormpath.AspNetCore
                 throw new ArgumentNullException(nameof(next));
             }
 
-            if (config == null)
+            if (client == null)
             {
-                throw new ArgumentNullException(nameof(config));
+                throw new ArgumentNullException(nameof(client));
             }
 
             _next = next;
             _logger = loggerFactory.CreateLogger<StormpathMiddleware>();
-            _config = config;
+            this.client = client;
         }
 
-        public async Task Invoke(HttpContext context)
+        public Task Invoke(HttpContext context)
         {
-            var request = context.Request;
-
-            bool enabled = _config.Login.Enabled;
-            bool matchesPath = request.Path.StartsWithSegments(_config.Login.Uri);
-            bool supportedVerb =
-                request.Method.Equals("GET", StringComparison.OrdinalIgnoreCase)
-                || request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase);
-
-            if (!enabled || !matchesPath || !supportedVerb)
-            {
-                await _next.Invoke(context);
-                return;
-            }
-
-            bool renderHtml =
-                (request.GetTypedHeaders().Accept?.Where(a => a.MediaType == "text/html").Any() ?? false)
-                && _config.Produces.Contains("text/html");
-
-            bool renderJson =
-                (request.GetTypedHeaders().Accept?.Where(a => a.MediaType == "application/json").Any() ?? false)
-                && _config.Produces.Contains("application/json");
-
-            if (!renderHtml && !renderJson)
-            {
-                await _next.Invoke(context);
-                return;
-            }
-
-            _logger.LogInformation("Caught login attempt");
-
-            var viewModelBuilder = new LoginViewModelBuilder(
-                _config.Login,
-                new TenantConfiguration(), // todo
-                request.QueryString.ToString());
-            var viewModel = viewModelBuilder.Build();
-
-            if (renderHtml)
-            {
-                context.Response.ContentType = "text/html";
-                await context.Response.WriteAsync("<b>Login, yo!</b>");
-            }
-            else if (renderJson)
-            {
-                context.Response.ContentType = "application/json";
-                await context.Response.WriteAsync("{ 'login': 'yo!' }");
-            }
+            throw new NotImplementedException(); // todo!
         }
+
+        //public async Task Invoke(HttpContext context)
+        //{
+        //    var request = context.Request;
+
+        //    bool enabled = _config.Login.Enabled;
+        //    bool matchesPath = request.Path.StartsWithSegments(_config.Login.Uri);
+        //    bool supportedVerb =
+        //        request.Method.Equals("GET", StringComparison.OrdinalIgnoreCase)
+        //        || request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase);
+
+        //    if (!enabled || !matchesPath || !supportedVerb)
+        //    {
+        //        await _next.Invoke(context);
+        //        return;
+        //    }
+
+        //    bool renderHtml =
+        //        (request.GetTypedHeaders().Accept?.Where(a => a.MediaType == "text/html").Any() ?? false)
+        //        && _config.Produces.Contains("text/html");
+
+        //    bool renderJson =
+        //        (request.GetTypedHeaders().Accept?.Where(a => a.MediaType == "application/json").Any() ?? false)
+        //        && _config.Produces.Contains("application/json");
+
+        //    if (!renderHtml && !renderJson)
+        //    {
+        //        await _next.Invoke(context);
+        //        return;
+        //    }
+
+        //    _logger.LogInformation("Caught login attempt");
+
+        //    var viewModelBuilder = new LoginViewModelBuilder(
+        //        _config.Login,
+        //        new TenantConfiguration(), // todo
+        //        request.QueryString.ToString());
+        //    var viewModel = viewModelBuilder.Build();
+
+        //    if (renderHtml)
+        //    {
+        //        context.Response.ContentType = "text/html";
+        //        await context.Response.WriteAsync("<b>Login, yo!</b>");
+        //    }
+        //    else if (renderJson)
+        //    {
+        //        context.Response.ContentType = "application/json";
+        //        await context.Response.WriteAsync("{ 'login': 'yo!' }");
+        //    }
+        //}
     }
 }
