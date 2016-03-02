@@ -1,4 +1,4 @@
-﻿// <copyright file="WebLogoutRouteConfiguration.cs" company="Stormpath, Inc.">
+﻿// <copyright file="StormpathMiddleware.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,9 +14,14 @@
 // limitations under the License.
 // </copyright>
 
-namespace Stormpath.Framework.Configuration
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Stormpath.AspNetCore
 {
-    public sealed class WebLogoutRouteConfiguration : WebRouteWithNextConfigurationBase
+    public class StormpathMiddleware
     {
     }
 }
