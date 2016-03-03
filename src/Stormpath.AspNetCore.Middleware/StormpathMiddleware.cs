@@ -59,59 +59,54 @@ namespace Stormpath.AspNetCore
             _config = configuration;
         }
 
-        public Task Invoke(HttpContext context)
+        public async Task Invoke(HttpContext context)
         {
-            throw new NotImplementedException(); // todo!
+            //var request = context.Request;
+
+            //bool enabled = _config.Login.Enabled;
+            //bool matchesPath = request.Path.StartsWithSegments(_config.Login.Uri);
+            //bool supportedVerb =
+            //    request.Method.Equals("GET", StringComparison.OrdinalIgnoreCase)
+            //    || request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase);
+
+            //if (!enabled || !matchesPath || !supportedVerb)
+            //{
+            //    await _next.Invoke(context);
+            //    return;
+            //}
+
+            //bool renderHtml =
+            //    (request.GetTypedHeaders().Accept?.Where(a => a.MediaType == "text/html").Any() ?? false)
+            //    && _config.Produces.Contains("text/html");
+
+            //bool renderJson =
+            //    (request.GetTypedHeaders().Accept?.Where(a => a.MediaType == "application/json").Any() ?? false)
+            //    && _config.Produces.Contains("application/json");
+
+            //if (!renderHtml && !renderJson)
+            //{
+            //    await _next.Invoke(context);
+            //    return;
+            //}
+
+            //_logger.LogInformation("Caught login attempt");
+
+            //var viewModelBuilder = new LoginViewModelBuilder(
+            //    _config.Login,
+            //    new TenantConfiguration(), // todo
+            //    request.QueryString.ToString());
+            //var viewModel = viewModelBuilder.Build();
+
+            //if (renderHtml)
+            //{
+            //    context.Response.ContentType = "text/html";
+            //    await context.Response.WriteAsync("<b>Login, yo!</b>");
+            //}
+            //else if (renderJson)
+            //{
+            //    context.Response.ContentType = "application/json";
+            //    await context.Response.WriteAsync("{ 'login': 'yo!' }");
+            //}
         }
-
-        //public async Task Invoke(HttpContext context)
-        //{
-        //    var request = context.Request;
-
-        //    bool enabled = _config.Login.Enabled;
-        //    bool matchesPath = request.Path.StartsWithSegments(_config.Login.Uri);
-        //    bool supportedVerb =
-        //        request.Method.Equals("GET", StringComparison.OrdinalIgnoreCase)
-        //        || request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase);
-
-        //    if (!enabled || !matchesPath || !supportedVerb)
-        //    {
-        //        await _next.Invoke(context);
-        //        return;
-        //    }
-
-        //    bool renderHtml =
-        //        (request.GetTypedHeaders().Accept?.Where(a => a.MediaType == "text/html").Any() ?? false)
-        //        && _config.Produces.Contains("text/html");
-
-        //    bool renderJson =
-        //        (request.GetTypedHeaders().Accept?.Where(a => a.MediaType == "application/json").Any() ?? false)
-        //        && _config.Produces.Contains("application/json");
-
-        //    if (!renderHtml && !renderJson)
-        //    {
-        //        await _next.Invoke(context);
-        //        return;
-        //    }
-
-        //    _logger.LogInformation("Caught login attempt");
-
-        //    var viewModelBuilder = new LoginViewModelBuilder(
-        //        _config.Login,
-        //        new TenantConfiguration(), // todo
-        //        request.QueryString.ToString());
-        //    var viewModel = viewModelBuilder.Build();
-
-        //    if (renderHtml)
-        //    {
-        //        context.Response.ContentType = "text/html";
-        //        await context.Response.WriteAsync("<b>Login, yo!</b>");
-        //    }
-        //    else if (renderJson)
-        //    {
-        //        context.Response.ContentType = "application/json";
-        //        await context.Response.WriteAsync("{ 'login': 'yo!' }");
-        //    }
-        //}
     }
 }
