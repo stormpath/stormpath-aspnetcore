@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
 using Microsoft.Extensions.Logging;
+using Stormpath.Configuration.Abstractions;
 using Stormpath.SDK.Client;
 
 namespace Stormpath.AspNetCore
@@ -27,10 +28,10 @@ namespace Stormpath.AspNetCore
     {
         private readonly RequestDelegate _next;
         private readonly ILogger _logger;
-        private readonly IClient client;
-        //private readonly StormpathWebConfig _config;
+        private readonly IClient _client;
+        private readonly StormpathConfiguration _config;
 
-        public StormpathMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, IClient client)
+        public StormpathMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, IClient client, StormpathConfiguration configuration)
         {
             if (next == null)
             {
@@ -47,9 +48,15 @@ namespace Stormpath.AspNetCore
                 throw new ArgumentNullException(nameof(client));
             }
 
+            if (configuration == null)
+            {
+                throw new ArgumentNullException(nameof(configuration));
+            }
+
             _next = next;
             _logger = loggerFactory.CreateLogger<StormpathMiddleware>();
-            this.client = client;
+            _client = client;
+            _config = configuration;
         }
 
         public Task Invoke(HttpContext context)

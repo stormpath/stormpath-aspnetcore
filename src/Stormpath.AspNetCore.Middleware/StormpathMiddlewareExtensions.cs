@@ -21,7 +21,6 @@ using Stormpath.Configuration.Abstractions;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Serialization;
-using Stormpath.SDK.Sync;
 
 namespace Stormpath.AspNetCore
 {
@@ -29,9 +28,6 @@ namespace Stormpath.AspNetCore
     {
         public static IServiceCollection AddStormpath(this IServiceCollection services, object configuration = null)
         {
-            // Construct framework user-agent string
-            //todo
-
             // Construct base client
             var client = Clients.Builder()
                 .SetHttpClient(HttpClients.Create().SystemNetHttpClient())
@@ -54,11 +50,9 @@ namespace Stormpath.AspNetCore
 
             // Make objects available to DI
             services.AddSingleton(_ => client); // todo syntax should be cleaner after rc2
-
-            //services.AddSingleton(extendedConfiguration);
+            services.AddSingleton(_ => client.Configuration);
 
             return services;
-
         }
 
         /// <summary>
@@ -76,9 +70,9 @@ namespace Stormpath.AspNetCore
 
             // Get Stormpath client from DI
             var client = app.ApplicationServices.GetRequiredService<IClient>();
-            //todo get configuration
+            var config = app.ApplicationServices.GetRequiredService<StormpathConfiguration>();
 
-            return app.UseMiddleware<StormpathMiddleware>(client);
+            return app.UseMiddleware<StormpathMiddleware>(client, config);
         }
     }
 }
