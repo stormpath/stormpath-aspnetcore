@@ -17,7 +17,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Http;
-using Stormpath.AspNetCore.Models.Error;
+using Stormpath.AspNetCore.Model.Error;
 
 namespace Stormpath.AspNetCore
 {

@@ -1,4 +1,4 @@
-﻿// <copyright file="MethodNotAllowed.cs" company="Stormpath, Inc.">
+﻿// <copyright file="NotAcceptable.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,10 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-namespace Stormpath.AspNetCore.Models.Error
+namespace Stormpath.AspNetCore.Model.Error
 {
-    public class MethodNotAllowed : AbstractError
+    public class NotAcceptable : AbstractError
     {
-        public override int StatusCode => 405;
+        public override int StatusCode => 406;
     }
 }

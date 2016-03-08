@@ -17,8 +17,8 @@
 using System;
 using Microsoft.AspNet.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Stormpath.AspNetCore.Internals;
-using Stormpath.AspNetCore.Routes;
+using Stormpath.AspNetCore.Internal;
+using Stormpath.AspNetCore.Route;
 using Stormpath.Configuration.Abstractions;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;

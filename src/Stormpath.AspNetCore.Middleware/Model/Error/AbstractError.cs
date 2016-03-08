@@ -1,4 +1,4 @@
-﻿// <copyright file="IFrameworkUserAgentBuilder.cs" company="Stormpath, Inc.">
+﻿// <copyright file="AbstractError.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,10 +14,12 @@
 // limitations under the License.
 // </copyright>
 
-namespace Stormpath.AspNetCore.Internals
+namespace Stormpath.AspNetCore.Model.Error
 {
-    public interface IFrameworkUserAgentBuilder
+    public abstract class AbstractError
     {
-        string UserAgent { get; }
+        public abstract int StatusCode { get; }
+
+        public object Body { get; protected set; }
     }
 }

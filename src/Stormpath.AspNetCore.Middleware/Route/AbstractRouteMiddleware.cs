@@ -22,12 +22,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
 using Microsoft.Extensions.Logging;
-using Stormpath.AspNetCore.Internals;
-using Stormpath.AspNetCore.Models.Error;
+using Stormpath.AspNetCore.Internal;
+using Stormpath.AspNetCore.Model.Error;
 using Stormpath.Configuration.Abstractions;
 using Stormpath.SDK.Client;
 
-namespace Stormpath.AspNetCore.Routes
+namespace Stormpath.AspNetCore.Route
 {
     public abstract class AbstractRouteMiddleware
     {

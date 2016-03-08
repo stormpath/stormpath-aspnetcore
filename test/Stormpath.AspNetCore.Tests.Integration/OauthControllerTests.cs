@@ -24,7 +24,7 @@ using FluentAssertions;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.TestHost;
-using Stormpath.AspNetCore.Routes;
+using Stormpath.AspNetCore.Route;
 using Xunit;
 
 namespace Stormpath.AspNetCore.Tests.Integration

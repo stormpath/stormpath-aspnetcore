@@ -24,7 +24,7 @@ using Microsoft.Extensions.Logging;
 using Stormpath.Configuration.Abstractions;
 using Stormpath.SDK.Client;
 
-namespace Stormpath.AspNetCore.Routes
+namespace Stormpath.AspNetCore.Route
 {
     public sealed class Oauth2Route : AbstractRouteMiddleware
     {

@@ -17,7 +17,7 @@
 using System;
 using System.Reflection;
 
-namespace Stormpath.AspNetCore.Internals
+namespace Stormpath.AspNetCore.Internal
 {
     internal sealed class DefaultFrameworkUserAgentBuilder : IFrameworkUserAgentBuilder
     {
