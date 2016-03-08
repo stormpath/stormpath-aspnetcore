@@ -7,7 +7,7 @@
     "Microsoft.Extensions.Logging.Abstractions": "1.0.0-rc1-final",
     "Newtonsoft.Json": "7.0.1",
     "Stormpath.Configuration.Abstractions": "2.0.0",
-    "Stormpath.SDK": "0.7.0-beta1"
+    "Stormpath.SDK": "0.7.0"
   },
   "description": "Stormpath middleware for ASP.NET Core.",
   "frameworks": {
