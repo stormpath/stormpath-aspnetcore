@@ -23,6 +23,7 @@ using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
 using Microsoft.Extensions.Logging;
 using Stormpath.AspNetCore.Internals;
+using Stormpath.AspNetCore.Models.Error;
 using Stormpath.Configuration.Abstractions;
 using Stormpath.SDK.Client;
 
@@ -79,7 +80,17 @@ namespace Stormpath.AspNetCore.Routes
 
         public Task Invoke(HttpContext context)
         {
-            if (!IsSupportedRequest(context))
+            if (!IsSupportedVerb(context))
+            {
+                return Error.Create<MethodNotAllowed>(context);
+            }
+
+            if (!HasSupportedAccept(context))
+            {
+                return Error.Create<NotAcceptable>(context);
+            }
+
+            if (!IsSupportedPath(context))
             {
                 return _next.Invoke(context);
             }
@@ -91,19 +102,14 @@ namespace Stormpath.AspNetCore.Routes
             return Dispatch(context, scopedClient);
         }
 
-        private bool IsSupportedRequest(HttpContext context)
-        {
-            bool supportedVerb = _supportedMethods.Contains(context.Request.Method, StringComparer.OrdinalIgnoreCase);
+        private bool IsSupportedVerb(HttpContext context)
+            => _supportedMethods.Contains(context.Request.Method, StringComparer.OrdinalIgnoreCase);
 
-            bool matchesPath = context.Request.Path.StartsWithSegments(_path);
+        private bool HasSupportedAccept(HttpContext context)
+            => true; //todo
 
-            //todo
-            //bool hasAccept = !string.IsNullOrEmpty(context.Items["Stormpath.Accept"].ToString());
-
-            return supportedVerb
-                && matchesPath;
-                //&& hasAccept;
-        }
+        private bool IsSupportedPath(HttpContext context)
+            => context.Request.Path.StartsWithSegments(_path);
 
         private IClient CreateScopedClient(HttpContext context)
         {
