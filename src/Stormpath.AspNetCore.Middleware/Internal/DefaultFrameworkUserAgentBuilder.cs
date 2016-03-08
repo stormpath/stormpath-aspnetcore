@@ -28,9 +28,11 @@ namespace Stormpath.AspNetCore.Internal
             _value = new Lazy<string>(() => Generate());
         }
 
-        public static string Generate()
+        public string GetUserAgent() => _value.Value;
+
+        private static string Generate()
         {
-            var frameworkVersion = typeof(DefaultFrameworkUserAgentBuilder).GetType().GetTypeInfo()
+            var frameworkVersion = typeof(DefaultFrameworkUserAgentBuilder).GetTypeInfo()
                 .Assembly
                 .GetName()
                 .Version
@@ -43,7 +45,5 @@ namespace Stormpath.AspNetCore.Internal
 
             return frameworkToken;
         }
-
-        public string UserAgent => _value.Value;
     }
 }
