@@ -69,7 +69,7 @@ namespace Stormpath.AspNetCore.Routes
             }
 
             _next = next;
-            _logger = loggerFactory.CreateLogger<StormpathMiddleware>();
+            _logger = loggerFactory.CreateLogger<AbstractRouteMiddleware>();
             _config = configuration;
             _clientFactory = new ScopedClientFactory(client);
             _path = path;

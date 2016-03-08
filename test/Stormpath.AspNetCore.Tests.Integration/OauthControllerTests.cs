@@ -24,7 +24,7 @@ using FluentAssertions;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.TestHost;
-using Stormpath.AspNetCore.Controllers;
+using Stormpath.AspNetCore.Routes;
 using Xunit;
 
 namespace Stormpath.AspNetCore.Tests.Integration
@@ -96,7 +96,7 @@ namespace Stormpath.AspNetCore.Tests.Integration
                 })
                 .UseStartup(app =>
                 {
-                    app.UseMiddleware<OauthController>("/oauth/tokens");
+                    app.UseMiddleware<Oauth2Route>("/oauth/tokens");
 
                     if (finalizer != null)
                     {
