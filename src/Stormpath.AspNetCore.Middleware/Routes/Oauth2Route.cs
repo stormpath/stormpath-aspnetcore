@@ -34,10 +34,10 @@ namespace Stormpath.AspNetCore.Routes
         public Oauth2Route(
             RequestDelegate next,
             ILoggerFactory loggerFactory,
-            IClient client,
+            IScopedClientFactory clientFactory,
             StormpathConfiguration configuration,
             string path)
-            : base(next, loggerFactory, client, configuration, path, SupportedMethods, SupportedContentTypes)
+            : base(next, loggerFactory, clientFactory, configuration, path, SupportedMethods, SupportedContentTypes)
         {
         }
 
@@ -83,8 +83,10 @@ namespace Stormpath.AspNetCore.Routes
 
         private static Task CreateOauthError(HttpContext context, string message)
         {
-            context.Response.ContentType = "application/json;charset=UTF-8";
             context.Response.StatusCode = 400;
+            context.Response.ContentType = "application/json;charset=UTF-8";
+            context.Response.Headers["Cache-Control"] = "no-store";
+            context.Response.Headers["Pragma"] = "no-cache";
 
             var error = new
             {

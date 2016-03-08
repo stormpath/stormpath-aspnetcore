@@ -42,7 +42,7 @@ namespace Stormpath.AspNetCore.Routes
         public AbstractRouteMiddleware(
             RequestDelegate next,
             ILoggerFactory loggerFactory,
-            IClient client,
+            IScopedClientFactory clientFactory,
             StormpathConfiguration configuration,
             string path,
             IEnumerable<string> supportedMethods,
@@ -58,9 +58,9 @@ namespace Stormpath.AspNetCore.Routes
                 throw new ArgumentNullException(nameof(next));
             }
 
-            if (client == null)
+            if (clientFactory == null)
             {
-                throw new ArgumentNullException(nameof(client));
+                throw new ArgumentNullException(nameof(clientFactory));
             }
 
             if (configuration == null)
@@ -71,7 +71,7 @@ namespace Stormpath.AspNetCore.Routes
             _next = next;
             _logger = loggerFactory.CreateLogger<AbstractRouteMiddleware>();
             _config = configuration;
-            _clientFactory = new ScopedClientFactory(client);
+            _clientFactory = clientFactory;
             _path = path;
             _supportedMethods = supportedMethods.ToArray();
             _supportedContentTypes = supportedContentTypes.ToArray();
