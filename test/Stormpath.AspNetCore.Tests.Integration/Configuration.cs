@@ -43,5 +43,26 @@ namespace Stormpath.AspNetCore.Tests.Integration
 
             creatingClient.ShouldThrow<InitializationException>();
         }
+
+        /// <summary>
+        /// Issue stormpath/stormpath-framework-tck#21
+        /// </summary>
+        [Fact]
+        [Obsolete("Move to TCK after #3")]
+        public void Raise_exception_if_application_cannot_be_found_by_name()
+        {
+            Action creatingClient = () =>
+            {
+                var client = TestClient.CreateWithConfiguration(options: new
+                {
+                    application = new
+                    {
+                        name = "Foobar" + Guid.NewGuid().ToString()
+                    }
+                });
+            };
+
+            creatingClient.ShouldThrow<InitializationException>();
+        }
     }
 }
