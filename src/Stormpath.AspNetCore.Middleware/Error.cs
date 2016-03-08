@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-using System;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Http;
 using Stormpath.AspNetCore.Model.Error;
@@ -28,19 +28,20 @@ namespace Stormpath.AspNetCore
         {
             var instance = new T();
 
-            return Invoke(context, instance);
+            return Create(context, instance);
         }
 
-        private static Task Invoke(HttpContext context, AbstractError error)
+        public static Task Create(HttpContext context, AbstractError error)
         {
             context.Response.StatusCode = error.StatusCode;
 
             if (error.Body != null)
             {
-                // add cache-control
-                // serialize
-                // write to response
-                throw new NotImplementedException();
+                context.Response.ContentType = "application/json;charset=UTF-8";
+                context.Response.Headers["Cache-Control"] = "no-store";
+                context.Response.Headers["Pragma"] = "no-cache";
+
+                return context.Response.WriteAsync(Serializer.Serialize(error.Body), Encoding.UTF8);
             }
             else
             {

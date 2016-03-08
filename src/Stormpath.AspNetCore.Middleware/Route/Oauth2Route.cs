@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
 using Microsoft.Extensions.Logging;
+using Stormpath.AspNetCore.Model.Error;
 using Stormpath.Configuration.Abstractions;
 using Stormpath.SDK.Client;
 
@@ -45,7 +46,7 @@ namespace Stormpath.AspNetCore.Route
         {
             if (!context.Request.HasFormContentType)
             {
-                return CreateOauthError(context, "invalid_request");
+                return Error.Create<OauthInvalidRequest>(context);
             }
 
             var grantType = context.Request.Form["grant_type"].ToString();
@@ -54,7 +55,7 @@ namespace Stormpath.AspNetCore.Route
 
             if (string.IsNullOrEmpty(grantType))
             {
-                return CreateOauthError(context, "invalid_request");
+                return Error.Create<OauthInvalidRequest>(context);
             }
 
             if (grantType.Equals("client_credentials", StringComparison.OrdinalIgnoreCase))
@@ -67,7 +68,7 @@ namespace Stormpath.AspNetCore.Route
             }
             else
             {
-                return CreateOauthError(context, "unsupported_grant_type");
+                return Error.Create<OauthUnsupportedGrant>(context);
             }
         }
 
@@ -79,21 +80,6 @@ namespace Stormpath.AspNetCore.Route
         private static Task ExecutePasswordFlow(HttpContext context, string username, string password)
         {
             throw new NotImplementedException();
-        }
-
-        private static Task CreateOauthError(HttpContext context, string message)
-        {
-            context.Response.StatusCode = 400;
-            context.Response.ContentType = "application/json;charset=UTF-8";
-            context.Response.Headers["Cache-Control"] = "no-store";
-            context.Response.Headers["Pragma"] = "no-cache";
-
-            var error = new
-            {
-                error = message
-            };
-
-            return context.Response.WriteAsync(Serializer.Serialize(error), Encoding.UTF8);
         }
     }
 }
