@@ -28,19 +28,20 @@ namespace Stormpath.AspNetCore.Tests.Integration
         /// </summary>
         [Fact]
         [Obsolete("Move to TCK after #3")]
-        public async void Raise_exception_if_application_cannot_be_found_by_href()
+        public void Raise_exception_if_application_cannot_be_found_by_href()
         {
-            var client = TestClient.CreateWithConfiguration(options: new
+            Action creatingClient = () =>
             {
-                application = new
+                var client = TestClient.CreateWithConfiguration(options: new
                 {
-                    href = "http://foo.baz/app" // invalid
-                }
-            });
+                    application = new
+                    {
+                        href = "https://api.stormpath.com/v1/applications/foo" // invalid
+                    }
+                });
+            };
 
-            var response = await client.GetAsync("/");
-
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError); // 500
+            creatingClient.ShouldThrow<InitializationException>();
         }
     }
 }

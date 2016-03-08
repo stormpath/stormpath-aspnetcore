@@ -160,7 +160,7 @@ namespace Stormpath.AspNetCore
             }
             catch (Exception ex)
             {
-                throw new InitializationException($"The provided application could not be found. THe provided application href was: {updatedConfiguration.Application.Href}", ex);
+                throw new InitializationException($"The provided application could not be found. The provided application href was: {updatedConfiguration.Application.Href}", ex);
             }
         }
 
