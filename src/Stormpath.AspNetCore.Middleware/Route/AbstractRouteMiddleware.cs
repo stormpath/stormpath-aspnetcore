@@ -125,7 +125,7 @@ namespace Stormpath.AspNetCore.Route
 
         private static string CreateFullUserAgent(HttpContext context)
         {
-            var userAgentBuilder = a(IFrameworkUserAgentBuilder)context.ApplicationServices.GetService(typeof(IFrameworkUserAgentBuilder));
+            var userAgentBuilder = (IFrameworkUserAgentBuilder)context.ApplicationServices.GetService(typeof(IFrameworkUserAgentBuilder));
 
             var callingAgent = string
                 .Join(" ", context.Request.Headers["X-Stormpath-Agent"])
