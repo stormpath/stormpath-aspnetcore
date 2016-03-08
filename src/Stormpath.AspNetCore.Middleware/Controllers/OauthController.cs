@@ -47,6 +47,38 @@ namespace Stormpath.AspNetCore.Controllers
             {
                 return CreateOauthError(context, "invalid_request");
             }
+
+            var grantType = context.Request.Form["grant_type"].ToString();
+            var username = context.Request.Form["username"].ToString();
+            var password = context.Request.Form["password"].ToString();
+
+            if (string.IsNullOrEmpty(grantType))
+            {
+                return CreateOauthError(context, "invalid_request");
+            }
+
+            if (grantType.Equals("client_credentials", StringComparison.OrdinalIgnoreCase))
+            {
+                return ExecuteClientCredentialsFlow(context, username, password);
+            }
+            else if (grantType.Equals("password", StringComparison.OrdinalIgnoreCase))
+            {
+                return ExecutePasswordFlow(context, username, password);
+            }
+            else
+            {
+                return CreateOauthError(context, "unsupported_grant_type");
+            }
+        }
+
+        private static Task ExecuteClientCredentialsFlow(HttpContext context, string username, string password)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static Task ExecutePasswordFlow(HttpContext context, string username, string password)
+        {
+            throw new NotImplementedException();
         }
 
         private static Task CreateOauthError(HttpContext context, string message)

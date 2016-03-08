@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -47,6 +48,41 @@ namespace Stormpath.AspNetCore.Tests.Integration
 
             var jsonRequest = new StringContent(@"{ ""hello"" : ""world"" }", Encoding.UTF8, "application/json");
             var response = await client.PostAsync("/oauth/tokens", jsonRequest);
+
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest); // 400
+        }
+
+        [Fact]
+        public async Task Returns_invalid_request_for_empty_grant_type()
+        {
+            var client = CreateClient();
+
+            var grantRequest = new FormUrlEncodedContent(new Dictionary<string, string>()
+            {
+                ["grant_type"] = "",
+                ["username"] = "foo",
+                ["password"] = "bar"
+            });
+
+            var response = await client.PostAsync("/oauth/tokens", grantRequest);
+
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest); // 400
+            var responseContent = await response.Content.ReadAsStringAsync();
+        }
+
+        [Fact]
+        public async Task Executes_password_grant_flow()
+        {
+            var client = CreateClient();
+
+            var grantRequest = new FormUrlEncodedContent(new Dictionary<string, string>()
+            {
+                ["grant_type"] = "password",
+                ["username"] = "foo",
+                ["password"] = "bar"
+            });
+
+            var response = await client.PostAsync("/oauth/tokens", grantRequest);
 
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest); // 400
         }
