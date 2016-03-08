@@ -14,7 +14,9 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
@@ -26,7 +28,7 @@ namespace Stormpath.AspNetCore.Controllers
 {
     public sealed class OauthController : AbstractControllerMiddleware
     {
-        private readonly static string[] SupportedMethods = { "GET" };
+        private readonly static string[] SupportedMethods = { "POST" };
         private readonly static string[] SupportedContentTypes = { "application/json" };
 
         public OauthController(
@@ -39,9 +41,25 @@ namespace Stormpath.AspNetCore.Controllers
         {
         }
 
-        protected override async Task GetJson(HttpContext context, IClient scopedClient)
+        protected override Task PostJson(HttpContext context, IClient scopedClient)
         {
-            await context.Response.WriteAsync("tokens!");
+            if (!context.Request.HasFormContentType)
+            {
+                return CreateOauthError(context, "invalid_request");
+            }
+        }
+
+        private static Task CreateOauthError(HttpContext context, string message)
+        {
+            context.Response.ContentType = "application/json;charset=UTF-8";
+            context.Response.StatusCode = 400;
+
+            var error = new
+            {
+                error = message
+            };
+
+            return context.Response.WriteAsync(Serializer.Serialize(error), Encoding.UTF8);
         }
     }
 }

@@ -15,8 +15,11 @@
 // </copyright>
 
 using System;
+using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.TestHost;
@@ -28,11 +31,24 @@ namespace Stormpath.AspNetCore.Tests.Integration
     public class OauthControllerTests
     {
         [Fact]
-        public async Task Test1()
+        public async Task Does_not_respond_to_get()
         {
             var client = CreateClient();
 
-            await client.GetAsync("/oauth/tokens");
+            var response = await client.GetAsync("/oauth/tokens");
+
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound); // 404
+        }
+
+        [Fact]
+        public async Task Does_not_respond_to_post_without_form()
+        {
+            var client = CreateClient();
+
+            var jsonRequest = new StringContent(@"{ ""hello"" : ""world"" }", Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("/oauth/tokens", jsonRequest);
+
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest); // 400
         }
 
         private static HttpClient CreateClient(Func<HttpContext, Func<Task>, Task> finalizer = null)
