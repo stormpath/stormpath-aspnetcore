@@ -1,4 +1,4 @@
-﻿// <copyright file="StormpathMiddlewareExtensions.cs" company="Stormpath, Inc.">
+﻿// <copyright file="StormpathMiddlwareServiceExtensions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,20 +14,22 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using Microsoft.AspNet.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Stormpath.AspNetCore.Internal;
-using Stormpath.AspNetCore.Route;
-using Stormpath.Configuration.Abstractions;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Serialization;
 
 namespace Stormpath.AspNetCore
 {
-    public static class StormpathMiddlewareExtensions
+    public static class StormpathMiddlwareServiceExtensions
     {
+        /// <summary>
+        /// Adds services required for Stormpath.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection" />.</param>
+        /// <param name="configuration">Configuration options for Stormpath.</param>
+        /// <returns>A reference to this instance after the operation has completed.</returns>
         public static IServiceCollection AddStormpath(this IServiceCollection services, object configuration = null)
         {
             // Construct the base framework User-Agent
@@ -59,34 +61,6 @@ namespace Stormpath.AspNetCore
             services.AddSingleton(_ => userAgentBuilder);
 
             return services;
-        }
-
-        /// <summary>
-        /// Adds the Stormpath middleware to the pipeline with the given options.
-        /// </summary>
-        /// <param name="app"></param>
-        /// <param name="options"></param>
-        /// <returns></returns>
-        public static IApplicationBuilder UseStormpath(this IApplicationBuilder app)
-        {
-            if (app == null)
-            {
-                throw new ArgumentNullException(nameof(app));
-            }
-
-            var config = app.ApplicationServices.GetRequiredService<StormpathConfiguration>();
-
-            AddRoutes(app, config);
-
-            return app;
-        }
-
-        private static void AddRoutes(IApplicationBuilder app, StormpathConfiguration config)
-        {
-            if (config.Web.Oauth2.Enabled == true)
-            {
-                app.UseMiddleware<Oauth2Route>(config.Web.Oauth2.Uri);
-            }
         }
     }
 }
