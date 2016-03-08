@@ -1,4 +1,4 @@
-﻿// <copyright file="StormpathMiddlewareExtensions.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Oauth2Route.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +15,6 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
