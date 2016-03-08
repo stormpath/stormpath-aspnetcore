@@ -18,6 +18,7 @@ using System;
 using Microsoft.AspNet.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Stormpath.AspNetCore.Internals;
+using Stormpath.AspNetCore.Routes;
 using Stormpath.Configuration.Abstractions;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;
@@ -40,6 +41,8 @@ namespace Stormpath.AspNetCore
                 .Build();
 
             // Scope it!
+            IScopedClientFactory scopedClientFactory = new ScopedClientFactory(client);
+
             // Attempt to connect and get configuration from server
             //try
             //{
@@ -51,7 +54,7 @@ namespace Stormpath.AspNetCore
             //}
 
             // Make objects available to DI
-            services.AddSingleton(_ => client); // inject a scoped client factory instead
+            services.AddSingleton(_ => scopedClientFactory);
             services.AddSingleton(_ => client.Configuration); // todo syntax should be cleaner after rc2
             services.AddSingleton(_ => userAgentBuilder);
 
@@ -71,11 +74,19 @@ namespace Stormpath.AspNetCore
                 throw new ArgumentNullException(nameof(app));
             }
 
-            // Get Stormpath client from DI
-            var client = app.ApplicationServices.GetRequiredService<IClient>();
             var config = app.ApplicationServices.GetRequiredService<StormpathConfiguration>();
 
+            AddRoutes(app, config);
+
             return app;
+        }
+
+        private static void AddRoutes(IApplicationBuilder app, StormpathConfiguration config)
+        {
+            if (config.Web.Oauth2.Enabled == true)
+            {
+                app.UseMiddleware<Oauth2Route>(config.Web.Oauth2.Uri);
+            }
         }
     }
 }

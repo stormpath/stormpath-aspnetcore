@@ -26,9 +26,9 @@ using Stormpath.AspNetCore.Internals;
 using Stormpath.Configuration.Abstractions;
 using Stormpath.SDK.Client;
 
-namespace Stormpath.AspNetCore.Controllers
+namespace Stormpath.AspNetCore.Routes
 {
-    public abstract class AbstractControllerMiddleware
+    public abstract class AbstractRouteMiddleware
     {
         private readonly IScopedClientFactory _clientFactory;
         private readonly string _path;
@@ -39,7 +39,7 @@ namespace Stormpath.AspNetCore.Controllers
         protected readonly ILogger _logger;
         protected readonly StormpathConfiguration _config;
 
-        public AbstractControllerMiddleware(
+        public AbstractRouteMiddleware(
             RequestDelegate next,
             ILoggerFactory loggerFactory,
             IClient client,

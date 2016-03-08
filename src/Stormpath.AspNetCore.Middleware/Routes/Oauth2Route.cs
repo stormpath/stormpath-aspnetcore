@@ -24,14 +24,14 @@ using Microsoft.Extensions.Logging;
 using Stormpath.Configuration.Abstractions;
 using Stormpath.SDK.Client;
 
-namespace Stormpath.AspNetCore.Controllers
+namespace Stormpath.AspNetCore.Routes
 {
-    public sealed class OauthController : AbstractControllerMiddleware
+    public sealed class Oauth2Route : AbstractRouteMiddleware
     {
         private readonly static string[] SupportedMethods = { "POST" };
         private readonly static string[] SupportedContentTypes = { "application/json" };
 
-        public OauthController(
+        public Oauth2Route(
             RequestDelegate next,
             ILoggerFactory loggerFactory,
             IClient client,
