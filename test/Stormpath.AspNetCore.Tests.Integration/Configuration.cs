@@ -1,4 +1,4 @@
-// <copyright file="Startup.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Configuration.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,19 +14,33 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+using System.Net;
 using FluentAssertions;
 using Xunit;
 
 namespace Stormpath.AspNetCore.Tests.Integration
 {
-    public class Startup
+    public class Configuration
     {
+        /// <summary>
+        /// Issue stormpath/stormpath-framework-tck#20
+        /// </summary>
         [Fact]
-        public void Constructing_default_client()
+        [Obsolete("Move to TCK after #3")]
+        public async void Raise_exception_if_application_cannot_be_found_by_href()
         {
-            var client = TestClient.CreateWithConfiguration(null);
+            var client = TestClient.CreateWithConfiguration(options: new
+            {
+                application = new
+                {
+                    href = "http://foo.baz/app" // invalid
+                }
+            });
 
-            client.Should().NotBeNull();
+            var response = await client.GetAsync("/");
+
+            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError); // 500
         }
     }
 }

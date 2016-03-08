@@ -14,11 +14,17 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Stormpath.AspNetCore.Internal;
+using Stormpath.Configuration.Abstractions;
+using Stormpath.Configuration.Abstractions.Model;
+using Stormpath.SDK;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Http;
 using Stormpath.SDK.Serialization;
+using Stormpath.SDK.Sync;
 
 namespace Stormpath.AspNetCore
 {
@@ -30,37 +36,137 @@ namespace Stormpath.AspNetCore
         /// <param name="services">The <see cref="IServiceCollection" />.</param>
         /// <param name="configuration">Configuration options for Stormpath.</param>
         /// <returns>A reference to this instance after the operation has completed.</returns>
+        /// <exception cref="InitializationException">There was a problem initializing Stormpath.</exception>
         public static IServiceCollection AddStormpath(this IServiceCollection services, object configuration = null)
         {
             // Construct the base framework User-Agent
             IFrameworkUserAgentBuilder userAgentBuilder = new DefaultFrameworkUserAgentBuilder();
 
             // Construct base client
-            var client = Clients.Builder()
+            var baseClient = Clients.Builder()
                 .SetHttpClient(HttpClients.Create().SystemNetHttpClient())
                 .SetSerializer(Serializers.Create().JsonNetSerializer())
                 .SetConfiguration(configuration)
                 .Build();
 
             // Scope it!
-            IScopedClientFactory scopedClientFactory = new ScopedClientFactory(client);
+            IScopedClientFactory scopedClientFactory = new ScopedClientFactory(baseClient);
+            var client = scopedClientFactory.Create(new ScopedClientOptions()
+            {
+                UserAgent = userAgentBuilder.GetUserAgent()
+            });
 
-            // Attempt to connect and get configuration from server
-            //try
-            //{
-            //    var tenant = client.GetCurrentTenant();
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new Exception("Unable to initialize Stormpath client. See the inner exception for details.", ex);
-            //}
+            // Attempt to connect
+            try
+            {
+                var tenant = client.GetCurrentTenant();
+            }
+            catch (Exception ex)
+            {
+                throw new InitializationException("Unable to initialize the Stormpath client. See the inner exception for details.", ex);
+            }
+
+            // Resolve application href, if necessary
+            // (see https://github.com/stormpath/stormpath-framework-spec/blob/master/configuration.md#application-resolution)
+            var updatedConfiguration = ResolveApplication(client);
+
+            // Validate application can be retrieved
+            EnsureApplication(client, updatedConfiguration);
+
+            // Validate Account Store configuration
+            // (see https://github.com/stormpath/stormpath-framework-spec/blob/master/configuration.md#application-resolution)
+            EnsureAccountStores(client, updatedConfiguration);
 
             // Make objects available to DI
-            services.AddSingleton(_ => scopedClientFactory);
-            services.AddSingleton(_ => client.Configuration); // todo syntax should be cleaner after rc2
+            services.AddSingleton(_ => scopedClientFactory); // todo syntax should be cleaner after rc2
+            services.AddSingleton(_ => client.Configuration);
             services.AddSingleton(_ => userAgentBuilder);
 
             return services;
+        }
+
+        private static StormpathConfiguration ResolveApplication(IClient client)
+        {
+            var originalConfiguration = client.Configuration;
+
+            // If href is specified, no need to resolve
+            if (!string.IsNullOrEmpty(originalConfiguration.Application.Href))
+            {
+                return originalConfiguration;
+            }
+
+            // If name is specified, look up by name
+            if (!string.IsNullOrEmpty(originalConfiguration.Application.Name))
+            {
+                try
+                {
+                    var foundApplication = client.GetApplications()
+                        .Where(app => app.Name == originalConfiguration.Application.Name)
+                        .Synchronously()
+                        .Single();
+
+                    if (string.IsNullOrEmpty(foundApplication.Href))
+                    {
+                        throw new Exception("The application href is empty."); // Becomes the innerException of the InitializationException
+                    }
+
+                    return new StormpathConfiguration(
+                        originalConfiguration.Client,
+                        new ApplicationConfiguration(href: foundApplication.Href),
+                        originalConfiguration.Web);
+                }
+                catch (Exception ex)
+                {
+                    throw new InitializationException($"The provided application could not be found. The provided application name was: {originalConfiguration.Application.Name}", ex);
+                }
+            }
+
+            // If neither, try to get the single application in the tenant
+            try
+            {
+                var singleApplication = client.GetApplications()
+                    .Synchronously()
+                    .Take(3)
+                    .ToList()
+                    .Where(app => app.Name != "Stormpath")
+                    .Single();
+
+                if (string.IsNullOrEmpty(singleApplication.Href))
+                {
+                    throw new Exception("The application href is empty."); // Becomes the innerException of the InitializationException
+                }
+
+                return new StormpathConfiguration(
+                    originalConfiguration.Client,
+                    new ApplicationConfiguration(href: singleApplication.Href),
+                    originalConfiguration.Web);
+            }
+            catch (Exception ex)
+            {
+                throw new InitializationException($"Could not automatically resolve a Stormpath Application. Please specify your Stormpath Application in your configuration.", ex);
+            }
+        }
+
+        private static void EnsureApplication(IClient client, StormpathConfiguration updatedConfiguration)
+        {
+            try
+            {
+                var application = client.GetApplication(updatedConfiguration.Application.Href);
+
+                if (string.IsNullOrEmpty(application.Href))
+                {
+                    throw new Exception("The application href is empty."); // Becomes the innerException of the InitializationException
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InitializationException($"The provided application could not be found. THe provided application href was: {updatedConfiguration.Application.Href}", ex);
+            }
+        }
+
+        private static void EnsureAccountStores(IClient client, StormpathConfiguration updatedConfiguration)
+        {
+            // todo
         }
     }
 }

@@ -1,4 +1,4 @@
-// <copyright file="Startup.cs" company="Stormpath, Inc.">
+﻿// <copyright file="TestClient.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,19 +14,26 @@
 // limitations under the License.
 // </copyright>
 
-using FluentAssertions;
-using Xunit;
+using System.Net.Http;
+using Microsoft.AspNet.TestHost;
 
 namespace Stormpath.AspNetCore.Tests.Integration
 {
-    public class Startup
+    public static class TestClient
     {
-        [Fact]
-        public void Constructing_default_client()
+        public static HttpClient CreateWithConfiguration(object options)
         {
-            var client = TestClient.CreateWithConfiguration(null);
+            var server = new TestServer(TestServer.CreateBuilder()
+                .UseServices(services =>
+                {
+                    services.AddStormpath(options);
+                })
+                .UseStartup(app =>
+                {
+                    app.UseStormpath();
+                }));
 
-            client.Should().NotBeNull();
+            return server.CreateClient();
         }
     }
 }

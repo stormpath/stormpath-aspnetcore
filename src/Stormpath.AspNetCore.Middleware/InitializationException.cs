@@ -1,4 +1,4 @@
-// <copyright file="Startup.cs" company="Stormpath, Inc.">
+﻿// <copyright file="StormpathMiddlwareServiceExtensions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,19 +14,20 @@
 // limitations under the License.
 // </copyright>
 
-using FluentAssertions;
-using Xunit;
+using System;
 
-namespace Stormpath.AspNetCore.Tests.Integration
+namespace Stormpath.AspNetCore
 {
-    public class Startup
+    public class InitializationException : Exception
     {
-        [Fact]
-        public void Constructing_default_client()
+        public InitializationException(string message)
+            : base(message)
         {
-            var client = TestClient.CreateWithConfiguration(null);
+        }
 
-            client.Should().NotBeNull();
+        public InitializationException(string message, Exception innerException)
+            : base(message, innerException)
+        {
         }
     }
 }

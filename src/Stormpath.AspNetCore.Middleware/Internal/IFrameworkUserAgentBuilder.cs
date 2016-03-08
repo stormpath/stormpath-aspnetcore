@@ -18,6 +18,6 @@ namespace Stormpath.AspNetCore.Internal
 {
     public interface IFrameworkUserAgentBuilder
     {
-        string UserAgent { get; }
+        string GetUserAgent();
     }
 }
