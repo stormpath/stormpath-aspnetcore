@@ -32,45 +32,6 @@ namespace Stormpath.AspNetCore.Tests.Integration
     public class OauthControllerTests
     {
         [Fact]
-        public async Task Does_not_respond_to_get()
-        {
-            var client = CreateClient();
-
-            var response = await client.GetAsync("/oauth/tokens");
-
-            response.StatusCode.Should().Be(HttpStatusCode.NotFound); // 404
-        }
-
-        [Fact]
-        public async Task Does_not_respond_to_post_without_form()
-        {
-            var client = CreateClient();
-
-            var jsonRequest = new StringContent(@"{ ""hello"" : ""world"" }", Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("/oauth/tokens", jsonRequest);
-
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest); // 400
-        }
-
-        [Fact]
-        public async Task Returns_invalid_request_for_empty_grant_type()
-        {
-            var client = CreateClient();
-
-            var grantRequest = new FormUrlEncodedContent(new Dictionary<string, string>()
-            {
-                ["grant_type"] = "",
-                ["username"] = "foo",
-                ["password"] = "bar"
-            });
-
-            var response = await client.PostAsync("/oauth/tokens", grantRequest);
-
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest); // 400
-            var responseContent = await response.Content.ReadAsStringAsync();
-        }
-
-        [Fact]
         public async Task Executes_password_grant_flow()
         {
             var client = CreateClient();
