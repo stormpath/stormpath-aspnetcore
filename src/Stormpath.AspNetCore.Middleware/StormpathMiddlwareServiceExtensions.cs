@@ -70,7 +70,7 @@ namespace Stormpath.AspNetCore
             // (see https://github.com/stormpath/stormpath-framework-spec/blob/master/configuration.md#application-resolution)
             var updatedConfiguration = ResolveApplication(client);
 
-            // Validate application can be retrieved
+            // Validate that the application is valid
             EnsureApplication(client, updatedConfiguration);
 
             // Validate Account Store configuration
@@ -79,7 +79,7 @@ namespace Stormpath.AspNetCore
 
             // Make objects available to DI
             services.AddSingleton(_ => scopedClientFactory); // todo syntax should be cleaner after rc2
-            services.AddSingleton(_ => client.Configuration);
+            services.AddSingleton(_ => updatedConfiguration);
             services.AddSingleton(_ => userAgentBuilder);
 
             return services;
