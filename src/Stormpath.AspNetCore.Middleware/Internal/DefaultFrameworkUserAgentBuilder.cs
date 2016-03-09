@@ -35,11 +35,9 @@ namespace Stormpath.AspNetCore.Internal
             var frameworkVersion = typeof(DefaultFrameworkUserAgentBuilder).GetTypeInfo()
                 .Assembly
                 .GetName()
-                .Version
-                .ToString()
-                .Replace(".0.0", ".0");
+                .Version;
 
-            var frameworkToken = $"stormpath-aspnetcore/{frameworkVersion}";
+            var frameworkToken = $"stormpath-aspnetcore/{frameworkVersion.Major}.{frameworkVersion.Minor}.{frameworkVersion.Revision}";
 
             // Todo get ASP.NET/MVC library version
 
