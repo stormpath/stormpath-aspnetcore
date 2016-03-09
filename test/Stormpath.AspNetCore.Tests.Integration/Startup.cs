@@ -24,7 +24,13 @@ namespace Stormpath.AspNetCore.Tests.Integration
         [Fact]
         public void Constructing_default_client()
         {
-            var client = TestClient.CreateWithConfiguration(null);
+            var client = TestClient.CreateWithConfiguration(options: new
+            {
+                application = new
+                {
+                    name = "My Application"
+                }
+            });
 
             client.Should().NotBeNull();
         }
