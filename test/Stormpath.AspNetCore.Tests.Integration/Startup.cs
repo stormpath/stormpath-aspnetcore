@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using FluentAssertions;
 using Xunit;
 
@@ -22,6 +23,7 @@ namespace Stormpath.AspNetCore.Tests.Integration
     public class Startup
     {
         [Fact]
+        [Obsolete("Remove this soon")]
         public void Constructing_default_client()
         {
             var client = TestClient.CreateWithConfiguration(options: new

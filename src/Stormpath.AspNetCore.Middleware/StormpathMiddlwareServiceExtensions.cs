@@ -166,7 +166,31 @@ namespace Stormpath.AspNetCore
 
         private static void EnsureAccountStores(IClient client, StormpathConfiguration updatedConfiguration)
         {
-            // todo
+            var application = client.GetApplication(updatedConfiguration.Application.Href);
+
+            // The application should have at least one mapped Account Store
+            var accountStoreCount = application.GetAccountStoreMappings().Synchronously().Count();
+            if (accountStoreCount < 1)
+            {
+                throw new InitializationException("No account stores are mapped to the specified application. Account stores are required for login and registration.");
+            }
+
+            // register.autoLogin and email verification workflow should not both be enabled
+            if (updatedConfiguration.Web.Register.AutoLogin)
+            {
+                // TODO
+            }
+
+            // If the registration route is enabled, we need a default Account Store
+            if (updatedConfiguration.Web.Register.Enabled == true)
+            {
+                var defaultAccountStore = application.GetDefaultAccountStore();
+
+                if (defaultAccountStore == null)
+                {
+                    throw new InitializationException("No default account store is mapped to the specified application. A default account store is required for registration.");
+                }
+            }
         }
     }
 }
