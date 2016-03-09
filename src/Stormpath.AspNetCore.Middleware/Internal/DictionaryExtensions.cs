@@ -1,4 +1,4 @@
-﻿// <copyright file="Serializer.cs" company="Stormpath, Inc.">
+﻿// <copyright file="DictionaryExtensions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,22 +14,17 @@
 // limitations under the License.
 // </copyright>
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using System.Collections.Generic;
 
-namespace Stormpath.AspNetCore
+namespace Stormpath.AspNetCore.Internal
 {
-    internal static class Serializer
+    public static class DictionaryExtensions
     {
-        private static readonly JsonSerializerSettings settings = new JsonSerializerSettings()
+        public static object GetOrNull(this IDictionary<string, object> source, string key)
         {
-            ContractResolver = new CamelCasePropertyNamesContractResolver()
-        };
-
-        public static string Serialize(object @obj)
-        {
-            var serialized = JsonConvert.SerializeObject(@obj, Formatting.Indented, settings);
-            return serialized; // todo one line
+            object value = null;
+            source.TryGetValue(key, out value);
+            return value;
         }
     }
 }

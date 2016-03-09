@@ -38,7 +38,7 @@ namespace Stormpath.AspNetCore.Route
 
         protected readonly RequestDelegate _next;
         protected readonly ILogger _logger;
-        protected readonly StormpathConfiguration _config;
+        protected readonly StormpathConfiguration _configuration;
 
         public AbstractRouteMiddleware(
             RequestDelegate next,
@@ -71,7 +71,7 @@ namespace Stormpath.AspNetCore.Route
 
             _next = next;
             _logger = loggerFactory.CreateLogger<AbstractRouteMiddleware>();
-            _config = configuration;
+            _configuration = configuration;
             _clientFactory = clientFactory;
             _path = path;
             _supportedMethods = supportedMethods.ToArray();
@@ -97,9 +97,10 @@ namespace Stormpath.AspNetCore.Route
 
             _logger.LogInformation($"Stormpath middleware handling request {context.Request.Path}");
 
-            var scopedClient = CreateScopedClient(context);
-
-            return Dispatch(context, scopedClient);
+            using (var scopedClient = CreateScopedClient(context))
+            {
+                return Dispatch(context, scopedClient);
+            }
         }
 
         private bool IsSupportedVerb(HttpContext context)
@@ -187,25 +188,25 @@ namespace Stormpath.AspNetCore.Route
             return _supportedContentTypes.First();
         }
 
-        protected virtual Task GetJson(HttpContext context, IClient scopedClient)
+        protected virtual Task GetJson(HttpContext context, IClient client)
         {
             // This should not happen with proper configuration.
             throw new NotImplementedException("Fatal error: this controller does not support GET with application/json.");
         }
 
-        protected virtual Task GetHtml(HttpContext context, IClient scopedClient)
+        protected virtual Task GetHtml(HttpContext context, IClient client)
         {
             // This should not happen with proper configuration.
             throw new NotImplementedException("Fatal error: this controller does not support GET with text/html.");
         }
 
-        protected virtual Task PostJson(HttpContext context, IClient scopedClient)
+        protected virtual Task PostJson(HttpContext context, IClient client)
         {
             // This should not happen with proper configuration.
             throw new NotImplementedException("Fatal error: this controller does not support POST with application/json.");
         }
 
-        protected virtual Task PostHtml(HttpContext context, IClient scopedClient)
+        protected virtual Task PostHtml(HttpContext context, IClient client)
         {
             // This should not happen with proper configuration.
             throw new NotImplementedException("Fatal error: this controller does not support POST with text/html.");

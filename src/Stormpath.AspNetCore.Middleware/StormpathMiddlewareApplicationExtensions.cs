@@ -51,6 +51,11 @@ namespace Stormpath.AspNetCore
             {
                 app.UseMiddleware<Oauth2Route>(config.Web.Oauth2.Uri);
             }
+
+            if (config.Web.Register.Enabled == true)
+            {
+                app.UseMiddleware<RegisterRoute>(config.Web.Register.Uri);
+            }
         }
     }
 }

@@ -15,12 +15,16 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
 using Microsoft.Extensions.Logging;
-using Stormpath.AspNetCore.Model.Error;
+using Newtonsoft.Json;
+using Stormpath.AspNetCore.Internal;
 using Stormpath.Configuration.Abstractions;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Client;
 
 namespace Stormpath.AspNetCore.Route
@@ -40,9 +44,52 @@ namespace Stormpath.AspNetCore.Route
         {
         }
 
-        protected override Task PostJson(HttpContext context, IClient scopedClient)
+        protected override async Task PostJson(HttpContext context, IClient scopedClient)
         {
-            throw new NotImplementedException();
+            IDictionary<string, object> postData = null;
+
+            using (var streamReader = new StreamReader(context.Request.Body))
+            using (var jsonReader = new JsonTextReader(streamReader))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                postData = serializer.Deserialize<IDictionary<string, object>>(jsonReader);
+            }
+
+            var email = postData.GetOrNull("email")?.ToString();
+            var password = postData.GetOrNull("password")?.ToString();
+
+            bool missingEmailOrPassword = string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password);
+            if (missingEmailOrPassword)
+            {
+                throw new Exception("Missing email or password!");
+            }
+
+            var givenName = postData.GetOrNull("givenName")?.ToString() ?? "UNKNOWN";
+            var surname = postData.GetOrNull("surname")?.ToString() ?? "UNKNOWN";
+            var username = postData.GetOrNull("username")?.ToString();
+
+            var application = await scopedClient.GetApplicationAsync(_configuration.Application.Href);
+
+            var newAccount = scopedClient.Instantiate<IAccount>()
+                .SetEmail(email)
+                .SetPassword(password)
+                .SetGivenName(givenName)
+                .SetSurname(surname);
+
+            if (!string.IsNullOrEmpty(username))
+            {
+                newAccount.SetUsername(username);
+            }
+
+            await application.CreateAccountAsync(newAccount);
+
+            var sanitizer = new ResponseSanitizer<IAccount>();
+            var responseModel = new
+            {
+                account = sanitizer.Sanitize(newAccount)
+            };
+
+            await Response.Ok(responseModel, context);
         }
     }
 }

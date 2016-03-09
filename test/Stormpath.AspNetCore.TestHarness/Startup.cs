@@ -39,7 +39,13 @@ namespace Stormpath.AspNetCore.TestHarness
         public void ConfigureServices(IServiceCollection services)
         {
             // Add Stormpath
-            services.AddStormpath();
+            services.AddStormpath(configuration: new
+            {
+                application = new
+                {
+                    name = "My Application"
+                }
+            });
 
             // Add framework services.
             services.AddMvc();

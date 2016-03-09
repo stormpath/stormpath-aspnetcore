@@ -19,9 +19,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
 using Microsoft.Extensions.Logging;
+using Stormpath.AspNetCore.Internal;
 using Stormpath.AspNetCore.Model.Error;
 using Stormpath.Configuration.Abstractions;
 using Stormpath.SDK.Client;
+using Stormpath.SDK.Oauth;
 
 namespace Stormpath.AspNetCore.Route
 {
@@ -40,7 +42,7 @@ namespace Stormpath.AspNetCore.Route
         {
         }
 
-        protected override Task PostJson(HttpContext context, IClient scopedClient)
+        protected override Task PostJson(HttpContext context, IClient client)
         {
             if (!context.Request.HasFormContentType)
             {
@@ -62,7 +64,7 @@ namespace Stormpath.AspNetCore.Route
             }
             else if (grantType.Equals("password", StringComparison.OrdinalIgnoreCase))
             {
-                return ExecutePasswordFlow(context, username, password);
+                return ExecutePasswordFlow(context, client, username, password);
             }
             else
             {
@@ -75,9 +77,22 @@ namespace Stormpath.AspNetCore.Route
             throw new NotImplementedException();
         }
 
-        private static Task ExecutePasswordFlow(HttpContext context, string username, string password)
+        private async Task ExecutePasswordFlow(HttpContext context, IClient client, string username, string password)
         {
-            throw new NotImplementedException();
+            var application = await client.GetApplicationAsync(_configuration.Application.Href);
+
+            var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
+                .SetLogin(username)
+                .SetPassword(password)
+                .Build();
+
+            var tokenResult = await application.NewPasswordGrantAuthenticator()
+                .AuthenticateAsync(passwordGrantRequest);
+
+            var sanitizer = new ResponseSanitizer<IOauthGrantAuthenticationResult>();
+            var responseModel = sanitizer.Sanitize(tokenResult);
+
+            await Response.Ok(responseModel, context);
         }
     }
 }

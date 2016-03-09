@@ -1,4 +1,4 @@
-﻿// <copyright file="Serializer.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Response.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,22 +14,18 @@
 // limitations under the License.
 // </copyright>
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using System.Threading.Tasks;
+using Microsoft.AspNet.Http;
 
 namespace Stormpath.AspNetCore
 {
-    internal static class Serializer
+    public static class Response
     {
-        private static readonly JsonSerializerSettings settings = new JsonSerializerSettings()
+        public static Task Ok(object model, HttpContext context)
         {
-            ContractResolver = new CamelCasePropertyNamesContractResolver()
-        };
+            context.Response.ContentType = "application/json;charset=UTF-8";
 
-        public static string Serialize(object @obj)
-        {
-            var serialized = JsonConvert.SerializeObject(@obj, Formatting.Indented, settings);
-            return serialized; // todo one line
+            return context.Response.WriteAsync(Serializer.Serialize(model));
         }
     }
 }
