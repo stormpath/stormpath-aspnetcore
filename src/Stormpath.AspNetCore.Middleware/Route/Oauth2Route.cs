@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
@@ -42,7 +43,7 @@ namespace Stormpath.AspNetCore.Route
         {
         }
 
-        protected override Task PostJson(HttpContext context, IClient client)
+        protected override Task PostJson(HttpContext context, IClient client, CancellationToken cancellationToken)
         {
             if (!context.Request.HasFormContentType)
             {
@@ -60,11 +61,11 @@ namespace Stormpath.AspNetCore.Route
 
             if (grantType.Equals("client_credentials", StringComparison.OrdinalIgnoreCase))
             {
-                return ExecuteClientCredentialsFlow(context, username, password);
+                return ExecuteClientCredentialsFlow(context, username, password, cancellationToken);
             }
             else if (grantType.Equals("password", StringComparison.OrdinalIgnoreCase))
             {
-                return ExecutePasswordFlow(context, client, username, password);
+                return ExecutePasswordFlow(context, client, username, password, cancellationToken);
             }
             else
             {
@@ -72,14 +73,14 @@ namespace Stormpath.AspNetCore.Route
             }
         }
 
-        private static Task ExecuteClientCredentialsFlow(HttpContext context, string username, string password)
+        private static Task ExecuteClientCredentialsFlow(HttpContext context, string username, string password, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        private async Task ExecutePasswordFlow(HttpContext context, IClient client, string username, string password)
+        private async Task ExecutePasswordFlow(HttpContext context, IClient client, string username, string password, CancellationToken cancellationToken)
         {
-            var application = await client.GetApplicationAsync(_configuration.Application.Href);
+            var application = await client.GetApplicationAsync(_configuration.Application.Href, cancellationToken);
 
             var passwordGrantRequest = OauthRequests.NewPasswordGrantRequest()
                 .SetLogin(username)
@@ -87,12 +88,12 @@ namespace Stormpath.AspNetCore.Route
                 .Build();
 
             var tokenResult = await application.NewPasswordGrantAuthenticator()
-                .AuthenticateAsync(passwordGrantRequest);
+                .AuthenticateAsync(passwordGrantRequest, cancellationToken);
 
             var sanitizer = new ResponseSanitizer<IOauthGrantAuthenticationResult>();
             var responseModel = sanitizer.Sanitize(tokenResult);
 
-            await Response.Ok(responseModel, context);
+            await Response.Ok(responseModel, context, cancellationToken);
         }
     }
 }

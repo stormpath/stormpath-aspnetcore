@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
@@ -44,7 +45,7 @@ namespace Stormpath.AspNetCore.Route
         {
         }
 
-        protected override async Task PostJson(HttpContext context, IClient scopedClient)
+        protected override async Task PostJson(HttpContext context, IClient scopedClient, CancellationToken cancellationToken)
         {
             IDictionary<string, object> postData = null;
 
@@ -68,7 +69,7 @@ namespace Stormpath.AspNetCore.Route
             var surname = postData.GetOrNull("surname")?.ToString() ?? "UNKNOWN";
             var username = postData.GetOrNull("username")?.ToString();
 
-            var application = await scopedClient.GetApplicationAsync(_configuration.Application.Href);
+            var application = await scopedClient.GetApplicationAsync(_configuration.Application.Href, cancellationToken);
 
             var newAccount = scopedClient.Instantiate<IAccount>()
                 .SetEmail(email)
@@ -81,7 +82,7 @@ namespace Stormpath.AspNetCore.Route
                 newAccount.SetUsername(username);
             }
 
-            await application.CreateAccountAsync(newAccount);
+            await application.CreateAccountAsync(newAccount, cancellationToken);
 
             var sanitizer = new ResponseSanitizer<IAccount>();
             var responseModel = new
@@ -89,7 +90,7 @@ namespace Stormpath.AspNetCore.Route
                 account = sanitizer.Sanitize(newAccount)
             };
 
-            await Response.Ok(responseModel, context);
+            await Response.Ok(responseModel, context, cancellationToken);
         }
     }
 }

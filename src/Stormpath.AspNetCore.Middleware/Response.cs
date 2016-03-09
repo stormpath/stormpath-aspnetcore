@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Http;
 
@@ -21,11 +22,11 @@ namespace Stormpath.AspNetCore
 {
     public static class Response
     {
-        public static Task Ok(object model, HttpContext context)
+        public static Task Ok(object model, HttpContext context, CancellationToken cancellationToken)
         {
             context.Response.ContentType = "application/json;charset=UTF-8";
 
-            return context.Response.WriteAsync(Serializer.Serialize(model));
+            return context.Response.WriteAsync(Serializer.Serialize(model), cancellationToken);
         }
     }
 }

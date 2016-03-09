@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
@@ -99,7 +100,7 @@ namespace Stormpath.AspNetCore.Route
 
             using (var scopedClient = CreateScopedClient(context))
             {
-                return Dispatch(context, scopedClient);
+                return Dispatch(context, scopedClient, CancellationToken.None);
             }
         }
 
@@ -137,43 +138,6 @@ namespace Stormpath.AspNetCore.Route
                 .Trim();
         }
 
-        private Task Dispatch(HttpContext context, IClient scopedClient)
-        {
-            var method = context.Request.Method;
-            var targetContentType = SelectBestContentType(context.Request.Headers["Accept"]);
-
-            if (targetContentType == "application/json")
-            {
-                if (method.Equals("GET", StringComparison.OrdinalIgnoreCase))
-                {
-                    return GetJson(context, scopedClient);
-                }
-
-                if (method.Equals("POST", StringComparison.OrdinalIgnoreCase))
-                {
-                    return PostJson(context, scopedClient);
-                }
-
-                throw new Exception($"Unknown verb to Stormpath middleware: '{method}'.");
-            }
-            else if (targetContentType == "text/html")
-            {
-                if (method.Equals("GET", StringComparison.OrdinalIgnoreCase))
-                {
-                    return GetHtml(context, scopedClient);
-                }
-
-                if (method.Equals("POST", StringComparison.OrdinalIgnoreCase))
-                {
-                    return PostHtml(context, scopedClient);
-                }
-
-                throw new Exception($"Unknown verb to Stormpath middleware: '{method}'.");
-            }
-
-            throw new Exception($"Unknown target Content-Type: '{targetContentType}'.");
-        }
-
         private string SelectBestContentType(IEnumerable<string> acceptedContentTypes)
         {
             // todo - spec-compliant content-type negotiation
@@ -188,25 +152,62 @@ namespace Stormpath.AspNetCore.Route
             return _supportedContentTypes.First();
         }
 
-        protected virtual Task GetJson(HttpContext context, IClient client)
+        private Task Dispatch(HttpContext context, IClient scopedClient, CancellationToken cancellationToken)
+        {
+            var method = context.Request.Method;
+            var targetContentType = SelectBestContentType(context.Request.Headers["Accept"]);
+
+            if (targetContentType == "application/json")
+            {
+                if (method.Equals("GET", StringComparison.OrdinalIgnoreCase))
+                {
+                    return GetJson(context, scopedClient, cancellationToken);
+                }
+
+                if (method.Equals("POST", StringComparison.OrdinalIgnoreCase))
+                {
+                    return PostJson(context, scopedClient, cancellationToken);
+                }
+
+                throw new Exception($"Unknown verb to Stormpath middleware: '{method}'.");
+            }
+            else if (targetContentType == "text/html")
+            {
+                if (method.Equals("GET", StringComparison.OrdinalIgnoreCase))
+                {
+                    return GetHtml(context, scopedClient, cancellationToken);
+                }
+
+                if (method.Equals("POST", StringComparison.OrdinalIgnoreCase))
+                {
+                    return PostHtml(context, scopedClient, cancellationToken);
+                }
+
+                throw new Exception($"Unknown verb to Stormpath middleware: '{method}'.");
+            }
+
+            throw new Exception($"Unknown target Content-Type: '{targetContentType}'.");
+        }
+
+        protected virtual Task GetJson(HttpContext context, IClient client, CancellationToken cancellationToken)
         {
             // This should not happen with proper configuration.
             throw new NotImplementedException("Fatal error: this controller does not support GET with application/json.");
         }
 
-        protected virtual Task GetHtml(HttpContext context, IClient client)
+        protected virtual Task GetHtml(HttpContext context, IClient client, CancellationToken cancellationToken)
         {
             // This should not happen with proper configuration.
             throw new NotImplementedException("Fatal error: this controller does not support GET with text/html.");
         }
 
-        protected virtual Task PostJson(HttpContext context, IClient client)
+        protected virtual Task PostJson(HttpContext context, IClient client, CancellationToken cancellationToken)
         {
             // This should not happen with proper configuration.
             throw new NotImplementedException("Fatal error: this controller does not support POST with application/json.");
         }
 
-        protected virtual Task PostHtml(HttpContext context, IClient client)
+        protected virtual Task PostHtml(HttpContext context, IClient client, CancellationToken cancellationToken)
         {
             // This should not happen with proper configuration.
             throw new NotImplementedException("Fatal error: this controller does not support POST with text/html.");
