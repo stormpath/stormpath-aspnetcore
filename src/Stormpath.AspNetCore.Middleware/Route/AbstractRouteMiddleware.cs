@@ -96,7 +96,12 @@ namespace Stormpath.AspNetCore.Route
                 throw new Exception($"Invalid OWIN request. Expected {OwinKeys.RequestPath}, but it was not found.");
             }
 
-            var owinContext = new DefaultOwinEnvironment(environment);
+            IOwinEnvironment owinContext = new DefaultOwinEnvironment(environment);
+
+            if (!IsSupportedPath(owinContext))
+            {
+                return _next.Invoke(environment);
+            }
 
             if (!IsSupportedVerb(owinContext))
             {
@@ -108,16 +113,11 @@ namespace Stormpath.AspNetCore.Route
                 return Error.Create<NotAcceptable>(owinContext);
             }
 
-            if (!IsSupportedPath(owinContext))
-            {
-                return _next.Invoke(environment);
-            }
-
             _logger.LogInformation($"Stormpath middleware handling request {owinContext.Request.Path}");
 
             using (var scopedClient = CreateScopedClient(owinContext))
             {
-                return Dispatch(owinContext, scopedClient, CancellationToken.None);
+                return Dispatch(owinContext, scopedClient, owinContext.CancellationToken);
             }
         }
 
@@ -145,7 +145,7 @@ namespace Stormpath.AspNetCore.Route
         private string CreateFullUserAgent(IOwinEnvironment context)
         {
             var callingAgent = string
-                .Join(" ", context.Request.Headers["X-Stormpath-Agent"])
+                .Join(" ", context.Request.Headers.GetHeaders("X-Stormpath-Agent"))
                 .Trim();
 
             return string
@@ -170,7 +170,7 @@ namespace Stormpath.AspNetCore.Route
         private Task Dispatch(IOwinEnvironment context, IClient scopedClient, CancellationToken cancellationToken)
         {
             var method = context.Request.Method;
-            var targetContentType = SelectBestContentType(context.Request.Headers["Accept"]);
+            var targetContentType = SelectBestContentType(context.Request.Headers.GetHeaders("Accept"));
 
             if (targetContentType == "application/json")
             {

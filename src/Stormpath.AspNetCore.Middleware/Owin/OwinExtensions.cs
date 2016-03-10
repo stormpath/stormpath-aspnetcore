@@ -31,7 +31,7 @@ namespace Stormpath.AspNetCore.Owin
             string[] value;
             return headers != null && headers.TryGetValue(name, out value)
                 ? value
-                : null;
+                : new string[0];
         }
 
         public static string GetHeader(this IDictionary<string, string[]> headers, string name)
@@ -39,7 +39,7 @@ namespace Stormpath.AspNetCore.Owin
             var values = GetHeaders(headers, name);
             if (values == null)
             {
-                return null;
+                return string.Empty;
             }
 
             switch (values.Length)

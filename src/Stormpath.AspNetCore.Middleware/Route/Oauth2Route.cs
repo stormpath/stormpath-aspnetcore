@@ -17,6 +17,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,8 +43,8 @@ namespace Stormpath.AspNetCore.Route
             AppFunc next,
             ILoggerFactory loggerFactory,
             IScopedClientFactory clientFactory,
+            IFrameworkUserAgentBuilder userAgentBuilder, 
             StormpathConfiguration configuration,
-            IFrameworkUserAgentBuilder userAgentBuilder,
             string path)
             : base(next, loggerFactory, clientFactory, configuration, userAgentBuilder, path, SupportedMethods, SupportedContentTypes)
         {
@@ -51,7 +52,7 @@ namespace Stormpath.AspNetCore.Route
 
         protected override async Task PostJson(IOwinEnvironment context, IClient client, CancellationToken cancellationToken)
         {
-            if (!context.Request.Headers.GetHeader("Content-Type").Equals("application/x-www-form-urlencoded"))
+            if (!context.Request.Headers.GetHeader("Content-Type").StartsWith("application/x-www-form-urlencoded"))
             {
                 await Error.Create<OauthInvalidRequest>(context);
                 return;
@@ -69,11 +70,11 @@ namespace Stormpath.AspNetCore.Route
                 return;
             }
 
-            var formData = new FormCollection(FormContentParser.Parse(requestBody));
+            var formData = FormContentParser.Parse(requestBody);
 
-            var grantType = formData["grant_type"].ToString();
-            var username = formData["username"].ToString();
-            var password = formData["password"].ToString();
+            var grantType = formData.GetHeader("grant_type");
+            var username = WebUtility.UrlDecode(formData.GetHeader("username"));
+            var password = WebUtility.UrlDecode(formData.GetHeader("password"));
 
             if (string.IsNullOrEmpty(grantType))
             {
