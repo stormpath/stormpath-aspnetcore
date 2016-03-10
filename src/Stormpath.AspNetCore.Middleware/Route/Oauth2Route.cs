@@ -15,6 +15,9 @@
 // </copyright>
 
 using System;
+using System.IO;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
@@ -22,9 +25,11 @@ using Microsoft.AspNet.Http;
 using Microsoft.Extensions.Logging;
 using Stormpath.AspNetCore.Internal;
 using Stormpath.AspNetCore.Model.Error;
+using Stormpath.AspNetCore.Owin;
 using Stormpath.Configuration.Abstractions;
 using Stormpath.SDK.Client;
 using Stormpath.SDK.Oauth;
+using AppFunc = System.Func<System.Collections.Generic.IDictionary<string, object>, System.Threading.Tasks.Task>;
 
 namespace Stormpath.AspNetCore.Route
 {
@@ -34,51 +39,71 @@ namespace Stormpath.AspNetCore.Route
         private readonly static string[] SupportedContentTypes = { "application/json" };
 
         public Oauth2Route(
-            RequestDelegate next,
+            AppFunc next,
             ILoggerFactory loggerFactory,
             IScopedClientFactory clientFactory,
             StormpathConfiguration configuration,
+            IFrameworkUserAgentBuilder userAgentBuilder,
             string path)
-            : base(next, loggerFactory, clientFactory, configuration, path, SupportedMethods, SupportedContentTypes)
+            : base(next, loggerFactory, clientFactory, configuration, userAgentBuilder, path, SupportedMethods, SupportedContentTypes)
         {
         }
 
-        protected override Task PostJson(HttpContext context, IClient client, CancellationToken cancellationToken)
+        protected override async Task PostJson(IOwinEnvironment context, IClient client, CancellationToken cancellationToken)
         {
-            if (!context.Request.HasFormContentType)
+            if (!context.Request.Headers.GetHeader("Content-Type").Equals("application/x-www-form-urlencoded"))
             {
-                return Error.Create<OauthInvalidRequest>(context);
+                await Error.Create<OauthInvalidRequest>(context);
+                return;
             }
 
-            var grantType = context.Request.Form["grant_type"].ToString();
-            var username = context.Request.Form["username"].ToString();
-            var password = context.Request.Form["password"].ToString();
+            var requestBody = string.Empty;
+            using (var reader = new StreamReader(context.Request.Body, Encoding.UTF8))
+            {
+                requestBody = await reader.ReadToEndAsync();
+            }
+
+            if (string.IsNullOrEmpty(requestBody))
+            {
+                await Error.Create<OauthInvalidRequest>(context);
+                return;
+            }
+
+            var formData = new FormCollection(FormContentParser.Parse(requestBody));
+
+            var grantType = formData["grant_type"].ToString();
+            var username = formData["username"].ToString();
+            var password = formData["password"].ToString();
 
             if (string.IsNullOrEmpty(grantType))
             {
-                return Error.Create<OauthInvalidRequest>(context);
+                await Error.Create<OauthInvalidRequest>(context);
+                return;
             }
 
             if (grantType.Equals("client_credentials", StringComparison.OrdinalIgnoreCase))
             {
-                return ExecuteClientCredentialsFlow(context, username, password, cancellationToken);
+                await ExecuteClientCredentialsFlow(context, username, password, cancellationToken);
+                return;
             }
             else if (grantType.Equals("password", StringComparison.OrdinalIgnoreCase))
             {
-                return ExecutePasswordFlow(context, client, username, password, cancellationToken);
+                await ExecutePasswordFlow(context, client, username, password, cancellationToken);
+                return;
             }
             else
             {
-                return Error.Create<OauthUnsupportedGrant>(context);
+                await Error.Create<OauthUnsupportedGrant>(context);
+                return;
             }
         }
 
-        private static Task ExecuteClientCredentialsFlow(HttpContext context, string username, string password, CancellationToken cancellationToken)
+        private static Task ExecuteClientCredentialsFlow(IOwinEnvironment context, string username, string password, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        private async Task ExecutePasswordFlow(HttpContext context, IClient client, string username, string password, CancellationToken cancellationToken)
+        private async Task ExecutePasswordFlow(IOwinEnvironment context, IClient client, string username, string password, CancellationToken cancellationToken)
         {
             var application = await client.GetApplicationAsync(_configuration.Application.Href, cancellationToken);
 

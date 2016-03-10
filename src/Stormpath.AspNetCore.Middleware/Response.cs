@@ -14,19 +14,20 @@
 // limitations under the License.
 // </copyright>
 
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Http;
+using Stormpath.AspNetCore.Owin;
 
 namespace Stormpath.AspNetCore
 {
     public static class Response
     {
-        public static Task Ok(object model, HttpContext context, CancellationToken cancellationToken)
+        public static Task Ok(object model, IOwinEnvironment context, CancellationToken cancellationToken)
         {
-            context.Response.ContentType = "application/json;charset=UTF-8";
+            context.Response.Headers.SetHeader("Content-Type", "application/json;charset=UTF-8");
 
-            return context.Response.WriteAsync(Serializer.Serialize(model), cancellationToken);
+            return context.Response.WriteAsync(Serializer.Serialize(model), Encoding.UTF8, cancellationToken);
         }
     }
 }

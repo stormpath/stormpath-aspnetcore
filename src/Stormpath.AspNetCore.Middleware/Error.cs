@@ -16,14 +16,14 @@
 
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Http;
 using Stormpath.AspNetCore.Model.Error;
+using Stormpath.AspNetCore.Owin;
 
 namespace Stormpath.AspNetCore
 {
     public static class Error
     {
-        public static Task Create<T>(HttpContext context)
+        public static Task Create<T>(IOwinEnvironment context)
             where T : AbstractError, new()
         {
             var instance = new T();
@@ -31,15 +31,15 @@ namespace Stormpath.AspNetCore
             return Create(context, instance);
         }
 
-        public static Task Create(HttpContext context, AbstractError error)
+        public static Task Create(IOwinEnvironment context, AbstractError error)
         {
             context.Response.StatusCode = error.StatusCode;
 
             if (error.Body != null)
             {
-                context.Response.ContentType = "application/json;charset=UTF-8";
-                context.Response.Headers["Cache-Control"] = "no-store";
-                context.Response.Headers["Pragma"] = "no-cache";
+                context.Response.Headers.SetHeader("Content-Type", "application/json;charset=UTF-8");
+                context.Response.Headers.SetHeader("Cache-Control", "no-store");
+                context.Response.Headers.SetHeader("Pragma", "no-cache");
 
                 return context.Response.WriteAsync(Serializer.Serialize(error.Body), Encoding.UTF8);
             }

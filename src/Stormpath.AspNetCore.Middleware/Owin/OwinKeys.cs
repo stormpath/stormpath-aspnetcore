@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Stormpath.AspNetCore.Owin
+﻿namespace Stormpath.AspNetCore.Owin
 {
     /// <summary>
     /// OWIN keys, as defined in <see href="http://owin.org/html/spec/owin-1.0.html"/>.

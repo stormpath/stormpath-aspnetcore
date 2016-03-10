@@ -19,14 +19,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Stormpath.AspNetCore.Internal;
+using Stormpath.AspNetCore.Owin;
 using Stormpath.Configuration.Abstractions;
 using Stormpath.SDK.Account;
 using Stormpath.SDK.Client;
+using AppFunc = System.Func<System.Collections.Generic.IDictionary<string, object>, System.Threading.Tasks.Task>;
 
 namespace Stormpath.AspNetCore.Route
 {
@@ -36,16 +36,17 @@ namespace Stormpath.AspNetCore.Route
         private readonly static string[] SupportedContentTypes = { "application/json" }; // todo
 
         public RegisterRoute(
-            RequestDelegate next,
+            AppFunc next,
             ILoggerFactory loggerFactory,
             IScopedClientFactory clientFactory,
+            IFrameworkUserAgentBuilder userAgentBuilder,
             StormpathConfiguration configuration,
             string path)
-            : base(next, loggerFactory, clientFactory, configuration, path, SupportedMethods, SupportedContentTypes)
+            : base(next, loggerFactory, clientFactory, configuration, userAgentBuilder, path, SupportedMethods, SupportedContentTypes)
         {
         }
 
-        protected override async Task PostJson(HttpContext context, IClient scopedClient, CancellationToken cancellationToken)
+        protected override async Task PostJson(IOwinEnvironment context, IClient scopedClient, CancellationToken cancellationToken)
         {
             IDictionary<string, object> postData = null;
 

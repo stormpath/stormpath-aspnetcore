@@ -25,6 +25,7 @@ using Microsoft.AspNet.Http;
 using Microsoft.Extensions.Logging;
 using Stormpath.AspNetCore.Internal;
 using Stormpath.AspNetCore.Model.Error;
+using Stormpath.AspNetCore.Owin;
 using Stormpath.Configuration.Abstractions;
 using Stormpath.SDK.Client;
 using AppFunc = System.Func<System.Collections.Generic.IDictionary<string, object>, System.Threading.Tasks.Task>;
@@ -41,12 +42,14 @@ namespace Stormpath.AspNetCore.Route
         protected readonly AppFunc _next;
         protected readonly ILogger _logger;
         protected readonly StormpathConfiguration _configuration;
+        private readonly IFrameworkUserAgentBuilder _userAgentBuilder;
 
         public AbstractRouteMiddleware(
             AppFunc next,
             ILoggerFactory loggerFactory,
             IScopedClientFactory clientFactory,
             StormpathConfiguration configuration,
+            IFrameworkUserAgentBuilder userAgentBuilder,
             string path,
             IEnumerable<string> supportedMethods,
             IEnumerable<string> supportedContentTypes)
@@ -71,9 +74,15 @@ namespace Stormpath.AspNetCore.Route
                 throw new ArgumentNullException(nameof(configuration));
             }
 
+            if (userAgentBuilder == null)
+            {
+                throw new ArgumentNullException(nameof(userAgentBuilder));
+            }
+
             _next = next;
             _logger = loggerFactory.CreateLogger<AbstractRouteMiddleware>();
             _configuration = configuration;
+            _userAgentBuilder = userAgentBuilder;
             _clientFactory = clientFactory;
             _path = path;
             _supportedMethods = supportedMethods.ToArray();
@@ -84,45 +93,44 @@ namespace Stormpath.AspNetCore.Route
         {
             if (!environment.ContainsKey(OwinKeys.RequestPath))
             {
-                throw new ApplicationException($"Invalid OWIN request. Expected {OwinKeys.RequestPath}, but it was not found.");
+                throw new Exception($"Invalid OWIN request. Expected {OwinKeys.RequestPath}, but it was not found.");
             }
 
-            var method = environment.GetOrNull(OwinKeys.RequestMethod);
-            var path = environment.GetOrNull(OwinKeys.RequestPath);
+            var owinContext = new DefaultOwinEnvironment(environment);
 
-            if (!IsSupportedVerb(context))
+            if (!IsSupportedVerb(owinContext))
             {
-                return Error.Create<MethodNotAllowed>(context);
+                return Error.Create<MethodNotAllowed>(owinContext);
             }
 
-            if (!HasSupportedAccept(context))
+            if (!HasSupportedAccept(owinContext))
             {
-                return Error.Create<NotAcceptable>(context);
+                return Error.Create<NotAcceptable>(owinContext);
             }
 
-            if (!IsSupportedPath(context))
+            if (!IsSupportedPath(owinContext))
             {
-                return _next.Invoke(context);
+                return _next.Invoke(environment);
             }
 
-            _logger.LogInformation($"Stormpath middleware handling request {context.Request.Path}");
+            _logger.LogInformation($"Stormpath middleware handling request {owinContext.Request.Path}");
 
-            using (var scopedClient = CreateScopedClient(context))
+            using (var scopedClient = CreateScopedClient(owinContext))
             {
-                return Dispatch(context, scopedClient, CancellationToken.None);
+                return Dispatch(owinContext, scopedClient, CancellationToken.None);
             }
         }
 
-        private bool IsSupportedVerb(HttpContext context)
+        private bool IsSupportedVerb(IOwinEnvironment context)
             => _supportedMethods.Contains(context.Request.Method, StringComparer.OrdinalIgnoreCase);
 
-        private bool HasSupportedAccept(HttpContext context)
+        private bool HasSupportedAccept(IOwinEnvironment context)
             => true; //todo
 
-        private bool IsSupportedPath(HttpContext context)
-            => context.Request.Path.StartsWithSegments(_path);
+        private bool IsSupportedPath(IOwinEnvironment context)
+            => context.Request.Path.StartsWith(_path, StringComparison.OrdinalIgnoreCase);
 
-        private IClient CreateScopedClient(HttpContext context)
+        private IClient CreateScopedClient(IOwinEnvironment context)
         {
             var fullUserAgent = CreateFullUserAgent(context);
 
@@ -134,16 +142,14 @@ namespace Stormpath.AspNetCore.Route
             return _clientFactory.Create(scopedClientOptions);
         }
 
-        private static string CreateFullUserAgent(HttpContext context)
+        private string CreateFullUserAgent(IOwinEnvironment context)
         {
-            var userAgentBuilder = (IFrameworkUserAgentBuilder)context.ApplicationServices.GetService(typeof(IFrameworkUserAgentBuilder));
-
             var callingAgent = string
                 .Join(" ", context.Request.Headers["X-Stormpath-Agent"])
                 .Trim();
 
             return string
-                .Join(" ", callingAgent, userAgentBuilder.GetUserAgent())
+                .Join(" ", callingAgent, _userAgentBuilder.GetUserAgent())
                 .Trim();
         }
 
@@ -161,7 +167,7 @@ namespace Stormpath.AspNetCore.Route
             return _supportedContentTypes.First();
         }
 
-        private Task Dispatch(HttpContext context, IClient scopedClient, CancellationToken cancellationToken)
+        private Task Dispatch(IOwinEnvironment context, IClient scopedClient, CancellationToken cancellationToken)
         {
             var method = context.Request.Method;
             var targetContentType = SelectBestContentType(context.Request.Headers["Accept"]);
@@ -198,25 +204,25 @@ namespace Stormpath.AspNetCore.Route
             throw new Exception($"Unknown target Content-Type: '{targetContentType}'.");
         }
 
-        protected virtual Task GetJson(HttpContext context, IClient client, CancellationToken cancellationToken)
+        protected virtual Task GetJson(IOwinEnvironment context, IClient client, CancellationToken cancellationToken)
         {
             // This should not happen with proper configuration.
             throw new NotImplementedException("Fatal error: this controller does not support GET with application/json.");
         }
 
-        protected virtual Task GetHtml(HttpContext context, IClient client, CancellationToken cancellationToken)
+        protected virtual Task GetHtml(IOwinEnvironment context, IClient client, CancellationToken cancellationToken)
         {
             // This should not happen with proper configuration.
             throw new NotImplementedException("Fatal error: this controller does not support GET with text/html.");
         }
 
-        protected virtual Task PostJson(HttpContext context, IClient client, CancellationToken cancellationToken)
+        protected virtual Task PostJson(IOwinEnvironment context, IClient client, CancellationToken cancellationToken)
         {
             // This should not happen with proper configuration.
             throw new NotImplementedException("Fatal error: this controller does not support POST with application/json.");
         }
 
-        protected virtual Task PostHtml(HttpContext context, IClient client, CancellationToken cancellationToken)
+        protected virtual Task PostHtml(IOwinEnvironment context, IClient client, CancellationToken cancellationToken)
         {
             // This should not happen with proper configuration.
             throw new NotImplementedException("Fatal error: this controller does not support POST with text/html.");

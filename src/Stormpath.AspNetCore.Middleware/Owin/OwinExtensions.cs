@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// Contains code from OWIN, licensed under Apache 2.0.
+
+using System.Collections.Generic;
 
 namespace Stormpath.AspNetCore.Owin
 {
@@ -22,6 +24,39 @@ namespace Stormpath.AspNetCore.Owin
             {
                 environment[key] = value;
             }
+        }
+
+        public static string[] GetHeaders(this IDictionary<string, string[]> headers, string name)
+        {
+            string[] value;
+            return headers != null && headers.TryGetValue(name, out value)
+                ? value
+                : null;
+        }
+
+        public static string GetHeader(this IDictionary<string, string[]> headers, string name)
+        {
+            var values = GetHeaders(headers, name);
+            if (values == null)
+            {
+                return null;
+            }
+
+            switch (values.Length)
+            {
+                case 0:
+                    return string.Empty;
+                case 1:
+                    return values[0];
+                default:
+                    return string.Join(",", values);
+            }
+        }
+
+        public static IDictionary<string, string[]> SetHeader(this IDictionary<string, string[]> headers, string name, string value)
+        {
+            headers[name] = new[] { value };
+            return headers;
         }
     }
 }
