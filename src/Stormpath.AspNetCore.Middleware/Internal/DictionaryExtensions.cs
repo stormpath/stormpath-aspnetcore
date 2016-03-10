@@ -26,5 +26,15 @@ namespace Stormpath.AspNetCore.Internal
             source.TryGetValue(key, out value);
             return value;
         }
+
+        public static T GetOrNull<T>(this IDictionary<string, object> source, string key)
+            where T : class
+        {
+            object value = source.GetOrNull(key);
+
+            return value == null
+                ? null
+                : value as T;
+        }
     }
 }

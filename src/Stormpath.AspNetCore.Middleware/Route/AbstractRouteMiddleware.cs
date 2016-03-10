@@ -27,6 +27,7 @@ using Stormpath.AspNetCore.Internal;
 using Stormpath.AspNetCore.Model.Error;
 using Stormpath.Configuration.Abstractions;
 using Stormpath.SDK.Client;
+using AppFunc = System.Func<System.Collections.Generic.IDictionary<string, object>, System.Threading.Tasks.Task>;
 
 namespace Stormpath.AspNetCore.Route
 {
@@ -37,12 +38,12 @@ namespace Stormpath.AspNetCore.Route
         private readonly string[] _supportedMethods;
         private readonly string[] _supportedContentTypes;
 
-        protected readonly RequestDelegate _next;
+        protected readonly AppFunc _next;
         protected readonly ILogger _logger;
         protected readonly StormpathConfiguration _configuration;
 
         public AbstractRouteMiddleware(
-            RequestDelegate next,
+            AppFunc next,
             ILoggerFactory loggerFactory,
             IScopedClientFactory clientFactory,
             StormpathConfiguration configuration,
@@ -79,8 +80,16 @@ namespace Stormpath.AspNetCore.Route
             _supportedContentTypes = supportedContentTypes.ToArray();
         }
 
-        public Task Invoke(HttpContext context)
+        public Task Invoke(IDictionary<string, object> environment)
         {
+            if (!environment.ContainsKey(OwinKeys.RequestPath))
+            {
+                throw new ApplicationException($"Invalid OWIN request. Expected {OwinKeys.RequestPath}, but it was not found.");
+            }
+
+            var method = environment.GetOrNull(OwinKeys.RequestMethod);
+            var path = environment.GetOrNull(OwinKeys.RequestPath);
+
             if (!IsSupportedVerb(context))
             {
                 return Error.Create<MethodNotAllowed>(context);
