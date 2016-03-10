@@ -49,22 +49,22 @@ namespace Stormpath.AspNetCore
                 .SetConfiguration(configuration)
                 .Build();
 
+            // Attempt to connect and prime the cache with ITenant
+            try
+            {
+                var tenant = baseClient.GetCurrentTenant();
+            }
+            catch (Exception ex)
+            {
+                throw new InitializationException("Unable to initialize the Stormpath client. See the inner exception for details.", ex);
+            }
+
             // Scope it!
             IScopedClientFactory scopedClientFactory = new ScopedClientFactory(baseClient);
             var client = scopedClientFactory.Create(new ScopedClientOptions()
             {
                 UserAgent = userAgentBuilder.GetUserAgent()
             });
-
-            // Attempt to connect
-            try
-            {
-                var tenant = client.GetCurrentTenant();
-            }
-            catch (Exception ex)
-            {
-                throw new InitializationException("Unable to initialize the Stormpath client. See the inner exception for details.", ex);
-            }
 
             // Resolve application href, if necessary
             // (see https://github.com/stormpath/stormpath-framework-spec/blob/master/configuration.md#application-resolution)
