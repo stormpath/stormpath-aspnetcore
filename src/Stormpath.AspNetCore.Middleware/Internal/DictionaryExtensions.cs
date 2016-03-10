@@ -27,14 +27,57 @@ namespace Stormpath.AspNetCore.Internal
             return value;
         }
 
-        public static T GetOrNull<T>(this IDictionary<string, object> source, string key)
-            where T : class
+        public static TValue Get<TValue>(this IDictionary<string, TValue> source, string key)
         {
-            object value = source.GetOrNull(key);
+            TValue value;
+            return source.TryGetValue(key, out value)
+                ? value
+                : default(TValue);
+        }
 
-            return value == null
-                ? null
-                : value as T;
+        public static T Get<T>(this IDictionary<string, object> source, string key)
+        {
+            object value;
+            return source.TryGetValue(key, out value)
+                ? (T)value
+                : default(T);
+        }
+
+        public static string GetString(this IDictionary<string, string[]> collection, string name)
+        {
+            var values = Get(collection, name);
+            if (values == null)
+            {
+                return string.Empty;
+            }
+
+            switch (values.Length)
+            {
+                case 0:
+                    return string.Empty;
+                case 1:
+                    return values[0];
+                default:
+                    return string.Join(",", values);
+            }
+        }
+
+        public static IDictionary<string, string[]> SetString(this IDictionary<string, string[]> collection, string name, string value)
+        {
+            collection[name] = new[] { value };
+            return collection;
+        }
+
+        public static void SetOrRemove<T>(this IDictionary<string, object> environment, string key, T value)
+        {
+            if (Equals(value, default(T)))
+            {
+                environment.Remove(key);
+            }
+            else
+            {
+                environment[key] = value;
+            }
         }
     }
 }

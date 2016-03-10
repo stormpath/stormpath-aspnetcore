@@ -145,7 +145,7 @@ namespace Stormpath.AspNetCore.Route
         private string CreateFullUserAgent(IOwinEnvironment context)
         {
             var callingAgent = string
-                .Join(" ", context.Request.Headers.GetHeaders("X-Stormpath-Agent"))
+                .Join(" ", context.Request.Headers.Get("X-Stormpath-Agent") ?? new string[0])
                 .Trim();
 
             return string
@@ -170,7 +170,7 @@ namespace Stormpath.AspNetCore.Route
         private Task Dispatch(IOwinEnvironment context, IClient scopedClient, CancellationToken cancellationToken)
         {
             var method = context.Request.Method;
-            var targetContentType = SelectBestContentType(context.Request.Headers.GetHeaders("Accept"));
+            var targetContentType = SelectBestContentType(context.Request.Headers.Get("Accept"));
 
             if (targetContentType == "application/json")
             {

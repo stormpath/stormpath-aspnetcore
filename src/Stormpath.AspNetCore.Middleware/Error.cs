@@ -16,6 +16,7 @@
 
 using System.Text;
 using System.Threading.Tasks;
+using Stormpath.AspNetCore.Internal;
 using Stormpath.AspNetCore.Model.Error;
 using Stormpath.AspNetCore.Owin;
 
@@ -37,9 +38,9 @@ namespace Stormpath.AspNetCore
 
             if (error.Body != null)
             {
-                context.Response.Headers.SetHeader("Content-Type", "application/json;charset=UTF-8");
-                context.Response.Headers.SetHeader("Cache-Control", "no-store");
-                context.Response.Headers.SetHeader("Pragma", "no-cache");
+                context.Response.Headers.SetString("Content-Type", "application/json;charset=UTF-8");
+                context.Response.Headers.SetString("Cache-Control", "no-store");
+                context.Response.Headers.SetString("Pragma", "no-cache");
 
                 return context.Response.WriteAsync(Serializer.Serialize(error.Body), Encoding.UTF8);
             }

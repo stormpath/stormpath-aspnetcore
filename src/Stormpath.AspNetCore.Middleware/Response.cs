@@ -17,6 +17,7 @@
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Stormpath.AspNetCore.Internal;
 using Stormpath.AspNetCore.Owin;
 
 namespace Stormpath.AspNetCore
@@ -25,7 +26,7 @@ namespace Stormpath.AspNetCore
     {
         public static Task Ok(object model, IOwinEnvironment context, CancellationToken cancellationToken)
         {
-            context.Response.Headers.SetHeader("Content-Type", "application/json;charset=UTF-8");
+            context.Response.Headers.SetString("Content-Type", "application/json;charset=UTF-8");
 
             return context.Response.WriteAsync(Serializer.Serialize(model), Encoding.UTF8, cancellationToken);
         }

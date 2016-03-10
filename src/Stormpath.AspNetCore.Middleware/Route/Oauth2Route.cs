@@ -52,7 +52,7 @@ namespace Stormpath.AspNetCore.Route
 
         protected override async Task PostJson(IOwinEnvironment context, IClient client, CancellationToken cancellationToken)
         {
-            if (!context.Request.Headers.GetHeader("Content-Type").StartsWith("application/x-www-form-urlencoded"))
+            if (!context.Request.Headers.GetString("Content-Type").StartsWith("application/x-www-form-urlencoded"))
             {
                 await Error.Create<OauthInvalidRequest>(context);
                 return;
@@ -72,9 +72,9 @@ namespace Stormpath.AspNetCore.Route
 
             var formData = FormContentParser.Parse(requestBody);
 
-            var grantType = formData.GetHeader("grant_type");
-            var username = WebUtility.UrlDecode(formData.GetHeader("username"));
-            var password = WebUtility.UrlDecode(formData.GetHeader("password"));
+            var grantType = formData.GetString("grant_type");
+            var username = WebUtility.UrlDecode(formData.GetString("username"));
+            var password = WebUtility.UrlDecode(formData.GetString("password"));
 
             if (string.IsNullOrEmpty(grantType))
             {
