@@ -15,6 +15,8 @@
 // </copyright>
 
 using System;
+using System.Collections;
+using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -22,6 +24,7 @@ using Stormpath.AspNetCore.Internal;
 using Stormpath.AspNetCore.Route;
 using Stormpath.Configuration.Abstractions;
 using Stormpath.SDK.Client;
+using AppFunc = System.Func<System.Collections.Generic.IDictionary<string, object>, System.Threading.Tasks.Task>;
 
 namespace Stormpath.AspNetCore
 {
@@ -46,14 +49,14 @@ namespace Stormpath.AspNetCore
             var userAgentBuilder = app.ApplicationServices.GetRequiredService<IFrameworkUserAgentBuilder>();
             var config = app.ApplicationServices.GetRequiredService<StormpathConfiguration>();
 
-            AddRoutes(app, loggerFactory, clientFactory, userAgentBuilder, config);
+            app.UseOwin(BuildRoutePipeline(loggerFactory, clientFactory, userAgentBuilder, config));
 
             return app;
         }
 
-        private static void AddRoutes(IApplicationBuilder app, ILoggerFactory loggerFactory, IScopedClientFactory clientFactory, IFrameworkUserAgentBuilder userAgentBuilder, StormpathConfiguration config)
+        private static Action<Action<Func<AppFunc, AppFunc>>> BuildRoutePipeline(ILoggerFactory loggerFactory, IScopedClientFactory clientFactory, IFrameworkUserAgentBuilder userAgentBuilder, StormpathConfiguration config)
         {
-            app.UseOwin(pipeline =>
+            return new Action<Action<Func<AppFunc, AppFunc>>>(pipeline =>
             {
                 if (config.Web.Oauth2.Enabled == true)
                 {
