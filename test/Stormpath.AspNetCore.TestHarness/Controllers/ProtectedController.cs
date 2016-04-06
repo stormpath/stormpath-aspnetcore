@@ -23,11 +23,11 @@ namespace Stormpath.AspNetCore.TestHarness.Controllers
 {
     [Route("api/[controller]")]
     [Authorize]
-    public class SecretController
+    public class ProtectedController
     {
         private readonly IClient client;
 
-        public SecretController(IClient client)
+        public ProtectedController(IClient client)
         {
             this.client = client;
         }
