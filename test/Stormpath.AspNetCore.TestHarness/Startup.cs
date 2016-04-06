@@ -38,14 +38,15 @@ namespace Stormpath.AspNetCore.TestHarness
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add Stormpath
-            services.AddStormpath(configuration: new
+            // Add Stormpath services
+            var stormpathConfiguration = new
             {
                 application = new
                 {
                     name = "My Application"
                 }
-            });
+            };
+            services.AddStormpath(stormpathConfiguration);
 
             // Add framework services.
             services.AddMvc();
@@ -57,16 +58,13 @@ namespace Stormpath.AspNetCore.TestHarness
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseIISPlatformHandler();
-
-            app.UseStaticFiles();
-
+            // Use Stormpath middleware
             app.UseStormpath();
 
             app.UseMvc();
         }
 
         // Entry point for the application.
-        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+        public static void Main(string[] args) => Microsoft.AspNet.Hosting.WebApplication.Run<Startup>(args);
     }
 }
