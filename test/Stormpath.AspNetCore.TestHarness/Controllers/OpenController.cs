@@ -1,4 +1,4 @@
-﻿// <copyright file="SecretController.cs" company="Stormpath, Inc.">
+﻿// <copyright file="OpenController.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,29 +14,26 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
-using Stormpath.SDK.Client;
 
 namespace Stormpath.AspNetCore.TestHarness.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
-    public class SecretController
+    public class OpenController : Controller
     {
-        private readonly IClient client;
+        [FromServices]
+        public SDK.Client.IClient StormpathClient { get; set; }
 
-        public SecretController(IClient client)
-        {
-            this.client = client;
-        }
+        [FromServices]
+        public Lazy<SDK.Account.IAccount> StormpathAccountSafe { get; set; }
 
         public async Task<string> Get()
         {
-            var tenant = await client.GetCurrentTenantAsync();
+            var tenant = await StormpathClient.GetCurrentTenantAsync();
 
-            return "Hello secure world";
+            return "Hello world";
         }
     }
 }
