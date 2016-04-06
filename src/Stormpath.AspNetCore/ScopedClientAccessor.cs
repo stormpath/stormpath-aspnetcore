@@ -18,7 +18,7 @@ using Microsoft.AspNet.Http;
 using Stormpath.Owin.Common;
 using Stormpath.SDK.Client;
 
-namespace Stormpath.Owin.CoreHarness
+namespace Stormpath.AspNetCore
 {
     internal sealed class ScopedClientAccessor
     {

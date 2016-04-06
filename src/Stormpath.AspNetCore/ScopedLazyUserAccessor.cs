@@ -19,7 +19,7 @@ using Microsoft.AspNet.Http;
 using Stormpath.Owin.Common;
 using Stormpath.SDK.Account;
 
-namespace Stormpath.Owin.CoreHarness
+namespace Stormpath.AspNetCore
 {
     internal sealed class ScopedLazyUserAccessor
     {

@@ -14,9 +14,9 @@
 // limitations under the License.
 // </copyright>
 
-namespace Stormpath.Owin.CoreHarness
+namespace Stormpath.AspNetCore
 {
-    public sealed class UserConfigurationContainer
+    internal sealed class UserConfigurationContainer
     {
         public UserConfigurationContainer(object configuration = null)
         {

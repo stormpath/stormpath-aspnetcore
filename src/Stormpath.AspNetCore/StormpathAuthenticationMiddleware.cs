@@ -20,7 +20,7 @@ using Microsoft.AspNet.Builder;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.WebEncoders;
 
-namespace Stormpath.Owin.CoreHarness
+namespace Stormpath.AspNetCore
 {
     public sealed class StormpathAuthenticationMiddleware : AuthenticationMiddleware<StormpathAuthenticationOptions>
     {

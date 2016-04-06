@@ -21,7 +21,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Stormpath.Owin.Common;
 using Stormpath.Owin.Middleware;
 
-namespace Stormpath.Owin.CoreHarness
+namespace Stormpath.AspNetCore
 {
     public static class StormpathMiddlewareExtensions
     {

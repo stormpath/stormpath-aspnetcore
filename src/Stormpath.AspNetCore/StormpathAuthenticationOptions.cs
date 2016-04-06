@@ -16,7 +16,7 @@
 
 using Microsoft.AspNet.Authentication;
 
-namespace Stormpath.Owin.CoreHarness
+namespace Stormpath.AspNetCore
 {
     public sealed class StormpathAuthenticationOptions : AuthenticationOptions
     {

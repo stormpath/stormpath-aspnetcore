@@ -23,7 +23,7 @@ using Microsoft.AspNet.Http.Authentication;
 using Stormpath.Owin.Common;
 using Stormpath.SDK.Account;
 
-namespace Stormpath.Owin.CoreHarness
+namespace Stormpath.AspNetCore
 {
     public sealed class StormpathAuthenticationHandler : AuthenticationHandler<StormpathAuthenticationOptions>
     {
