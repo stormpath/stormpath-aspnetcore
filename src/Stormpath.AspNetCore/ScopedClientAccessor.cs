@@ -1,4 +1,4 @@
-﻿// <copyright file="OauthUnsupportedGrant.cs" company="Stormpath, Inc.">
+﻿// <copyright file="StormpathContextClientAccessor.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,18 +14,25 @@
 // limitations under the License.
 // </copyright>
 
-namespace Stormpath.AspNetCore.Model.Error
-{
-    public class OauthUnsupportedGrant : AbstractError
-    {
-        public override int StatusCode => 400;
+using Microsoft.AspNet.Http;
+using Stormpath.Owin.Common;
+using Stormpath.SDK.Client;
 
-        public OauthUnsupportedGrant()
+namespace Stormpath.Owin.CoreHarness
+{
+    internal sealed class ScopedClientAccessor
+    {
+        private readonly IHttpContextAccessor httpContextAccessor;
+
+        public ScopedClientAccessor(IHttpContextAccessor httpContextAccessor)
         {
-            this.Body = new
-            {
-                error = "unsupported_grant_type"
-            };
+            this.httpContextAccessor = httpContextAccessor;
+        }
+
+        public IClient GetItem()
+        {
+            var context = this.httpContextAccessor.HttpContext;
+            return context.Items[OwinKeys.StormpathClient] as IClient;
         }
     }
 }

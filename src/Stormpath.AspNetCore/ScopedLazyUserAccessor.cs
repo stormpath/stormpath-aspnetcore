@@ -1,4 +1,4 @@
-﻿// <copyright file="StormpathMiddlwareServiceExtensions.cs" company="Stormpath, Inc.">
+﻿// <copyright file="StormpathContextLazyUserAccessor.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,19 +15,25 @@
 // </copyright>
 
 using System;
+using Microsoft.AspNet.Http;
+using Stormpath.Owin.Common;
+using Stormpath.SDK.Account;
 
-namespace Stormpath.AspNetCore
+namespace Stormpath.Owin.CoreHarness
 {
-    public class InitializationException : Exception
+    internal sealed class ScopedLazyUserAccessor
     {
-        public InitializationException(string message)
-            : base(message)
+        private readonly Lazy<IAccount> account;
+
+        public ScopedLazyUserAccessor(IHttpContextAccessor httpContextAccessor)
         {
+            this.account = new Lazy<IAccount>(() =>
+            {
+                var context = httpContextAccessor.HttpContext;
+                return context.Items[OwinKeys.StormpathUser] as IAccount;
+            });
         }
 
-        public InitializationException(string message, Exception innerException)
-            : base(message, innerException)
-        {
-        }
+        public Lazy<IAccount> GetItem() => this.account;
     }
 }

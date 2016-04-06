@@ -1,4 +1,4 @@
-﻿// <copyright file="Serializer.cs" company="Stormpath, Inc.">
+﻿// <copyright file="StormpathUserConfiguration.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,22 +14,15 @@
 // limitations under the License.
 // </copyright>
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-
-namespace Stormpath.AspNetCore
+namespace Stormpath.Owin.CoreHarness
 {
-    internal static class Serializer
+    public sealed class UserConfigurationContainer
     {
-        private static readonly JsonSerializerSettings settings = new JsonSerializerSettings()
+        public UserConfigurationContainer(object configuration = null)
         {
-            ContractResolver = new CamelCasePropertyNamesContractResolver()
-        };
-
-        public static string Serialize(object @obj)
-        {
-            var serialized = JsonConvert.SerializeObject(@obj, Formatting.Indented, settings);
-            return serialized; // todo one line
+            this.Configuration = configuration;
         }
+
+        public object Configuration { get; private set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿// <copyright file="OauthInvalidRequest.cs" company="Stormpath, Inc.">
+﻿// <copyright file="StormpathAuthenticationOptions.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,18 +14,17 @@
 // limitations under the License.
 // </copyright>
 
-namespace Stormpath.AspNetCore.Model.Error
-{
-    public class OauthInvalidRequest : AbstractError
-    {
-        public override int StatusCode => 400;
+using Microsoft.AspNet.Authentication;
 
-        public OauthInvalidRequest()
+namespace Stormpath.Owin.CoreHarness
+{
+    public sealed class StormpathAuthenticationOptions : AuthenticationOptions
+    {
+        public StormpathAuthenticationOptions() 
+            : base()
         {
-            this.Body = new
-            {
-                error = "invalid_request"
-            };
+            AutomaticAuthenticate = true;
+            AutomaticChallenge = true;
         }
     }
 }
