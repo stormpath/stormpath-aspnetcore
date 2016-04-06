@@ -2,13 +2,7 @@
   "authors": [ "Nate Barbettini" ],
   "copyright": "(c) 2016 Stormpath, Inc.",
   "dependencies": {
-    "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
-    "Microsoft.AspNet.Owin": "1.0.0-rc1-final",
-    "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Logging.Abstractions": "1.0.0-rc1-final",
-    "Newtonsoft.Json": "7.0.1",
-    "Stormpath.Configuration.Abstractions": "2.0.0",
-    "Stormpath.SDK": "0.7.1-beta3"
+    "Stormpath.Owin.Middleware": "0.1.0-beta1"
   },
   "description": "Stormpath middleware for ASP.NET Core.",
   "frameworks": {
