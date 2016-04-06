@@ -1,4 +1,4 @@
-# stormpath-aspnetcore
+# Stormpath ASP.NET Core Middleware
  Build simple, secure web applications with Stormpath and ASP.NET Core!
 
 ## Current Status
