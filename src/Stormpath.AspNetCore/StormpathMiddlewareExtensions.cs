@@ -81,7 +81,7 @@ namespace Stormpath.AspNetCore
             var hostingAssembly = app.GetType().GetTypeInfo().Assembly;
 
             var stormpathMiddleware = StormpathMiddleware.Create(
-                runtimeUserAgent: GetLibraryUserAgent(hostingAssembly),
+                libraryUserAgent: GetLibraryUserAgent(hostingAssembly),
                 configuration: suppliedConfiguration.Configuration);
 
             app.UseOwin(addToPipeline =>
