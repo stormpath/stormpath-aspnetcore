@@ -10,7 +10,7 @@
     "Microsoft.AspNet.Authorization": "1.0.0-rc1-final",
     "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
     "Microsoft.AspNet.Owin": "1.0.0-rc1-final",
-    "Stormpath.Owin.Middleware": "0.1.0-beta2"
+    "Stormpath.Owin.Middleware": "0.1.0-beta4"
   },
   "description": "Stormpath middleware for ASP.NET Core.",
   "frameworks": {
@@ -38,5 +38,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.AspNetCore"
   },
-  "version": "0.1.0-beta1"
+  "version": "0.1.0-beta3"
 }

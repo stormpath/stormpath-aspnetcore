@@ -20,6 +20,7 @@ using Microsoft.AspNet.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Stormpath.Owin.Common;
 using Stormpath.Owin.Middleware;
+using Stormpath.Owin.Middleware.Owin;
 
 namespace Stormpath.AspNetCore
 {
@@ -80,9 +81,12 @@ namespace Stormpath.AspNetCore
             var suppliedConfiguration = app.ApplicationServices.GetRequiredService<UserConfigurationContainer>();
             var hostingAssembly = app.GetType().GetTypeInfo().Assembly;
 
-            var stormpathMiddleware = StormpathMiddleware.Create(
-                libraryUserAgent: GetLibraryUserAgent(hostingAssembly),
-                configuration: suppliedConfiguration.Configuration);
+            var stormpathMiddleware = StormpathMiddleware.Create(new StormpathMiddlewareOptions()
+            {
+                LibraryUserAgent = GetLibraryUserAgent(hostingAssembly),
+                Configuration = suppliedConfiguration.Configuration,
+                ViewRenderer = RenderRazorView,
+            });
 
             app.UseOwin(addToPipeline =>
             {
@@ -97,6 +101,11 @@ namespace Stormpath.AspNetCore
             app.UseMiddleware<StormpathAuthenticationMiddleware>(new StormpathAuthenticationOptions() { AuthenticationScheme = "Bearer" });
 
             return app;
+        }
+
+        private static System.Threading.Tasks.Task RenderRazorView(string name, object model, IOwinEnvironment env, System.Threading.CancellationToken ct)
+        {
+            throw new NotImplementedException();
         }
 
         private static string GetLibraryUserAgent(Assembly hostingAssembly)
