@@ -61,10 +61,12 @@ namespace Stormpath.AspNetCore
         private static ClaimsPrincipal CreatePrincipal(IAccount account, string scheme)
         {
             var claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, account.Href));
             claims.Add(new Claim(ClaimTypes.Email, account.Email));
+            claims.Add(new Claim(ClaimTypes.Name, account.Username));
             claims.Add(new Claim(ClaimTypes.GivenName, account.GivenName));
             claims.Add(new Claim(ClaimTypes.Surname, account.Surname));
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, account.Username));
+            claims.Add(new Claim("FullName", account.FullName));            
 
             var identity = new ClaimsIdentity(claims, scheme);
             var principal = new ClaimsPrincipal(identity);
