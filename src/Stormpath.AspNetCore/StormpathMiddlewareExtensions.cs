@@ -19,6 +19,7 @@ using System.Reflection;
 using Microsoft.AspNet.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Stormpath.Owin.Common;
+using Stormpath.Owin.Common.Views.Precompiled;
 using Stormpath.Owin.Middleware;
 using Stormpath.Owin.Middleware.Owin;
 
@@ -105,7 +106,14 @@ namespace Stormpath.AspNetCore
 
         private static System.Threading.Tasks.Task RenderRazorView(string name, object model, IOwinEnvironment env, System.Threading.CancellationToken ct)
         {
-            throw new NotImplementedException();
+            var view = ViewResolver.GetView(name);
+            if (view == null)
+            {
+                // todo defer to razor
+                throw new InvalidOperationException($"View '{name}' not found.");
+            }
+
+            return view.ExecuteAsync(model, env.Response.Body);
         }
 
         private static string GetLibraryUserAgent(Assembly hostingAssembly)
