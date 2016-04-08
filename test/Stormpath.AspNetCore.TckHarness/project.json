@@ -14,7 +14,7 @@
     "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
-    "Stormpath.AspNetCore": "0.1.0-beta3"
+    "Stormpath.AspNetCore": "0.1.0-beta4"
   },
   "exclude": [
     "wwwroot",
