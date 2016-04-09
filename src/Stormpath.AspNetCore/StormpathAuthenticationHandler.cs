@@ -15,47 +15,72 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Authentication;
+using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Http.Authentication;
+using Microsoft.AspNet.Http.Features.Authentication;
+using Stormpath.Configuration.Abstractions;
+using Stormpath.Configuration.Abstractions.Model;
 using Stormpath.Owin.Common;
+using Stormpath.Owin.Middleware;
 using Stormpath.SDK.Account;
 
 namespace Stormpath.AspNetCore
 {
     public sealed class StormpathAuthenticationHandler : AuthenticationHandler<StormpathAuthenticationOptions>
     {
+        private AuthenticationRequiredBehavior handler;
+
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            object schemeValue;
-            string scheme;
+            var config = Context.Items.Get<StormpathConfiguration>(OwinKeys.StormpathConfiguration);
+            var scheme = Context.Items.Get<string>(OwinKeys.StormpathUserScheme);
+            var account = Context.Items.Get<IAccount>(OwinKeys.StormpathUser);
 
-            Context.Items.TryGetValue(OwinKeys.StormpathUserScheme, out schemeValue);
-            scheme = schemeValue as string;
-
-            if (!string.Equals(scheme, Options.AuthenticationScheme, System.StringComparison.OrdinalIgnoreCase))
+            var getAcceptHeaderFunc = new Func<string>(() => Request.Headers["Accept"]);
+            var getRequestPathFunc = new Func<string>(() => Request.Path);
+            var deleteCookieAction = new Action<WebCookieConfiguration>(cookie =>
             {
-                return Task.FromResult(AuthenticateResult.Failed("Invalid authentication scheme."));
-            }
+                Response.Cookies.Delete(cookie.Name, new CookieOptions()
+                {
+                    Domain = cookie.Domain,
+                    Path = cookie.Path
+                });
+            });
+            var setStatusCodeAction = new Action<int>(code => Response.StatusCode = code);
+            var redirectAction = new Action<string>(location => Response.Redirect(location));
 
-            object accountValue;
-            IAccount authenticatedAccount;
+            this.handler = new AuthenticationRequiredBehavior(
+                config.Web,
+                getAcceptHeaderFunc,
+                getRequestPathFunc,
+                deleteCookieAction,
+                setStatusCodeAction,
+                redirectAction);
 
-            Context.Items.TryGetValue(OwinKeys.StormpathUser, out accountValue);
-            authenticatedAccount = accountValue as IAccount;
-
-            if (authenticatedAccount == null)
+            if (this.handler.IsAuthorized(scheme, Options.AuthenticationScheme, account))
             {
-                return Task.FromResult(AuthenticateResult.Failed("No account found."));
+                var principal = CreatePrincipal(account, scheme);
+                var ticket = new AuthenticationTicket(principal, new AuthenticationProperties(), scheme);
+
+                return Task.FromResult(AuthenticateResult.Success(ticket));
             }
+            
+            return Task.FromResult(AuthenticateResult.Failed("Request is not properly authenticated."));
+        }
 
-
-            var principal = CreatePrincipal(authenticatedAccount, scheme);
-            var ticket = new AuthenticationTicket(principal, new AuthenticationProperties(), scheme);
-
-            return Task.FromResult(AuthenticateResult.Success(ticket));
+        protected override Task<bool> HandleUnauthorizedAsync(ChallengeContext context)
+        {
+            if (this.handler != null)
+            {
+                handler.OnUnauthorized();
+            }
+            
+            return Task.FromResult(true);
         }
 
         private static ClaimsPrincipal CreatePrincipal(IAccount account, string scheme)
