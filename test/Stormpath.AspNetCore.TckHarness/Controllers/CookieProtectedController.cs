@@ -22,7 +22,7 @@ using Stormpath.SDK.Client;
 namespace Stormpath.AspNetCore.TestHarness.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize("Cookie")]
+    [Authorize("Stormpath.Cookie")]
     public class CookieProtectedController
     {
         private readonly IClient client;

@@ -52,13 +52,10 @@ namespace Stormpath.AspNetCore
             services.AddAuthentication();
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(
-                    RequestAuthenticationScheme.Bearer, 
+                options.AddPolicy("Stormpath.Bearer", 
                     policy => policy.AddAuthenticationSchemes(RequestAuthenticationScheme.Bearer).RequireAuthenticatedUser());
-                options.AddPolicy(RequestAuthenticationScheme.Cookie,
+                options.AddPolicy("Stormpath.Cookie",
                     policy => policy.AddAuthenticationSchemes(RequestAuthenticationScheme.Cookie).RequireAuthenticatedUser());
-                options.AddPolicy(RequestAuthenticationScheme.ApiCredentials,
-                    policy => policy.AddAuthenticationSchemes(RequestAuthenticationScheme.ApiCredentials).RequireAuthenticatedUser());
             });
 
             return services;

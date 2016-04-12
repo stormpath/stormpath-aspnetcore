@@ -22,7 +22,7 @@ using Stormpath.SDK.Client;
 namespace Stormpath.AspNetCore.TestHarness.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize("Bearer")]
+    [Authorize("Stormpath.Bearer")]
     public class BearerProtectedController
     {
         private readonly IClient client;
