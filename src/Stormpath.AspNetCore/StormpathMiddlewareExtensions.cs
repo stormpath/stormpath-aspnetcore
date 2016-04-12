@@ -21,7 +21,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Stormpath.Owin.Common;
 using Stormpath.Owin.Common.Views.Precompiled;
 using Stormpath.Owin.Middleware;
-using Stormpath.Owin.Middleware.Owin;
 
 namespace Stormpath.AspNetCore
 {
@@ -86,7 +85,7 @@ namespace Stormpath.AspNetCore
             {
                 LibraryUserAgent = GetLibraryUserAgent(hostingAssembly),
                 Configuration = suppliedConfiguration.Configuration,
-                ViewRenderer = RenderRazorView,
+                ViewRenderer = new RazorViewRenderer(),
             });
 
             app.UseOwin(addToPipeline =>
@@ -102,18 +101,6 @@ namespace Stormpath.AspNetCore
             app.UseMiddleware<StormpathAuthenticationMiddleware>(new StormpathAuthenticationOptions() { AuthenticationScheme = "Bearer" });
 
             return app;
-        }
-
-        private static System.Threading.Tasks.Task RenderRazorView(string name, object model, IOwinEnvironment env, System.Threading.CancellationToken ct)
-        {
-            var view = ViewResolver.GetView(name);
-            if (view == null)
-            {
-                // todo defer to razor
-                throw new InvalidOperationException($"View '{name}' not found.");
-            }
-
-            return view.ExecuteAsync(model, env.Response.Body);
         }
 
         private static string GetLibraryUserAgent(Assembly hostingAssembly)

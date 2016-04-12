@@ -33,7 +33,7 @@ namespace Stormpath.AspNetCore
 {
     public sealed class StormpathAuthenticationHandler : AuthenticationHandler<StormpathAuthenticationOptions>
     {
-        private AuthenticationRequiredBehavior handler;
+        private RouteProtector handler;
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
@@ -41,8 +41,6 @@ namespace Stormpath.AspNetCore
             var scheme = Context.Items.Get<string>(OwinKeys.StormpathUserScheme);
             var account = Context.Items.Get<IAccount>(OwinKeys.StormpathUser);
 
-            var getAcceptHeaderFunc = new Func<string>(() => Request.Headers["Accept"]);
-            var getRequestPathFunc = new Func<string>(() => Request.Path);
             var deleteCookieAction = new Action<WebCookieConfiguration>(cookie =>
             {
                 Response.Cookies.Delete(cookie.Name, new CookieOptions()
@@ -54,15 +52,13 @@ namespace Stormpath.AspNetCore
             var setStatusCodeAction = new Action<int>(code => Response.StatusCode = code);
             var redirectAction = new Action<string>(location => Response.Redirect(location));
 
-            this.handler = new AuthenticationRequiredBehavior(
+            this.handler = new RouteProtector(
                 config.Web,
-                getAcceptHeaderFunc,
-                getRequestPathFunc,
                 deleteCookieAction,
                 setStatusCodeAction,
                 redirectAction);
 
-            if (this.handler.IsAuthorized(scheme, Options.AuthenticationScheme, account))
+            if (this.handler.IsAuthenticated(scheme, Options.AuthenticationScheme, account))
             {
                 var principal = CreatePrincipal(account, scheme);
                 var ticket = new AuthenticationTicket(principal, new AuthenticationProperties(), scheme);
@@ -77,7 +73,7 @@ namespace Stormpath.AspNetCore
         {
             if (this.handler != null)
             {
-                handler.OnUnauthorized();
+                handler.OnUnauthorized(Request.Headers["Accept"], Request.Path);
             }
             
             return Task.FromResult(true);
