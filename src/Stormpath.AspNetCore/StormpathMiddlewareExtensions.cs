@@ -81,7 +81,7 @@ namespace Stormpath.AspNetCore
             {
                 LibraryUserAgent = GetLibraryUserAgent(hostingAssembly),
                 Configuration = suppliedConfiguration.Configuration,
-                ViewRenderer = new RazorViewRenderer(),
+                ViewRenderer = new PrecompiledDeferringViewRenderer(new RazorViewRenderer()),
             });
 
             app.UseOwin(addToPipeline =>
