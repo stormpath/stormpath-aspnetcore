@@ -17,8 +17,8 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Stormpath.Owin.Common;
-using Stormpath.Owin.Common.Views.Precompiled;
+using Stormpath.Owin.Abstractions;
+using Stormpath.Owin.Views.Precompiled;
 
 namespace Stormpath.AspNetCore
 {

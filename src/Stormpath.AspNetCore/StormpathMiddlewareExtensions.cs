@@ -18,7 +18,7 @@ using System;
 using System.Reflection;
 using Microsoft.AspNet.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Stormpath.Owin.Common;
+using Stormpath.Owin.Abstractions;
 using Stormpath.Owin.Middleware;
 
 namespace Stormpath.AspNetCore

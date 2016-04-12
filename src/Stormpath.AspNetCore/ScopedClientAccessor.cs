@@ -15,7 +15,7 @@
 // </copyright>
 
 using Microsoft.AspNet.Http;
-using Stormpath.Owin.Common;
+using Stormpath.Owin.Abstractions;
 using Stormpath.SDK.Client;
 
 namespace Stormpath.AspNetCore

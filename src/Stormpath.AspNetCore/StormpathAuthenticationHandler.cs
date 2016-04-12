@@ -23,9 +23,8 @@ using Microsoft.AspNet.Authentication;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Http.Authentication;
 using Microsoft.AspNet.Http.Features.Authentication;
-using Stormpath.Configuration.Abstractions;
-using Stormpath.Configuration.Abstractions.Model;
-using Stormpath.Owin.Common;
+using Stormpath.Configuration.Abstractions.Immutable;
+using Stormpath.Owin.Abstractions;
 using Stormpath.Owin.Middleware;
 using Stormpath.SDK.Account;
 
