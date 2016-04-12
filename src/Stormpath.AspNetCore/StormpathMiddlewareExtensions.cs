@@ -19,7 +19,6 @@ using System.Reflection;
 using Microsoft.AspNet.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Stormpath.Owin.Common;
-using Stormpath.Owin.Common.Views.Precompiled;
 using Stormpath.Owin.Middleware;
 
 namespace Stormpath.AspNetCore
