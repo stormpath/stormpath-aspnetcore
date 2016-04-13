@@ -17,11 +17,11 @@ You can add Stormpath to a new or existing ASP.NET Core project with only two li
 
 1. **[Sign up](https://api.stormpath.com/register) for Stormpath**
 
-2. **Get Your Key File**
+2. **Get your key file**
 
   [Download your key file](https://support.stormpath.com/hc/en-us/articles/203697276-Where-do-I-find-my-API-key-) from the Stormpath Console.
 
-3. **Store Your Key as Environment Variables**
+3. **Store your key as environment variables**
 
   Open your key file and grab the **API Key ID** and **API Key Secret**, then run these commands in PowerShell (or the Windows Command Prompt) to save them as environment variables:
 
@@ -30,7 +30,7 @@ You can add Stormpath to a new or existing ASP.NET Core project with only two li
   setx STORMPATH_CLIENT_APIKEY_SECRET "[value-from-properties-file]"
   ```
 
-4. **Store Your Stormpath Application Href in an Environment Variable**
+4. **Store your Stormpath Application href in an environment variable**
 
   Grab the `href` (called **REST URL** in the Stormpath Console UI) of your Application. It should look something like this:
 
@@ -42,25 +42,25 @@ You can add Stormpath to a new or existing ASP.NET Core project with only two li
   setx STORMPATH_APPLICATION_HREF "[your Application href]"
   ```
   
-  > :pushpin: It's also possible to specify the Application href at runtime by passing a configuration object when you initialize the middleware.
+  > :bulb: It's also possible to specify the Application href at runtime by passing a configuration object when you initialize the middleware.
 
-5. **Create an Application**
+5. **Create an project**
 
- Skip this step if you are adding Stormpath to an existing application.
+ Skip this step if you are adding Stormpath to an existing project.
  
- Use the Web - ASP.NET Web Application - ASP.NET 5 Web Application template in Visual Studio, with Authentication set to No Authentication.
+ Use the **Web** - **ASP.NET Web Application** - **ASP.NET 5 Web Application** template in Visual Studio, with Authentication set to **No Authentication**.
  
- Alternatively, use [`yo aspnet`](https://github.com/OmniSharp/generator-aspnet) to scaffold a new project with a couple of keystrokes!
+ Alternatively, use [`yo aspnet`](https://github.com/OmniSharp/generator-aspnet) to scaffold a new web project with a couple of keystrokes!
  
-6. **Install the Middleware**
+6. **Install the middleware package**
 
- Edit your `projecct.json` file, or use the Package Manager Console:
+ Edit your `project.json` file, or use the Package Manager Console:
  
  ```
  PM> install-package Stormpath.AspNetCore
  ```
  
-7. **Configure and Add the Middleware**
+7. **Configure and add the middleware**
 
  First, add Stormpath to your services collection in `ConfigureServices`:
  
@@ -86,9 +86,9 @@ You can add Stormpath to a new or existing ASP.NET Core project with only two li
  app.UseStormpath();
  ```
  
- Make sure you add Stormpath **before** other middleware such as MVC.
+ Make sure you add Stormpath **before** other middleware you want to protect, such as MVC.
  
-8. **That's It!**
+8. **That's it!**
 
   Compile and run your project, and use a browser to access `/login`. You should see a login view. MVC and Web API routes can be protected by adding `[Authorize]` attributes to the appropriate controller or method.
 
