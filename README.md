@@ -90,7 +90,7 @@ You can add Stormpath to a new or existing ASP.NET Core project with only two li
  
 8. **That's It!**
 
-  Compile and run your project, and use a browser to access `/login`. You should see a login view.
+  Compile and run your project, and use a browser to access `/login`. You should see a login view. MVC and Web API routes can be protected by adding `[Authorize]` attributes to the appropriate controller or method.
 
 
 ## Getting Help
