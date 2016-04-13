@@ -56,6 +56,11 @@ namespace Stormpath.AspNetCore
 
             var viewResult = viewEngine.FindView(actionContext, path);
 
+            if (!viewResult.Success)
+            {
+                return;
+            }
+
             using (var writer = new System.IO.StreamWriter(context.Response.Body))
             {
                 var viewContext = new ViewContext(actionContext, viewResult.View, viewDataDictionary, new TempDataDictionary(httpContextAccessor, tempDataProvider), writer, new HtmlHelperOptions());
