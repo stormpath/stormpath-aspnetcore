@@ -44,7 +44,7 @@ You can add Stormpath to a new or existing ASP.NET Core project with only two li
   
   > :bulb: It's also possible to specify the Application href at runtime by passing a configuration object when you initialize the middleware.
 
-5. **Create an project**
+5. **Create a project**
 
  Skip this step if you are adding Stormpath to an existing project.
  
