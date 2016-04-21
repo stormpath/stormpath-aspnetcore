@@ -4,16 +4,13 @@
 Setup
 =====
 
-This section walks you through the basic setup for Express-Stormpath, by the end
-of this page you'll have setup the login and registration features for your
-Express application!
+This section walks you through adding Stormpath to a new ASP.NET Core project. By the end
+of this page you'll have working login and registration features for your application!
 
 Create a Stormpath Account
 --------------------------
 
-Now that you've decided to use Stormpath, the first thing you'll want to do is
-create a new Stormpath account: https://api.stormpath.com/register
-
+If you haven't already, the first thing you'll want to do is `create a new Stormpath account <https://api.stormpath.com/register>`_!
 
 Create an API Key Pair
 ----------------------
@@ -24,24 +21,25 @@ API key pair is easily created by logging into your dashboard and clicking the
 prompt you to download your key pair.
 
 .. note::
-    Please keep the API key pair file you just downloaded safe!  These two keys
-    allow you to make Stormpath API requests, and should be properly protected,
-    backed up, etc.
+    Please keep the API key pair file safe!  This key and secret
+    allow you to make Stormpath API requests, and should be properly protected.
 
-Once you've downloaded your `apiKey.properties` file, save it to the following
-location in your home directory:
+Once you've downloaded your ``apiKey.properties`` file, make a new hidden folder in your home directory
+called ``.stormpath`` and place the file in the new folder.
 
-.. code-block:: sh
-
-    ~/.stormpath/apiKey.properties
-
-To ensure no other users on your system can access the file, you'll also want to
-change the file's permissions. You can do this by opening up your terminal and
-running:
+In the Windows Command prompt, run these commands from your Downloads folder:
 
 .. code-block:: sh
 
-    $ chmod go-rwx ~/.stormpath/apiKey.properties
+    mkdir %homedrive%%homepath%\.stormpath
+    move apiKey.properties %homedrive%%homepath%\.stormpath
+
+In PowerShell or another shell, the commands are similar:
+
+.. code-block:: sh
+
+    mkdir ~/.stormpath
+    move apiKey.properties ~/.stormpath
 
 For the rest of this tutorial, we'll assume that you've placed this file in that
 location. If you prefer to expose options with environment variables or
@@ -55,13 +53,13 @@ All new Stormpath Tenants will have a Stormpath Application, called
 "My Application". You'll generally want one application per project, and we can
 use this default application to get started.
 
-An application has an HREF, and it looks like this:
+An application has an **href**, and it looks like this:
 
 .. code-block:: sh
 
-    https://api.stormpath.com/v1/applications/24kkU5XOz4tQlZ7sBtPUN6
+    https://api.stormpath.com/v1/applications/l0ngr4nd0mstr1ngh3r3
 
-From inside the `Admin Console`_, you can find the HREF by navigating to the
+From inside the `Admin Console`_, you can find the href by navigating to the
 Application in the Application's list.
 
 To learn more about Stormpath Applications, please see the
@@ -74,55 +72,57 @@ To learn more about Stormpath Applications, please see the
     `Directory Resource`_ and `Modeling Your User Base`_.
 
 
-Now that you've created an Application, you're ready to plug Express-Stormpath
+Now that you've created an Application, you're ready to plug Stormpath
 into your project!
+
+.. note::
+
+  If you want to create a new project to use for this tutorial, use the **ASP.NET 5 - Web Application** template in Visual Studio. Make sure you change the authentication type to **No Authentication**, since you'll be adding the authentication yourself using Stormpath!
 
 Install the Package
 -------------------
 
-Now that you've got a Stormpath account all setup and ready to go, all that's
-left to do before we can dive into the code is install the `Express-Stormpath`_
-package from `NPM`_.
+Now that you've got a Stormpath account all set up and ready to go, all that's
+left to do before we can dive into the code is install the `Stormpath.AspNetCore`_
+package from NuGet.
 
-To install Express-Stormpath, you'll need ``npm``.  You can install the latest
-version of Express-Stormpath by opening up your terminal and running::
+This can be done with the NuGet Package Manager GUI, or using the Package Manager Console::
 
-    $ npm install express-stormpath --save
-
-If you'd like to upgrade to the latest version of Express-Stormpath (*maybe you
-have an old version installed*), you can run::
-
-    $ npm update express-stormpath
-
-.. note::
-    Express-Stormpath is currently *only* compatible with Express 4.x.
+    PM> install-package Stormpath.AspNetCore
 
 
-
-
-Initialize Express-Stormpath
+Initialize the Middleware
 ----------------------------
 
-With the module installed, we can add it to our application. Here is a sample
-Express application, it shows the minimal code required to integrate Stormpath:
+Now that the package is installed, you can add it to your application in ``Startup.cs``.
 
-.. literalinclude:: code/csharp/setup/setup.cs
+First, add the required services in ``ConfigureServices()``:
+
+.. literalinclude:: code/csharp/setup/configure_services.cs
     :language: csharp
 
-With this minimal configuration, our library will do the following:
+Next, add Stormpath to your middleware pipeline in ``Configure()``:
+
+.. literalinclude:: code/csharp/setup/configure.cs
+    :language: csharp
+
+With this minimal configuration, the library will do the following:
+
+- Look for your ``apiKey.properties`` file in the ``.stormpath`` folder.
 
 - Fetch your Stormpath Application and all the data about its configuration and
   account stores.
 
-- Attach the :ref:`default_features` to your express application, such as the
+- Attach the :ref:`default_features` to your application, such as the
   login page and registration page.
 
-- Hold any requests that require authentication, until Stormpath is ready.
+That's it, you're ready to go! Compile and run your project, and try navigating to these URLs:
 
-That's it, you're ready to go! Try navigating to these URLs in your application:
+- http://localhost:5000/login
+- http://localhost:5000/register
 
-- http://localhost:3000/login
-- http://localhost:3000/register
+.. note::
+  If you are running on IIS or IIS Express, the port may not be 5000.
 
 You should be able to register for an account and log in. The newly created
 account will be placed in the directory that is mapped to "My Application".
@@ -134,7 +134,7 @@ account will be placed in the directory that is mapped to "My Application".
     by logging into the `Admin Console`_ and going to the the Workflows tab
     for the directory of your Stormpath Application.
 
-There are many more features than login and registration, please continue to the
+There are many more features than login and registration. Continue to the
 next section to learn more!
 
 
@@ -145,21 +145,12 @@ Looking for some example applications?  We provide the following examples
 applications to get you up and running quickly.  They show you how to setup
 Stormpath, and implement a profile page for the logged-in user:
 
-- `Express-Stormpath Example Project`_
-
-- `Stormpath Angular + Express Fullstack Sample Project`_
-
-- `Stormpath React + Express Fullstack Example Project`_
+- `ASP.NET MVC6 Example Project`_
 
 .. _Admin Console: https://api.stormpath.com/login
 .. _Application Resource: https://docs.stormpath.com/rest/product-guide/latest/reference.html#application
-.. _Active Directory: http://en.wikipedia.org/wiki/Active_Directory
 .. _Directory Resource: https://docs.stormpath.com/rest/product-guide/latest/reference.html#directory
-.. _Express-Stormpath Example Project: https://github.com/stormpath/express-stormpath-sample-project
-.. _LDAP: http://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol
-.. _Express-Stormpath: https://www.npmjs.org/package/express-stormpath
+.. _Stormpath.AspNetCore: https://www.nuget.org/packages/Stormpath.AspNetCore
 .. _Modeling Your User Base: https://docs.stormpath.com/rest/product-guide/latest/accnt_mgmt.html#modeling-your-user-base
-.. _NPM: https://www.npmjs.org/
 .. _Setting up Development and Production Environments: https://docs.stormpath.com/guides/dev-test-prod-environments/
-.. _Stormpath Angular + Express Fullstack Sample Project: https://github.com/stormpath/express-stormpath-angular-sample-project
-.. _Stormpath React + Express Fullstack Example Project: https://github.com/stormpath/stormpath-express-react-example
+.. _ASP.NET MVC6 Example Project: https://github.com/stormpath/stormpath-aspnetcore-example
