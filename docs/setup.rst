@@ -27,6 +27,8 @@ prompt you to download your key pair.
 Once you've downloaded your ``apiKey.properties`` file, make a new hidden folder in your home directory
 called ``.stormpath`` and place the file in the new folder.
 
+.. warning:: Rewrite this section.
+
 In the Windows Command prompt, run these commands from your Downloads folder:
 
 .. code-block:: sh
