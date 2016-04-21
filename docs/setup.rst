@@ -106,23 +106,8 @@ Initialize Express-Stormpath
 With the module installed, we can add it to our application. Here is a sample
 Express application, it shows the minimal code required to integrate Stormpath:
 
- .. code-block:: javascript
-
-    var express = require('express');
-    var stormpath = require('express-stormpath');
-
-    var app = express();
-
-    app.use(stormpath.init(app, {
-      // Optional configuration options.
-    }));
-
-    app.listen(3000);
-
-    // Stormpath will let you know when it's ready to start authenticating users.
-    app.on('stormpath.ready', function () {
-      console.log('Stormpath Ready!');
-    });
+.. literalinclude:: code/csharp/setup/setup.cs
+    :language: csharp
 
 With this minimal configuration, our library will do the following:
 
