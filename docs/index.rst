@@ -1,14 +1,14 @@
-Express Library Guide
+ASP.NET Core Library Guide
 =====================
 
-Express-Stormpath is an extension for `Express`_ that makes it *incredibly*
-simple to add users and user data to your application.  It aims to completely
+The `Stormpath.AspNetCore`_ package is a plugin for ASP.NET Core that makes it *incredibly*
+simple to add users and authentication to your application.  It aims to completely
 abstract away all user registration, login, authentication, and authorization
-problems, and make building secure websites painless.  And the best part?  **You
+concerns, and make building secure websites painless.  And the best part?  **You
 don't even need a database!**
 
-This documentation will show you how to get started with Express-Stormpath.  If
-you're a new Express-Stormpath user, start here!
+This documentation will show you how to get started with Stormpath and ASP.NET Core.  If
+you're a new user, start here!
 
 .. toctree::
    :maxdepth: 2
@@ -32,18 +32,8 @@ you're a new Express-Stormpath user, start here!
 Additional Notes
 ----------------
 
-This part of the documentation covers changes between versions and upgrade
-information, to help you migrate to newer versions of Express-Stormpath easily.
-
-Express-Stormpath is made available under the `Apache License, Version 2.0`_.
+The Stormpath.AspNetCore library is made available under the `Apache License, Version 2.0`_.
 In short, you can do pretty much whatever you want!
 
-.. toctree::
-   :maxdepth: 2
-
-   changelog
-   upgrading
-
-
-.. _Express: http://expressjs.com/
+.. _Stormpath.AspNetCore: https://www.nuget.org/packages/Stormpath.AspNetCore
 .. _Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0.html
