@@ -44,15 +44,15 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Express Library Guide'
-copyright = u'2014, Stormpath, Inc.'
+project = u'ASP.NET Core Library Guide'
+copyright = u'2016, Stormpath, Inc.'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
 # The short X.Y version.
-version = loads(open('../package.json', 'rb').read())['version']
+version = loads(open('../src/Stormpath.AspNetCore/project.json', 'rb').read())['version']
 # The full version, including alpha/beta/rc tags.
 release = version
 
@@ -199,10 +199,10 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
-latex_documents = [
-  ('index', 'Express-Stormpath.tex', u'Express-Stormpath Documentation',
-   u'Stormpath, Inc.', 'manual'),
-]
+#latex_documents = [
+#  ('index', 'Express-Stormpath.tex', u'Express-Stormpath Documentation',
+#   u'Stormpath, Inc.', 'manual'),
+#]
 
 # The name of an image file (relative to this directory) to place at the top of
 # the title page.
@@ -229,10 +229,10 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    ('index', 'express-stormpath', u'Express-Stormpath Documentation',
-     [u'Stormpath, Inc.'], 1)
-]
+#man_pages = [
+#    ('index', 'express-stormpath', u'Express-Stormpath Documentation',
+#     [u'Stormpath, Inc.'], 1)
+#]
 
 # If true, show URL addresses after external links.
 #man_show_urls = False
@@ -243,11 +243,11 @@ man_pages = [
 # Grouping the document tree into Texinfo files. List of tuples
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
-texinfo_documents = [
-  ('index', 'Express-Stormpath', u'Express-Stormpath Documentation',
-   u'Stormpath, Inc.', 'Express-Stormpath', 'One line description of project.',
-   'Miscellaneous'),
-]
+#texinfo_documents = [
+#  ('index', 'Express-Stormpath', u'Express-Stormpath Documentation',
+#   u'Stormpath, Inc.', 'Express-Stormpath', 'One line description of project.',
+#   'Miscellaneous'),
+#]
 
 # Documents to append as an appendix to all manuals.
 #texinfo_appendices = []
