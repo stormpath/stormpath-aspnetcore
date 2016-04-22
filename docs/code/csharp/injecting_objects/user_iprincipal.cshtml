@@ -1,0 +1,6 @@
+@using System.Security.Claims;
+
+@if (Context.User.Identity.IsAuthenticated)
+{
+    <p>Hello, <b>@Context.User.Claims.Where(c => c.Type == ClaimTypes.GivenName)</b>!</p>
+}
