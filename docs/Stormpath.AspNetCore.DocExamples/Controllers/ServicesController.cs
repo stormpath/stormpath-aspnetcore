@@ -57,4 +57,26 @@ namespace Stormpath.AspNetCore.DocExamples.Controllers
         }
     }
     #endregion
+
+    public class UserModificationController : Controller
+    {
+        #region code/csharp/stormpath_objects/update_user_password.cs
+        [FromServices]
+        public Lazy<IAccount> Account { get; set; }
+
+        
+        [HttpPost]
+        public async Task<IActionResult> UpdatePassword(string newPassword)
+        {
+            if (Account.Value != null)
+            {
+                var stormpathAccount = Account.Value;
+                stormpathAccount.SetPassword(newPassword);
+                await stormpathAccount.SaveAsync();
+            }
+
+            return RedirectToAction("Index");
+        }
+        #endregion
+    }
 }
