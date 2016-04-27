@@ -8,7 +8,7 @@ using Stormpath.SDK.Application;
 
 namespace Stormpath.AspNetCore.DocExamples.Controllers
 {
-    #region code/csharp/injecting_objects/controller_fromservices.cs
+    #region code/csharp/stormpath_objects/controller_fromservices.cs
     public class ServicesController : Controller
     {
         [FromServices]
@@ -21,7 +21,7 @@ namespace Stormpath.AspNetCore.DocExamples.Controllers
     }
     #endregion
 
-    #region code/csharp/injecting_objects/controller_injection.cs
+    #region code/csharp/stormpath_objects/controller_injection.cs
     public class InjectedServicesController : Controller
     {
         public IApplication StormpathApplication { get; private set; }
@@ -38,7 +38,7 @@ namespace Stormpath.AspNetCore.DocExamples.Controllers
     }
     #endregion
 
-    #region code/csharp/injecting_objects/injecting_user.cs
+    #region code/csharp/stormpath_objects/injecting_user.cs
     public class UserController : Controller
     {
         [FromServices]
