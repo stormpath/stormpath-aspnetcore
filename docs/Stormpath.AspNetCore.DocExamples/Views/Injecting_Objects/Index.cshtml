@@ -1,0 +1,21 @@
+﻿@* #region code/csharp/injecting_objects/user_iprincipal.cstml *@
+
+@using System.Security.Claims;
+
+@if (Context.User.Identity.IsAuthenticated)
+{
+    <p>Hello, <b>@Context.User.Claims.Where(c => c.Type == ClaimTypes.GivenName)</b>!</p>
+}
+
+@* #endregion *@
+
+@* #region code/csharp/injecting_objects/injecting_user_view.cshtml *@
+
+@inject Lazy<Stormpath.SDK.Account.IAccount> Account;
+
+@if (Account.Value != null)
+{
+    <p>Hello, <b>@Account.Value.GivenName</b>!</p>
+}
+
+@* #endregion *@

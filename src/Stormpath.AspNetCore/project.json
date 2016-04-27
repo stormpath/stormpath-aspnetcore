@@ -31,11 +31,11 @@
   },
   "iconUrl": "https://raw.githubusercontent.com/stormpath/stormpath-sdk-csharp/master/icon.png",
   "language": "en-US",
-  "licenseUrl": "https://github.com/stormpath/stormpath-aspnet/blob/master/LICENSE",
+  "licenseUrl": "https://github.com/stormpath/stormpath-aspnetcore/blob/master/LICENSE",
   "owners": [ "Stormpath, Inc." ],
-  "projectUrl": "https://github.com/stormpath/stormpath-aspnet",
+  "projectUrl": "https://github.com/stormpath/stormpath-aspnetcore",
   "repository": {
-    "url": "https://github.com/stormpath/stormpath-aspnet"
+    "url": "https://github.com/stormpath/stormpath-aspnetcore"
   },
   "tags": [ "Stormpath API Authentication Authorization" ],
   "tooling": {
