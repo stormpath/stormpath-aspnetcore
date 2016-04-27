@@ -1,4 +1,4 @@
-.. _injecting_objects:
+.. _working_with_stormpath:
 
 Working with Stormpath
 =================

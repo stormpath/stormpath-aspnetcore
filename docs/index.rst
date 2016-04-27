@@ -1,5 +1,5 @@
 ASP.NET Core Library Guide
-=====================
+==========================
 
 The `Stormpath.AspNetCore`_ package is a plugin for ASP.NET Core that makes it *incredibly*
 simple to add users and authentication to your application.  It aims to completely
@@ -16,17 +16,7 @@ you're a new user, start here!
    introduction
    setup
    configuration
-   user_data
-   authentication
-   authorization
-   registration
-   login
-   social_login
-   logout
-   password_reset
-   templates
-   help
-   contributors
+   working_with_stormpath
 
 
 Additional Notes

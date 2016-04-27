@@ -116,6 +116,8 @@ Like all the other methods of supplying configuration, any omitted options will 
 .. tip::
   The most flexible way of providing configuration in a production environment is with YAML/JSON markup or environment variables. Inline options are useful during development.
 
+.. _default_features:
+
 Default Features
 ----------------
 
