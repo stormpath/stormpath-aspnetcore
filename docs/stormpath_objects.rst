@@ -78,5 +78,18 @@ You can also use the ``@inject`` directive to do the same injection directly in 
 
 If you want to require authentication on certain controllers or routes, jump to the :ref:`authentication` section.
 
+
+Working with the Stormpath API
+------------------------------
+
+By injecting one of the available types (``IClient``, ``IApplication``, or ``IAccount``), you can use the `Stormpath .NET SDK`_ to interact with the Stormpath API.
+
+To update the user's password, for example:
+
+.. literalinclude:: code/csharp/stormpath_objects/update_user_password.cs
+    :language: csharp
+
+There are many more things you can do with the .NET SDK. Check out the `Stormpath .NET API documentation`_ to learn more!
+
 .. _Stormpath .NET SDK: https://github.com/stormpath/stormpath-sdk-dotnet
 .. _Stormpath .NET API documentation: http://docs.stormpath.com/dotnet/api/
