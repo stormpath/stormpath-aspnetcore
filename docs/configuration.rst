@@ -154,10 +154,17 @@ Disabling Features
 
 The library enables many features by default, but you might not want to use all of them.
 For example, if you wanted to disable all the default features, you could use
-this configuration (or the equivalent YAML/JSON or environment variables):
+this configuration in code:
 
 .. literalinclude:: code/csharp/configuration/disable_default_features.cs
     :language: csharp
+
+The equivalent ``stormpath.yaml`` looks like this:
+
+.. literalinclude:: code/configuration/disable_default_features.yaml
+    :language: yaml
+
+You could also achieve the same result using environment variables, by setting ``STORMPATH_WEB_LOGIN_ENABLED = 'false'`` and so on.
 
 Disabling Content Types
 -----------------------
