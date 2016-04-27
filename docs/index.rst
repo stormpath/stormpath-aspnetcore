@@ -17,6 +17,7 @@ you're a new user, start here!
    setup
    configuration
    stormpath_objects
+   authentication
 
 
 Additional Notes
