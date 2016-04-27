@@ -219,6 +219,7 @@ The validation strategy can be changed via :ref:`Configuration`. The default con
 
 
 .. todo::
+
   OAuth2 Client Credentials
   -------------------------
 
@@ -346,20 +347,20 @@ OAuth2 Password Grant
 ---------------------
 
 This is the authentication strategy that you will want to use for mobile clients.
+
 In this situation the end-user supplies their username and password to your
 mobile application.  The mobile application sends that username and password to
-your ASP.NET application, which then verifies the password with Stormpath.
+your ASP.NET server, which then verifies the password with Stormpath.
 
 If the account is valid and the password is correct, Stormpath will generate
 an Access and Refresh Token for the user.  Your server gets these tokens from Stormpath
-and then sends it down to your mobile application.
+and then sends them down to your mobile application.
 
 The mobile application then stores the tokens in a secure location, and
-uses them for future requests to your API.  Every time the mobile application uses
-this Access Token your server will verify that it's still valid, using Stormpath.
+uses them for future requests to your ASP.NET Web API application.
 
 When a user wants to login to your mobile application, the mobile application
-should make this request to your ASP.NET API::
+should make this request to your ASP.NET Web API application::
 
     POST /oauth/token HTTP/1.1
     Host: myapi.com
@@ -377,19 +378,21 @@ If the authentication is successful, your server will return a token response to
       "token_type": "Bearer",
       "access_token": "eyJraWQiOiI2Nl...",
       "expires_in": 3600
+    }
 
-Your mobile application should store the Access Token and Refresh Token.  By
-default the Access Token is valid for 1 hour and the Refresh Token for 60 days. (You can configure this - see :ref:`setting_token_expiration_time`.)
+Your mobile application should store the tokens in a secure location.
 
-Each request the mobile application makes to your ASP.NET API should include the Access Token as a ``Bearer`` header::
+.. note::
+  By default the Access Token is valid for 1 hour and the Refresh Token is valid for 60 days. You can configure this in the Stormpath Admin Console; see :ref:`setting_token_expiration_time`.
+
+Each subsequent request the mobile application makes to your ASP.NET Web API should include the Access Token as a ``Bearer`` header::
 
     GET /profile HTTP/1.1
     Host: myapi.com
     Authorization: Bearer eyJraWQiOiI2Nl...
     ...
 
-When the Access Token expires you can get a new Access Token by using the
-Refresh Token and making this request to your ASP.NET API::
+When the Access Token expires, you can use the Refresh Token to obtain a new Access Token::
 
     POST /oauth/token HTTP/1.1
     Host: myapi.com
