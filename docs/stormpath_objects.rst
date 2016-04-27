@@ -1,6 +1,6 @@
-.. _working_with_stormpath:
+.. _stormpath_objects:
 
-Working with Stormpath
+Stormpath Objects
 =================
 
 When the Stormpath middleware is added to your ASP.NET request pipeline, these types will be available via dependency injection for each request:
@@ -11,12 +11,12 @@ When the Stormpath middleware is added to your ASP.NET request pipeline, these t
 
 You can request any of these objects from the container using the ``[FromServices]`` attribute:
 
-.. literalinclude:: code/csharp/injecting_objects/controller_fromservices.cs
+.. literalinclude:: code/csharp/stormpath_objects/controller_fromservices.cs
     :language: csharp
 
 Or, if you prefer, you can use constructor injection:
 
-.. literalinclude:: code/csharp/injecting_objects/controller_injection.cs
+.. literalinclude:: code/csharp/stormpath_objects/controller_injection.cs
     :language: csharp
 
 
@@ -49,7 +49,7 @@ The Stormpath middleware automatically checks incoming requests for authenticati
 
 A subset of the user's Stormpath Account details are automatically placed in the ``ClaimsPrincipal`` object for the request. This makes it possible to quickly do things like update a view if the user is logged in:
 
-.. literalinclude:: code/csharp/injecting_objects/user_iprincipal.cs
+.. literalinclude:: code/csharp/stormpath_objects/user_iprincipal.cshtml
     :language: html
 
 The full list of claims populated in ``Context.User`` are:
@@ -61,9 +61,9 @@ The full list of claims populated in ``Context.User`` are:
 * ``ClaimTypes.Surname``
 * ``"FullName"``
 
-If you want full access to the Stormpath ``IAccount`` object, simply inject a ``Lazy<IAccount>`` in your controller:
+If you want full access to the Stormpath ``IAccount`` object, inject a ``Lazy<IAccount>`` in your controller:
 
-.. litereralinclude:: code/csharp/injecting_objects/injecting_user.cs
+.. literalinclude:: code/csharp/stormpath_objects/injecting_user.cs
     :language: csharp
 
 If the request is unauthenticated, the lazy value will resolve to ``null``. If the request represents a valid user, you'll get an ``IAccount`` instance representing the user's Stormpath Account.
@@ -73,7 +73,7 @@ If the request is unauthenticated, the lazy value will resolve to ``null``. If t
 
 You can also use the ``@inject`` directive to do the same injection directly in your views:
 
-.. literalinclude:: code/csharp/injecting_objects/injecting_user_view.cshtml
+.. literalinclude:: code/csharp/stormpath_objects/injecting_user_view.cshtml
     :language: html
 
 If you want to require authentication on certain controllers or routes, jump to the :ref:`authentication` section.

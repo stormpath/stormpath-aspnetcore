@@ -16,7 +16,7 @@ you're a new user, start here!
    introduction
    setup
    configuration
-   working_with_stormpath
+   stormpath_objects
 
 
 Additional Notes
