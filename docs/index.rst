@@ -18,7 +18,10 @@ you're a new user, start here!
    configuration
    stormpath_objects
    authentication
+   registration
 
+.. todo::
+    authorization
 
 Additional Notes
 ----------------
