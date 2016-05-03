@@ -20,13 +20,13 @@ This feature supports several options that you can configure using code or marku
 * **uri**: The path for this feature. (Default: ``/register``)
 * **autoLogin**: Whether the user should be logged in after registering. (Default: ``false``)
 * **nextUri**: The location to send the user after registering, if **autoLogin** is on. (Default: ``/``)
-* **view**: The view to render for HTML requests; see :ref:`custom_view`. (Default: ``register``)
-* **form**: The fields that will be displayed on the form; see :ref:`customizing_form`.
+* **view**: The view to render for HTML requests; see :ref:`register_custom_view`. (Default: ``register``)
+* **form**: The fields that will be displayed on the form; see :ref:`register_customizing_form`.
 
-.. tip::
-  Any unchanged options will retain their default values. See the :ref:`default_configuration` section to view the defaults.
+.. note::
+  Any unchanged options will retain their default values. See the :ref:`register_default_configuration` section to view the defaults.
 
-.. _customizing_form:
+.. _register_customizing_form:
 
 Customizing the Form
 --------------------
@@ -53,7 +53,7 @@ Each field item in ``web.register.form.fields`` has these configurable propertie
 Making Fields Optional
 ......................
 
-If you would like to show a field, but not require it, set the ``required`` property to ``false``:
+If you would like to show a field, but not require it, set the ``required`` property to ``false``, as shown in YAML below:
 
 .. code-block:: yaml
 
@@ -79,7 +79,7 @@ If you would like to remove a field from the form entirely, set the ``visible`` 
   Because the Stormpath API requires a first and last name, the library will auto-fill these fields with ``UNKNOWN`` if you make them optional and the user does not provide them.
 
 
-.. _custom_fields:
+.. _register_custom_fields:
 
 Adding Custom Fields
 ....................
@@ -126,16 +126,26 @@ If you want to change the order of the fields, you can do so by specifying the
 
 Any visible fields that are omitted from the `fieldOrder` array will be placed at the end of the form.
 
-.. _custom_view:
+.. _register_custom_view:
 
 Using a Custom View
 -------------------
 
-By default, this library will use a pre-built view created by Stormpath.
+By default, this route will use a pre-built view created by Stormpath.
 
-If you want to customize the look and feel of the view, you can set the ``stormpath.web.register.view`` configuration property to the name of (or path to) a Razor view available in your project. Feel free to copy and modify the `pre-built view templates`_ and use them as a starting point!
+If you want to customize the look and feel of the view, you can set the ``view`` option to the name of (or path to) a Razor view available in your project:
 
-The view you specify will be passed a model of type ``Stormpath.Owin.Abstractions.ViewModel.ExtendedRegisterViewModel``.
+.. code-block:: yaml
+
+  stormpath:
+    web:
+      register:
+        view: "~/Views/Register/Register.cshtml"
+
+.. note::
+  The view you specify will be passed a model of type ``Stormpath.Owin.Abstractions.ViewModel.ExtendedRegisterViewModel``.
+
+Feel free to copy and modify the `pre-built view templates`_ and use them as a starting point!
 
 .. todo::
   Update this section when it's possible to simply update the included Razor files.
@@ -406,7 +416,7 @@ If an error occurs, you'll get an error object that looks like this:
 Supplying Custom Fields
 .......................
 
-If any custom fields exist on the form (see :ref:`custom_fields`), you can supply them either as a root property, or a child of a property called ``customData``:
+If any custom fields exist on the form (see :ref:`register_custom_fields`), you can supply them either as a root property, or a child of a property called ``customData``:
 
 .. code-block:: json
 
@@ -422,7 +432,7 @@ If any custom fields exist on the form (see :ref:`custom_fields`), you can suppl
   }
 
 
-.. _default_configuration:
+.. _register_default_configuration:
 
 Default Configuration
 ---------------------

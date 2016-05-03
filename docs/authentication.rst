@@ -18,6 +18,8 @@ your choices look like this:
     **HTTP Basic Authentication** or **OAuth2 Client Credentials**.
 
 
+.. _cookie_authentication:
+
 Cookie Authentication
 ---------------------
 

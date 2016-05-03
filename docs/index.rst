@@ -19,9 +19,11 @@ you're a new user, start here!
    stormpath_objects
    authentication
    registration
+   login
 
 .. todo::
     authorization
+    id_site
 
 Additional Notes
 ----------------
