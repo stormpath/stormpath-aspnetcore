@@ -5,44 +5,40 @@ Registration
 ============
 
 The registration feature of this library allows you to use Stormpath to create
-new accounts in a Stormpath directory.  You can create traditional password-
-based accounts, or gather account data from other providers such as Facebook and
-Google.
+new accounts in a Stormpath directory.  You can create traditional password-based accounts, or gather account data from other providers such as Facebook and Google.
 
 By default this library will serve an HTML registration page at ``/register``.
-You can change this URI with the ``web.register.uri`` configuration option.  You can disable
-this feature entirely by setting ``web.register.enabled`` to ``false``.
+You can change this URI, or disable the feature entirely if you wish.
 
 
 Configuration Options
 ---------------------
 
-This feature supports several options that you can configure using code or markup (see :ref:`Configuration`):
+This feature supports several options that you can configure using code or markup (see the :ref:`Configuration` section):
 
 * **enabled**: Whether the feature is enabled. (Default: ``true``)
 * **uri**: The path for this feature. (Default: ``/register``)
-* **autoLogin**: Whether the user should automatically be logged in after registering. (Default: ``false``)
-* **nextUri**: The location to send the user after registering, if **autoLogin** is ``true``. (Default: ``/``)
-* **view**: The view name to render for HTML requests; see :ref:`custom_view`. (Default: ``register``)
+* **autoLogin**: Whether the user should be logged in after registering. (Default: ``false``)
+* **nextUri**: The location to send the user after registering, if **autoLogin** is on. (Default: ``/``)
+* **view**: The view to render for HTML requests; see :ref:`custom_view`. (Default: ``register``)
 * **form**: The fields that will be displayed on the form; see :ref:`customizing_form`.
 
 .. tip::
-  Any unchanged options will retain their default values; see :ref:`default_configuration`.
+  Any unchanged options will retain their default values. See the :ref:`default_configuration` section to view the defaults.
 
 .. _customizing_form:
 
 Customizing the Form
 --------------------
 
-The registration form will render these fields by default, and they will be
-required by the user:
+The registration form will render these fields by default, and they will be required:
 
 * First Name (given name)
 * Last Name (surname)
 * Email
 * Password
 
-You can customize the form by simply changing the configuration. For example, while email and password will always be required, you could make first and last name optional. Or, you can ask the user for both an email address and a unique username. You can also specify your own custom fields.
+You can customize the form by simply changing the configuration. For example, while email and password will always be required, you could make first and last name optional. Or, you can ask the user for both an email address and a username. You can also specify your own custom fields!
 
 Each field item in ``web.register.form.fields`` has these configurable properties:
 
@@ -50,8 +46,9 @@ Each field item in ``web.register.form.fields`` has these configurable propertie
 * **visible**: Whether the field is visible on the form.
 * **required**: Whether an error will be shown if the field is missing.
 * **label**: The label text rendered for the control.
-* **placeholder** The placeholder text in the control.
+* **placeholder**: The placeholder text in the control.
 * **type**: The HTML input type of the control.
+
 
 Making Fields Optional
 ......................
@@ -81,13 +78,15 @@ If you would like to remove a field from the form entirely, set the ``visible`` 
 .. note::
   Because the Stormpath API requires a first and last name, the library will auto-fill these fields with ``UNKNOWN`` if you make them optional and the user does not provide them.
 
+
+.. _custom_fields:
+
 Adding Custom Fields
 ....................
 
 You can add your own custom fields to the form.  The values will be
 automatically added to the user's `Custom Data`_ object when they register
-successfully.  You can define a custom field by defining a new field object,
-like this:
+successfully.  You can create a custom field by defining a new field configuration:
 
 .. code-block:: yaml
 
@@ -96,6 +95,8 @@ like this:
       register:
         form:
           fields:
+            // Other fields
+            // ...
             favoriteColor:
               enabled: true
               label: "Favorite Color"
@@ -123,25 +124,33 @@ If you want to change the order of the fields, you can do so by specifying the
             - "email"
             - "password"
 
+Any visible fields that are omitted from the `fieldOrder` array will be placed at the end of the form.
 
 .. _custom_view:
 
 Using a Custom View
 -------------------
 
-Todo.
+By default, this library will use a pre-built view created by Stormpath.
+
+If you want to customize the look and feel of the view, you can set the ``stormpath.web.register.view`` configuration property to the name of (or path to) a Razor view available in your project. Feel free to copy and modify the `pre-built view templates`_ and use them as a starting point!
+
+The view you specify will be passed a model of type ``Stormpath.Owin.Abstractions.ViewModel.ExtendedRegisterViewModel``.
+
+.. todo::
+  Update this section when it's possible to simply update the included Razor files.
 
 
 Password Strength Requirements
 ------------------------------
 
-Stormpath supports complex password strength rules, such as number of letters
-or special characters required.  These settings are controlled on a directory
-basis.  If you want to modify the password strength rules for your application
-you should use the `Stormpath Admin Console`_ to find the directory that is mapped
-to your application, and modify it's password policy.
+Stormpath supports complex password strength rules, such as the number of letters
+or special characters required.  These settings are controlled on a per-Directory
+basis.
 
-For more information see `Account Password Strength Policy`_.
+If you want to modify the password strength rules for your application, use the `Stormpath Admin Console`_ to find the directory that is mapped to your application, and modify the associated password policy.
+
+For more information, see `Account Password Strength Policy`_.
 
 
 
@@ -151,10 +160,7 @@ Email Verification
 We **highly** recommend that you use email verification, as it adds an additional layer
 of security to your site (it makes it harder for bots to create spam accounts).
 
-When the Stormpath email verification workflow is enabled on the directory, we will send the new account an email with a link that they must click on in order to verify their account.  When they click on
-that link they will be directed to your application like:
-
-http://yourapplication.com/verify?sptoken=TOKEN
+When the Stormpath email verification workflow is enabled on the directory, we will send new accounts an email with a link they must click in order to verify their account.
 
 To enable email verification, you need to configure the Stormpath Directory. Follow these steps:
 
@@ -166,13 +172,14 @@ To enable email verification, you need to configure the Stormpath Directory. Fol
 
     http://yourapplication.com/verify
 
-The ``/verify`` route is automatically handled by the Stormpath middleware; see the :ref:`email_verification` section.
+.. note::
+  The ``/verify`` route is automatically handled by the Stormpath middleware; see the :ref:`email_verification` section.
 
 
 Auto Login
 ----------
 
-If you are *not* using email verificaion (not recommended) you may log users in
+If you are *not* using email verification, you may log users in
 automatically when they register.  This can be achieved with this configuration:
 
 .. code-block:: yaml
@@ -183,7 +190,7 @@ automatically when they register.  This can be achieved with this configuration:
         autoLogin: true
         nextUri: "/"
 
-By default the ``nextUri`` is to the `/` root page, but you can modify this to whatever destination you want.
+By default the ``nextUri`` is to the ``/`` root page, but you can modify this to whatever destination you want.
 
 
 .. todo::
@@ -282,12 +289,13 @@ By default the ``nextUri`` is to the `/` root page, but you can modify this to w
 JSON Registration API
 ---------------------
 
-If you are using this library from a SPA framework like Angular or React, you will interact with the registration endpoint via GET and POST requests, instead of letting the middleware render an HTML view.
+If you are using this library from a client framework like Angular or React, you will interact with the registration endpoint via GET and POST requests, instead of letting the middleware render an HTML view.
+
 
 Getting the Form View Model
 ...........................
 
-By making a GET request to the registration endpoint with ``Accept: application/json``, you can retrieve a JSON view model that describes the registration form and any external account stores that are mapped to your Stormpath Application.
+By making a GET request to the registration endpoint with the ``Accept: application/json`` header set, you can retrieve a JSON view model that describes the registration form and any external account stores that are mapped to your Stormpath Application.
 
 Here's an example view model that represents an application that has the default registration form, and a mapped Google social directory:
 
@@ -348,8 +356,8 @@ Here's an example view model that represents an application that has the default
   You may have to explicitly tell your client library that you want a JSON
   response from the server. Not all libraries do this automatically. If the
   library does not set the ``Accept: application/json`` header on the request,
-  you'll get back the HTML registration form - not the JSON response that you
-  expect.
+  you'll get back the HTML registration form instead of the JSON response that you
+  expect!
 
 
 Registering a User
@@ -395,13 +403,33 @@ If an error occurs, you'll get an error object that looks like this:
     "message": "Invalid username or password."
   }
 
+Supplying Custom Fields
+.......................
+
+If any custom fields exist on the form (see :ref:`custom_fields`), you can supply them either as a root property, or a child of a property called ``customData``:
+
+.. code-block:: json
+
+  {
+      "email": "foo@bar.com",
+      "password": "mySuper3ecretPAssw0rd",
+      "surname": "bar",
+      "givenName": "foo",
+      "customValue": "custom value can be on root object or in customData object",
+      "customData": {
+        "favoriteColor": "beige"
+      }
+  }
+
 
 .. _default_configuration:
 
 Default Configuration
 ---------------------
 
-Options that are not overridden by explicit configuration (see :ref:`configuration`) will retain their default values, shown in YAML below:
+Options that are not overridden by explicit configuration (see :ref:`configuration`) will retain their default values.
+
+For reference, the full default configuration is shown in YAML below:
 
 .. code-block:: yaml
 
@@ -467,6 +495,7 @@ Options that are not overridden by explicit configuration (see :ref:`configurati
             - "confirmPassword"
 
 .. _Custom Data: http://docs.stormpath.com/rest/product-guide/latest/accnt_mgmt.html#how-to-store-additional-user-information-as-custom-data
+.. _pre-built view templates: https://github.com/stormpath/stormpath-dotnet-owin-middleware/tree/master/src/Stormpath.Owin.Views
 
 .. _Stormpath Admin Console: https://api.stormpath.com
 .. _Account Password Strength Policy: https://docs.stormpath.com/rest/product-guide/latest/accnt_mgmt.html#manage-password-policies
