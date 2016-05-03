@@ -20,7 +20,7 @@ This feature supports several options that you can configure using code or marku
 * **enabled**: Whether the feature is enabled. (Default: ``true``)
 * **uri**: The path for this feature. (Default: ``/login``)
 * **nextUri**: The location to send the user after logging in. (Default: ``/``)
-* **view**: The view to render for HTML requests; see :ref:`login_custom_view`. (Default: ``login``)
+* **view**: The view to render; see :ref:`login_custom_view`. (Default: ``login``)
 * **form**: The fields that will be displayed on the form; see :ref:`login_customizing_form`.
 
 .. note::
@@ -63,7 +63,7 @@ Using a Custom View
 
 By default, this route will use a pre-built view created by Stormpath.
 
-If you want to customize the look and feel of the view, you can set the ``view`` option to the name of (or path to) a Razor view available in your project:
+If you want to customize the look and feel of the view, you can set the ``view`` option to the name of (or the path to) a Razor view available in your project:
 
 .. code-block:: yaml
 
@@ -185,7 +185,7 @@ If the login attempt is successful, the user will be redirected to ``/`` by defa
 
 .. _json_login_api:
 
-JSON Login API
+Mobile/JSON API
 --------------
 
 If you are using this library from a client framework like Angular or React, you will interact with the login endpoint via GET and POST requests, instead of letting the middleware render an HTML view.
@@ -194,9 +194,13 @@ If you are using this library from a client framework like Angular or React, you
 Making a Login Attempt
 ......................
 
-Simply POST to the ``/login`` endpoint, with the following format:
+Simply POST to the ``/login`` endpoint with the user's credentials:
 
-.. code-block:: json
+.. code-block:: http
+
+    POST /login
+    Accept: application/json
+    Content-Type: application/json
 
     {
       "login": "foo@bar.com",
@@ -280,7 +284,7 @@ Default Configuration
 
 Options that are not overridden by explicit configuration (see :ref:`configuration`) will retain their default values.
 
-For reference, the full default configuration is shown in YAML below:
+For reference, the full default configuration for this route is shown as YAML below:
 
 .. code-block:: yaml
 

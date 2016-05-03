@@ -23,6 +23,8 @@ you're a new user, start here!
    login
    .. social_login
    logout
+   password_reset
+   .. email_verification?
    .. id_site
 
 Additional Notes

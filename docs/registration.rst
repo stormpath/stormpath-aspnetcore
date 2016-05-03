@@ -20,7 +20,7 @@ This feature supports several options that you can configure using code or marku
 * **uri**: The path for this feature. (Default: ``/register``)
 * **autoLogin**: Whether the user should be logged in after registering. (Default: ``false``)
 * **nextUri**: The location to send the user after registering, if **autoLogin** is on. (Default: ``/``)
-* **view**: The view to render for HTML requests; see :ref:`register_custom_view`. (Default: ``register``)
+* **view**: The view to render; see :ref:`register_custom_view`. (Default: ``register``)
 * **form**: The fields that will be displayed on the form; see :ref:`register_customizing_form`.
 
 .. note::
@@ -133,7 +133,7 @@ Using a Custom View
 
 By default, this route will use a pre-built view created by Stormpath.
 
-If you want to customize the look and feel of the view, you can set the ``view`` option to the name of (or path to) a Razor view available in your project:
+If you want to customize the look and feel of the view, you can set the ``view`` option to the name of (or the path to) a Razor view available in your project:
 
 .. code-block:: yaml
 
@@ -183,7 +183,7 @@ To enable email verification, you need to configure the Stormpath Directory. Fol
     http://yourapplication.com/verify
 
 .. note::
-  The ``/verify`` route is automatically handled by the Stormpath middleware; see the :ref:`email_verification` section.
+  The ``/verify`` route is automatically handled by this library; see the :ref:`email_verification` section.
 
 
 Auto Login
@@ -296,7 +296,7 @@ By default the ``nextUri`` is to the ``/`` root page, but you can modify this to
 
 .. _json_registration_api:
 
-JSON Registration API
+Mobile/JSON API
 ---------------------
 
 If you are using this library from a client framework like Angular or React, you will interact with the registration endpoint via GET and POST requests, instead of letting the middleware render an HTML view.
@@ -373,10 +373,14 @@ Here's an example view model that represents an application that has the default
 Registering a User
 ..................
 
-Simply post an object to ``/register`` and supply the fields that you wish to
+Simply post a JSON object to ``/register`` and supply the fields that you wish to
 populate for the user:
 
-.. code-block:: json
+.. code-block:: http
+
+    POST /register
+    Accept: application/json
+    Content-Type: application/json
 
     {
         "email": "foo@bar.com",
@@ -418,7 +422,11 @@ Supplying Custom Fields
 
 If any custom fields exist on the form (see :ref:`register_custom_fields`), you can supply them either as a root property, or a child of a property called ``customData``:
 
-.. code-block:: json
+.. code-block:: http
+
+  POST /register
+  Accept: application/json
+  Content-Type: application/json
 
   {
       "email": "foo@bar.com",
@@ -439,7 +447,7 @@ Default Configuration
 
 Options that are not overridden by explicit configuration (see :ref:`configuration`) will retain their default values.
 
-For reference, the full default configuration is shown in YAML below:
+For reference, the full default configuration for this route is shown as YAML below:
 
 .. code-block:: yaml
 

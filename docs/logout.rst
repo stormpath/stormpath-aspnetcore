@@ -80,7 +80,7 @@ Default Configuration
 
 Options that are not overridden by explicit configuration (see :ref:`configuration`) will retain their default values.
 
-For reference, the full default configuration is shown in YAML below:
+For reference, the full default configuration for this route is shown as YAML below:
 
 .. code-block:: yaml
 
