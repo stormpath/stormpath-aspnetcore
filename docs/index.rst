@@ -18,12 +18,12 @@ you're a new user, start here!
    configuration
    stormpath_objects
    authentication
+   .. authorization
    registration
    login
-
-.. todo::
-    authorization
-    id_site
+   .. social_login
+   logout
+   .. id_site
 
 Additional Notes
 ----------------

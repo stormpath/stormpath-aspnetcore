@@ -9,7 +9,7 @@ The login feature of this library allows you to accept login attempts from any a
 .. todo::
   See :ref:`social_login` if you want to accept logins from providers such as Facebook or Google.
 
-By default this library will serve an HTML login page at ``/login``.  You can change this URI, or disable the feature entirely if you wish.
+By default, this library will serve an HTML login page at ``/login``.  You can change this URI, or disable the feature entirely if you wish.
 
 
 Configuration Options
@@ -284,30 +284,32 @@ For reference, the full default configuration is shown in YAML below:
 
 .. code-block:: yaml
 
-  login:
-    enabled: true
-    uri: "/login"
-    nextUri: "/"
-    view: "login"
-    form:
-      fields:
-        login:
-          enabled: true
-          visible: true
-          label: "Username or Email"
-          placeholder: "Username or Email"
-          required: true
-          type: "text"
-        password:
-          enabled: true
-          visible: true
-          label: "Password"
-          placeholder: "Password"
-          required: true
-          type: "password"
-      fieldOrder:
-        - "login"
-        - "password"
+  stormpath:
+    web:
+      login:
+        enabled: true
+        uri: "/login"
+        nextUri: "/"
+        view: "login"
+        form:
+          fields:
+            login:
+              enabled: true
+              visible: true
+              label: "Username or Email"
+              placeholder: "Username or Email"
+              required: true
+              type: "text"
+            password:
+              enabled: true
+              visible: true
+              label: "Password"
+              placeholder: "Password"
+              required: true
+              type: "password"
+          fieldOrder:
+            - "login"
+            - "password"
 
 
 .. _Stormpath Admin Console: https://api.stormpath.com

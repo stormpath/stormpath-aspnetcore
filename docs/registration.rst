@@ -7,7 +7,7 @@ Registration
 The registration feature of this library allows you to use Stormpath to create
 new accounts in a Stormpath directory.  You can create traditional password-based accounts, or gather account data from other providers such as Facebook and Google.
 
-By default this library will serve an HTML registration page at ``/register``.
+By default, this library will serve an HTML registration page at ``/register``.
 You can change this URI, or disable the feature entirely if you wish.
 
 
