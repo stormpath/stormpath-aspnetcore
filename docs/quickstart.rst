@@ -5,7 +5,8 @@ Quickstart
 ==========
 
 This section walks you through adding Stormpath to a new |framework| project. By the end
-of this page you'll have working login and registration features for your application!
+of this short page you'll have working login and registration features added to your application!
+
 
 Create a Stormpath Account
 --------------------------
@@ -16,67 +17,70 @@ If you haven't already, the first thing you'll want to do is `create a new Storm
 Create an API Key Pair
 ----------------------
 
-Once you've created a new account you need to create an API key pair. A new
+Once you've created a new account, you need to create an API key pair. A new
 API key pair is easily created by logging into your dashboard and clicking the
 "Create an API Key" button. This will generate a new API key for you, and
 prompt you to download your key pair.
 
 .. note::
     Please keep the API key file safe!  This key and secret
-    allow you to make Stormpath API requests, and should be properly protected.
+    allows you to make Stormpath API requests, and should be properly protected.
 
-Once you've downloaded your ``apiKey.properties`` file, make a new hidden folder in your home directory
-called ``.stormpath`` and place the file in the new folder.
+We recommend storing your API credentials in local environment variables. Once you've downloaded your ``apiKey.properties`` file, open it in Notepad or your favorite text editor. Find the **API Key ID** and **API Key Secret** and run these commands in PowerShell (or your shell of choice):
 
-.. warning:: Rewrite this section.
+.. code-block:: powershell
 
-In the Windows Command prompt, run these commands from your Downloads folder:
+  setx STORMPATH_CLIENT_APIKEY_ID "[value from properties file]"
+  setx STORMPATH_CLIENT_APIKEY_SECRET "[value from properties file]"
 
-.. code-block:: sh
+.. note::
 
-    mkdir %homedrive%%homepath%\.stormpath
-    move apiKey.properties %homedrive%%homepath%\.stormpath
-
-In PowerShell or bash, the commands are similar:
-
-.. code-block:: sh
-
-    mkdir ~/.stormpath
-    mv apiKey.properties ~/.stormpath
-
-For the rest of this tutorial, we'll assume that you've placed this file in that
-location. If you prefer to provide the API credentials with environment variables or
-configuration options, you can do that too! Please see the :ref:`configuration`
-section for other options.
+  You can also load your credentials straight from the ``apiKey.properties`` file, or
+  include them in your project code. See the :ref:`configuration` section for all the details.
 
 
 Find Your Stormpath Application
 -------------------------------
 
-All new Stormpath Tenants will have a Stormpath Application, called
+To get you up and running quickly, all new Stormpath Tenants come with a Stormpath Application called
 "My Application". You'll generally want one application per project, and we can
 use this default application to get started.
 
-An application has an **href**, and it looks like this:
+Every Stormpath Application has unique URL, which looks something like this:
 
-.. code-block:: sh
+.. code-block:: none
 
     https://api.stormpath.com/v1/applications/l0ngr4nd0mstr1ngh3r3
 
-From inside the `Admin Console`_, you can find the href by navigating to the
-Application in the Applications list.
+From inside the `Admin Console`_, you can find the URL (called the REST URL or **href** in the Admin Console) by navigating to the
+"My Application" item in the Applications list.
+
+We recommend saving this URL as an environment variable as well:
+
+.. code-block:: powershell
+
+  setx STORMPATH_APPLICATION_HREF "[your Application href]"
 
 To learn more about Stormpath Applications, please see the
-`Application Resource`_ and
-`Setting up Development and Production Environments`_
+`Application Resource`_ section of our REST API documentation.
 
-.. note::
-    Your default Application will also have a directory mapped to it. The
-    Directory is where Stormpath stores accounts. To learn more, please see
-    `Directory Resource`_ and `Modeling Your User Base`_.
+Your default Application will also have a directory mapped to it. The
+Directory is where Stormpath stores accounts. To learn more, please see
+`Directory Resource`_ and `Modeling Your User Base`_.
 
 
-Now that you have a Stormpath Application, you're ready to plug Stormpath into your project!
+Now that your API credentials and Stormpath Application are ready, you're set to plug Stormpath into your project!
+
+
+Example Projects
+--------------
+
+If you're feeling lazy (as all good programmers should!), you can download one of our example projects to get up and running super fast:
+
+- `ASP.NET Core (MVC6) Example Project`_
+
+.. todo::
+  Add ASP.NET and Nancy example projects when available
 
 
 Create a New Project
@@ -93,7 +97,7 @@ Create a New Project
   3. In the New ASP.NET Project dialog, pick **Web Application** from **ASP.NET 5 Templates**.
   4. Click **Change Authentication** and pick **No Authentication**. (You'll be adding it yourself!)
 
-  If you prefer the command line, you can use the [ASP.NET Yeoman Generator](https://github.com/OmniSharp/generator-aspnet) to scaffold a new project instead.
+  If you prefer the command line, you can use the `ASP.NET Yeoman Generator`_ to scaffold a new project instead:
 
   1. Run ``yo aspnet``.
   2. Pick the **Web Application Basic [without Membership and Authorization]** template. Done!
@@ -113,7 +117,7 @@ Install the Package
 -------------------
 
 Now that you've got a project and a Stormpath account all set up and ready to go, all that's
-left to do before we can dive into the code is install the library package from NuGet.
+left to do before we dive into the code is install the library package from NuGet.
 
 This can be done with the NuGet Package Manager GUI, or using the Package Manager Console:
 
@@ -142,9 +146,7 @@ Initialize the Middleware
 
 .. only:: aspnetcore
 
-  Once the package is installed, you can add it to your application in ``Startup.cs``.
-
-  First, add the required services in ``ConfigureServices()``:
+  Once the package is installed, you can add it to your application in ``Startup.cs``. First, add the required services in ``ConfigureServices()``:
 
   .. literalinclude:: code/csharp/setup/configure_services.cs
       :language: csharp
@@ -166,7 +168,7 @@ Initialize the Middleware
 
 With this minimal configuration, the library will do the following:
 
-- Look for your ``apiKey.properties`` file in the ``.stormpath`` folder.
+- Look for your Stormpath API credentials and Application URL in your local environment variables.
 
 - Fetch your Stormpath Application and all the data about its configuration and
   account stores.
@@ -180,7 +182,7 @@ That's it, you're ready to go! Compile and run your project, and try navigating 
 - http://localhost:5000/register
 
 .. note::
-  Your port number may differ. Check your project's configuration to find the port number your project is listening on.
+  Your port number may differ. Check your project's configuration to find the port number your project is using.
 
 You should be able to register for an account and log in. The newly created
 account will be placed in the directory that is mapped to "My Application".
@@ -188,30 +190,15 @@ account will be placed in the directory that is mapped to "My Application".
 .. note::
 
     By default, we don't require email verification for new accounts, but we
-    highly recommend you use this workflow. You can enable email verification
-    by logging into the `Admin Console`_ and going to the the Workflows tab
-    for the directory of your Stormpath Application.
+    highly recommend you use this workflow. See the :ref:`email_verification` section for details.
 
 There are many more features than login and registration. Continue to the
 next section to learn more!
 
 
-Example Applications
---------------------
-
-Looking for some example applications?  We provide the following examples
-applications to get you up and running quickly.  They show you how to setup
-Stormpath, and implement a profile page for the logged-in user:
-
-- `ASP.NET Core MVC6 Example Project`_
-
-.. todo::
-  Add ASP.NET and Nancy example projects when available
-
 .. _Admin Console: https://api.stormpath.com/login
 .. _Application Resource: https://docs.stormpath.com/rest/product-guide/latest/reference.html#application
 .. _Directory Resource: https://docs.stormpath.com/rest/product-guide/latest/reference.html#directory
-.. _Stormpath.AspNetCore: https://www.nuget.org/packages/Stormpath.AspNetCore
+.. _ASP.NET Yeoman Generator: https://github.com/OmniSharp/generator-aspnet
 .. _Modeling Your User Base: https://docs.stormpath.com/rest/product-guide/latest/accnt_mgmt.html#modeling-your-user-base
-.. _Setting up Development and Production Environments: https://docs.stormpath.com/guides/dev-test-prod-environments/
-.. _ASP.NET Core MVC6 Example Project: https://github.com/stormpath/stormpath-aspnetcore-example
+.. _ASP.NET Core (MVC6) Example Project: https://github.com/stormpath/stormpath-aspnetcore-example
