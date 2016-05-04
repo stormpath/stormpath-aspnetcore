@@ -1,14 +1,13 @@
 ASP.NET Core Library Guide
 ==========================
 
-The `Stormpath.AspNetCore`_ package is a plugin for ASP.NET Core that makes it *incredibly*
+The `Stormpath.AspNetCore`_ package is a plugin for |project| ASP.NET Core that makes it *incredibly*
 simple to add users and authentication to your application.  It aims to completely
 abstract away all user registration, login, authentication, and authorization
 concerns, and make building secure websites painless.  And the best part?  **You
 don't even need a database!**
 
-This documentation will show you how to get started with Stormpath and ASP.NET Core.  If
-you're a new user, start here!
+This documentation will show you how to get started with Stormpath and ASP.NET Core. If you're a new user, start at the :ref:`introduction`!
 
 .. toctree::
    :maxdepth: 2

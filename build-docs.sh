@@ -1,5 +1,5 @@
 #!/bin/bash
 
 cd docs;
-rm -rf _build/html;
-make html
+make clean
+make html FRAMEWORK=aspnetcore
