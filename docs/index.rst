@@ -13,7 +13,7 @@ This documentation will show you how to get started with Stormpath and |framewor
    :maxdepth: 2
 
    introduction
-   setup
+   quickstart
    configuration
    request_objects
    authentication

@@ -1,16 +1,17 @@
 .. _setup:
 
 
-Setup
-=====
+Quickstart
+==========
 
-This section walks you through adding Stormpath to a new ASP.NET Core project. By the end
+This section walks you through adding Stormpath to a new |framework| project. By the end
 of this page you'll have working login and registration features for your application!
 
 Create a Stormpath Account
 --------------------------
 
 If you haven't already, the first thing you'll want to do is `create a new Stormpath account <https://api.stormpath.com/register>`_.
+
 
 Create an API Key Pair
 ----------------------
@@ -48,6 +49,7 @@ location. If you prefer to provide the API credentials with environment variable
 configuration options, you can do that too! Please see the :ref:`configuration`
 section for other options.
 
+
 Find Your Stormpath Application
 -------------------------------
 
@@ -74,54 +76,93 @@ To learn more about Stormpath Applications, please see the
     `Directory Resource`_ and `Modeling Your User Base`_.
 
 
-Now that you've created an Application, you're ready to plug Stormpath
-into your project!
+Now that you have a Stormpath Application, you're ready to plug Stormpath into your project!
+
 
 Create a New Project
 --------------------
 
 .. note:: If you are adding Stormpath to an existing application, skip to the next section.
 
-First, create a new project using the ASP.NET Core template in Visual Studio.
+.. only:: aspnetcore
 
-1. Click on **File - New Project**.
-2. Under **Visual C# - Web**, pick the **ASP.NET Web Application** template.
-3. In the New ASP.NET Project dialog, pick **Web Application** from **ASP.NET 5 Templates**.
-4. Click **Change Authentication** and pick **No Authentication**. (You'll be adding it yourself!)
+  First, create a new project using the ASP.NET Core template in Visual Studio.
 
-If you prefer the command line, you can use the [ASP.NET Yeoman Generator](https://github.com/OmniSharp/generator-aspnet) to scaffold a new project instead.
-1. Run ``yo aspnet``.
-2. Pick the **Web Application Basic [without Membership and Authorization]** template. Done!
+  1. Click on **File - New Project**.
+  2. Under **Visual C# - Web**, pick the **ASP.NET Web Application** template.
+  3. In the New ASP.NET Project dialog, pick **Web Application** from **ASP.NET 5 Templates**.
+  4. Click **Change Authentication** and pick **No Authentication**. (You'll be adding it yourself!)
+
+  If you prefer the command line, you can use the [ASP.NET Yeoman Generator](https://github.com/OmniSharp/generator-aspnet) to scaffold a new project instead.
+
+  1. Run ``yo aspnet``.
+  2. Pick the **Web Application Basic [without Membership and Authorization]** template. Done!
+
+.. only:: aspnet
+
+  .. todo::
+    Add instructions
+
+.. only:: nancy
+
+  .. todo::
+    Add instructions
 
 
 Install the Package
 -------------------
 
 Now that you've got a project and a Stormpath account all set up and ready to go, all that's
-left to do before we can dive into the code is install the `Stormpath.AspNetCore`_
-package from NuGet.
+left to do before we can dive into the code is install the library package from NuGet.
 
 This can be done with the NuGet Package Manager GUI, or using the Package Manager Console:
 
-.. code-block:: none
+.. only:: aspnetcore
+
+  .. code-block:: none
 
     PM> install-package Stormpath.AspNetCore
+
+.. only:: aspnet
+
+  .. code-block:: none
+
+    PM> install-package Stormpath.AspNet
+
+
+.. only:: nancy
+
+  .. code-block:: none
+
+    PM> install-package Stormpath.Nancy
 
 
 Initialize the Middleware
 ----------------------------
 
-Once the package is installed, you can add it to your application in ``Startup.cs``.
+.. only:: aspnetcore
 
-First, add the required services in ``ConfigureServices()``:
+  Once the package is installed, you can add it to your application in ``Startup.cs``.
 
-.. literalinclude:: code/csharp/setup/configure_services.cs
-    :language: csharp
+  First, add the required services in ``ConfigureServices()``:
 
-Next, add Stormpath to your middleware pipeline in ``Configure()``:
+  .. literalinclude:: code/csharp/setup/configure_services.cs
+      :language: csharp
 
-.. literalinclude:: code/csharp/setup/configure.cs
-    :language: csharp
+  Next, add Stormpath to your middleware pipeline in ``Configure()``:
+
+  .. literalinclude:: code/csharp/setup/configure.cs
+      :language: csharp
+
+.. only:: aspnet
+
+  .. todo::
+    Add steps
+
+.. only:: nancy
+
+  .. todo::
+    Add steps
 
 With this minimal configuration, the library will do the following:
 
@@ -139,7 +180,7 @@ That's it, you're ready to go! Compile and run your project, and try navigating 
 - http://localhost:5000/register
 
 .. note::
-  If you are running on IIS or IIS Express, check your project's configuration to find the port assigned to the project.
+  Your port number may differ. Check your project's configuration to find the port number your project is listening on.
 
 You should be able to register for an account and log in. The newly created
 account will be placed in the directory that is mapped to "My Application".
@@ -163,6 +204,9 @@ applications to get you up and running quickly.  They show you how to setup
 Stormpath, and implement a profile page for the logged-in user:
 
 - `ASP.NET Core MVC6 Example Project`_
+
+.. todo::
+  Add ASP.NET and Nancy example projects when available
 
 .. _Admin Console: https://api.stormpath.com/login
 .. _Application Resource: https://docs.stormpath.com/rest/product-guide/latest/reference.html#application
