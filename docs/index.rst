@@ -15,7 +15,7 @@ This documentation will show you how to get started with Stormpath and |framewor
    introduction
    setup
    configuration
-   stormpath_objects
+   request_objects
    authentication
    .. authorization
    oauth2
