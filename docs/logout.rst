@@ -5,8 +5,8 @@ Logout
 
 If you are using browser-based sessions, you'll need a way for the user to log out and destroy their session cookies. Similarly, in a mobile application, you'll need a way to destroy the user's tokens if they want to log out. The logout feature does both.
 
-By default, this library will automatically provide a POST route at ``/logout``.
-Simply make a POST request to this URI and the user's tokens and cookies will be destroyed.
+By default, this library will provide a POST route at ``/logout``.
+Simply make a POST request to this URI and the user's tokens and cookies will be destroyed. You can change this URI, or disable the feature entirely if you wish.
 
 Configuration Options
 ---------------------
@@ -30,6 +30,8 @@ You can easily change the logout route URI and post-logout location by changing 
         uri: "/logMeOut"
         nextUri: "/goodbye"
 
+.. tip::
+  It's also possible to set this configuration via code. See the :ref:`configuration` section.
 
 .. todo::
 

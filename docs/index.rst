@@ -26,6 +26,7 @@ you're a new user, start here!
    password_reset
    .. email_verification?
    .. id_site
+   me_api
    templates
    help
 
