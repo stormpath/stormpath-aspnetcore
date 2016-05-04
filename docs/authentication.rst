@@ -240,7 +240,7 @@ The validation strategy can be changed via :ref:`Configuration`. The default con
   HTTP terms, that request looks like this::
 
 
-      POST /oauth/token HTTP/1.1
+      POST /oauth/token
       Host: myapi.com
       Content-Type: application/x-www-form-urlencoded
       Authorization: Basic <Base64UrlSafe(apiKeyId:apiKeySecret)>
@@ -345,8 +345,10 @@ The validation strategy can be changed via :ref:`Configuration`. The default con
       }));
 
 
-OAuth2 Password Grant
----------------------
+.. _oauth2_password_grant:
+
+OAuth 2.0 Password Grant
+------------------------
 
 This is the authentication strategy that you will want to use for mobile clients.
 
@@ -362,10 +364,13 @@ The mobile application then stores the tokens in a secure location, and
 uses them for future requests to your ASP.NET Web API application.
 
 When a user wants to login to your mobile application, the mobile application
-should make this request to your ASP.NET Web API application::
+should make this request to your ASP.NET Web API application:
 
-    POST /oauth/token HTTP/1.1
+.. code-block:: http
+
+    POST /oauth/token
     Host: myapi.com
+    Accept: application/json
     Content-Type: application/x-www-form-urlencoded
 
     grant_type=password
@@ -387,17 +392,23 @@ Your mobile application should store the tokens in a secure location.
 .. note::
   By default the Access Token is valid for 1 hour and the Refresh Token is valid for 60 days. You can configure this in the Stormpath Admin Console; see :ref:`setting_token_expiration_time`.
 
-Each subsequent request the mobile application makes to your ASP.NET Web API should include the Access Token as a ``Bearer`` header::
+Each subsequent request the mobile application makes to your ASP.NET Web API should include the Access Token as a ``Bearer`` header:
 
-    GET /profile HTTP/1.1
+.. code-block:: http
+
+    GET /profile
     Host: myapi.com
+    Accept: application/json
     Authorization: Bearer eyJraWQiOiI2Nl...
     ...
 
-When the Access Token expires, you can use the Refresh Token to obtain a new Access Token::
+When the Access Token expires, you can use the Refresh Token to obtain a new Access Token:
 
-    POST /oauth/token HTTP/1.1
+..code-block:: http
+
+    POST /oauth/token
     Host: myapi.com
+    Accept: application/json
     Content-Type: application/x-www-form-urlencoded
 
     grant_type=refresh_token
@@ -406,8 +417,11 @@ When the Access Token expires, you can use the Refresh Token to obtain a new Acc
 The response will contain a new Access Token.  Once the Refresh Token expires,
 the user will have to re-authenticate with a username and password.
 
-For full documentation on our OAuth2 Access Token features, please see
+For details on how to configure the ``/oauth/token`` endpoint, see the :ref:`oauth2` section.
+
+For full documentation on our OAuth 2.0 and token management features, please see
 `Using Stormpath for OAuth 2.0 and Access/Refresh Token Management`_
+
 
 .. _Stormpath Admin Console: https://api.stormpath.com/login
 .. _Using Stormpath for API Authentication: https://docs.stormpath.com/guides/api-key-management/

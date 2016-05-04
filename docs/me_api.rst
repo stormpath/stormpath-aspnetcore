@@ -1,10 +1,10 @@
 .. _me_api:
 
 
-Current User JSON API
+Current User API
 =====================
 
-If you are working with a front-end or mobile application, you'll need a way to get the user's details after they log in.
+If you are building a front-end or mobile application, you'll need a way to get the user's details after they log in.
 
 By default, this library will provide a JSON-only ``/me`` route that can be used to get the details of a logged-in user. You can change this URI, or disable the feature entirely if you wish.
 

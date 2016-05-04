@@ -19,6 +19,8 @@ you're a new user, start here!
    stormpath_objects
    authentication
    .. authorization
+   oauth2
+   me_api
    registration
    login
    .. social_login
@@ -26,8 +28,6 @@ you're a new user, start here!
    password_reset
    email_verification
    .. id_site
-   .. oauth2
-   me_api
    templates
    help
 
