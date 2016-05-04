@@ -7,7 +7,7 @@ Login
 The login feature of this library allows you to accept login attempts from any active Stormpath account in the Stormpath directory linked to your application. If the attempt is successful, cookies are created automatically for the user (see :ref:`cookie_authentication`).
 
 .. todo::
-  See :ref:`social_login` if you want to accept logins from providers such as Facebook or Google.
+  See social_login if you want to accept logins from providers such as Facebook or Google.
 
 By default, this library will serve an HTML login page at ``/login``.  You can change this URI, or disable the feature entirely if you wish.
 
@@ -161,7 +161,7 @@ If the login attempt is successful, the user will be redirected to ``/`` by defa
 .. _json_login_api:
 
 Mobile/JSON API
---------------
+---------------
 
 If you are using this library from a client framework like Angular or React, you will interact with the login endpoint via GET and POST requests, instead of letting the middleware render an HTML view.
 
