@@ -56,7 +56,7 @@ The first step in the password reset flow displays a form where the user can ent
 * **enabled**: Whether the feature is enabled. (Default: ``null``, see note above)
 * **uri**: The path for this feature. (Default: ``/forgot``)
 * **nextUri**: Where to send the user after they request a reset email. (Default: ``/login?status=forgot``)
-* **view**: The view to render; see :ref:`password_reset_custom_view`. (Default: ``forgot-password``)
+* **view**: The view to render; see :ref:`templates`. (Default: ``forgot-password``)
 
 Change Route
 ............
@@ -67,7 +67,7 @@ The second step in the password reset flow displays a form where the user can en
 * **autoLogin**: Whether the user is automatically logged in after changing their password. (Default: ``false``)
 * **uri**: The path for this feature. (Default: ``/change``)
 * **nextUri**: Where to send the user after changing their password. (Default: ``/login?status=reset``)
-* **view**: The view to render; see :ref:`password_reset_custom_view`. (Default: ``change-password``)
+* **view**: The view to render; see :ref:`templates`. (Default: ``change-password``)
 * **errorUri**: Where to send the user if the link is invalid. (Default: ``/forgot?status=invalid_sptoken``)
 
 .. todo::
@@ -92,33 +92,6 @@ You could, for example, change the route paths for both endpoints by setting thi
 
 .. note::
   Any unchanged options will retain their default values. See the :ref:`password_reset_default_configuration` section to view the defaults.
-
-
-.. _password_reset_custom_view:
-
-Using a Custom View
--------------------
-
-By default, this route will use pre-built views created by Stormpath.
-
-If you want to customize the look and feel of the views, you can set the ``view`` option to the name of (or the path to) a Razor view available in your project:
-
-.. code-block:: yaml
-
-  stormpath:
-    web:
-      forgotPassword:
-        view: "~/Views/ForgotPassword/Forgot.cshtml"
-      changePassword:
-        view: "~/Views/ForgotPassword/Change.cshtml"
-
-.. note::
-  The view you specify will be passed a model of type ``Stormpath.Owin.Abstractions.ViewModel.ForgotPasswordViewModel`` and ``Stormpath.Owin.Abstractions.ViewModel.ChangePasswordViewModel``, respectively.
-
-Feel free to copy and modify the `pre-built view templates`_ and use them as a starting point!
-
-.. todo::
-  Update this section when it's possible to simply update the included Razor files.
 
 
 Auto Login

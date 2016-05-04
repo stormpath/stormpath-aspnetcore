@@ -20,7 +20,7 @@ This feature supports several options that you can configure using code or marku
 * **enabled**: Whether the feature is enabled. (Default: ``true``)
 * **uri**: The path for this feature. (Default: ``/login``)
 * **nextUri**: The location to send the user after logging in. (Default: ``/``)
-* **view**: The view to render; see :ref:`login_custom_view`. (Default: ``login``)
+* **view**: The view to render; see :ref:`templates`. (Default: ``login``)
 * **form**: The fields that will be displayed on the form; see :ref:`login_customizing_form`.
 
 .. note::
@@ -54,31 +54,6 @@ You can change the label and placeholder text that is displayed by changing the 
 
 .. tip::
   It's also possible to set this configuration via code. See the :ref:`configuration` section.
-
-
-.. _login_custom_view:
-
-Using a Custom View
--------------------
-
-By default, this route will use a pre-built view created by Stormpath.
-
-If you want to customize the look and feel of the view, you can set the ``view`` option to the name of (or the path to) a Razor view available in your project:
-
-.. code-block:: yaml
-
-  stormpath:
-    web:
-      login:
-        view: "~/Views/Login/Login.cshtml"
-
-.. note::
-  The view you specify will be passed a model of type ``Stormpath.Owin.Abstractions.ViewModel.ExtendedLoginViewModel``.
-
-Feel free to copy and modify the `pre-built view templates`_ and use them as a starting point!
-
-.. todo::
-  Update this section when it's possible to simply update the included Razor files.
 
 
 Next URI
@@ -317,4 +292,3 @@ For reference, the full default configuration for this route is shown as YAML be
 
 
 .. _Stormpath Admin Console: https://api.stormpath.com
-.. _pre-built view templates: https://github.com/stormpath/stormpath-dotnet-owin-middleware/tree/master/src/Stormpath.Owin.Views

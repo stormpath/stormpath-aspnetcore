@@ -20,7 +20,7 @@ This feature supports several options that you can configure using code or marku
 * **uri**: The path for this feature. (Default: ``/register``)
 * **autoLogin**: Whether the user should be logged in after registering. (Default: ``false``)
 * **nextUri**: The location to send the user after registering, if **autoLogin** is on. (Default: ``/``)
-* **view**: The view to render; see :ref:`register_custom_view`. (Default: ``register``)
+* **view**: The view to render; see :ref:`templates`. (Default: ``register``)
 * **form**: The fields that will be displayed on the form; see :ref:`register_customizing_form`.
 
 .. note::
@@ -125,30 +125,6 @@ If you want to change the order of the fields, you can do so by specifying the
             - "password"
 
 Any visible fields that are omitted from the `fieldOrder` array will be placed at the end of the form.
-
-.. _register_custom_view:
-
-Using a Custom View
--------------------
-
-By default, this route will use a pre-built view created by Stormpath.
-
-If you want to customize the look and feel of the view, you can set the ``view`` option to the name of (or the path to) a Razor view available in your project:
-
-.. code-block:: yaml
-
-  stormpath:
-    web:
-      register:
-        view: "~/Views/Register/Register.cshtml"
-
-.. note::
-  The view you specify will be passed a model of type ``Stormpath.Owin.Abstractions.ViewModel.ExtendedRegisterViewModel``.
-
-Feel free to copy and modify the `pre-built view templates`_ and use them as a starting point!
-
-.. todo::
-  Update this section when it's possible to simply update the included Razor files.
 
 
 Password Strength Requirements
