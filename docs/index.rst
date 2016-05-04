@@ -1,13 +1,13 @@
-ASP.NET Core Library Guide
+|framework| Library Guide
 ==========================
 
-The `Stormpath.AspNetCore`_ package is a plugin for |project| ASP.NET Core that makes it *incredibly*
+This library is a plugin for |framework| that makes it *incredibly*
 simple to add users and authentication to your application.  It aims to completely
 abstract away all user registration, login, authentication, and authorization
 concerns, and make building secure websites painless.  And the best part?  **You
 don't even need a database!**
 
-This documentation will show you how to get started with Stormpath and ASP.NET Core. If you're a new user, start at the :ref:`introduction`!
+This documentation will show you how to get started with Stormpath and |framework|. If you're a new user, start at the :ref:`introduction`!
 
 .. toctree::
    :maxdepth: 2
@@ -30,11 +30,11 @@ This documentation will show you how to get started with Stormpath and ASP.NET C
    templates
    help
 
-Additional Notes
+
+License
 ----------------
 
-The Stormpath.AspNetCore library is made available under the `Apache License, Version 2.0`_.
+This library is made available under the `Apache License, Version 2.0`_.
 In short, you can do pretty much whatever you want!
 
-.. _Stormpath.AspNetCore: https://www.nuget.org/packages/Stormpath.AspNetCore
 .. _Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0.html
