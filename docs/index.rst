@@ -24,8 +24,9 @@ you're a new user, start here!
    .. social_login
    logout
    password_reset
-   .. email_verification?
+   email_verification
    .. id_site
+   .. oauth2
    me_api
    templates
    help

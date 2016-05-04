@@ -146,20 +146,7 @@ Email Verification
 We **highly** recommend that you use email verification, as it adds an additional layer
 of security to your site (it makes it harder for bots to create spam accounts).
 
-When the Stormpath email verification workflow is enabled on the directory, we will send new accounts an email with a link they must click in order to verify their account.
-
-To enable email verification, you need to configure the Stormpath Directory. Follow these steps:
-
-1. Use the `Stormpath Admin Console`_ to find the Stormpath Directory linked to your Application
-2. Navigate to the Workflows section and enable the **Verification Email** workflow
-3. Modify the **Link Base URL** to point to your application:
-
-.. code-block:: sh
-
-    http://yourapplication.com/verify
-
-.. note::
-  The ``/verify`` route is automatically handled by this library; see the :ref:`email_verification` section.
+Email verification will be automatically enabled if the Verification Email workflow is enabled on the Stormpath Directory linked to your application; see the :ref:`email_verification` section.
 
 
 Auto Login

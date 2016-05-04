@@ -185,7 +185,7 @@ Simply POST to the ``/login`` endpoint with the user's credentials:
 If the login attempt is successful, you will receive a 200 OK response and the
 session cookies will be set on the response. (See :ref:`cookie_authentication`)
 
-If an error occurs, you'll get an error object that looks like this:
+If an error occurs, you'll get an error response that looks like this:
 
 .. code-block:: json
 
