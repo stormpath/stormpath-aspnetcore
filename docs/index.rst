@@ -27,6 +27,7 @@ you're a new user, start here!
    .. email_verification?
    .. id_site
    templates
+   help
 
 Additional Notes
 ----------------
