@@ -3,7 +3,7 @@
 Password Reset
 ==============
 
-Stormpath provides a self-service password reset flow for your users, allowing them to request a link that resets their password. This library adds this functionality to your ASP.NET application automatically if it is enabled on your Stormpath Directory.
+Stormpath provides a self-service password reset flow for your users, allowing them to request a link that resets their password. This library adds this functionality to your |framework| application automatically if it is enabled on your Stormpath Directory.
 
 By default, this library will serve a Forgot Password form at ``/forgot`` and a callback handler at ``/change``, *if* the Password Reset Email workflow is enabled in Stormpath. You can change these URIs, or disable the feature entirely if you wish (see :ref:`password_reset_configuration`).
 
@@ -29,7 +29,7 @@ that your application is using. Follow these steps:
 How it Works
 ------------
 
-After enabling the workflow in Stormpath, restart your ASP.NET application.  You can now complete a self-service password reset:
+After enabling the workflow in Stormpath, restart your |framework| application.  You can now complete a self-service password reset:
 
 * The login form at ``/login`` will show a "Forgot Password?" link.
 * Clicking that link will take you to ``/forgot``, where you can enter your email address.

@@ -354,17 +354,17 @@ This is the authentication strategy that you will want to use for mobile clients
 
 In this situation the end-user supplies their username and password to your
 mobile application.  The mobile application sends that username and password to
-your ASP.NET server, which then verifies the password with Stormpath.
+your |framework| server, which then verifies the password with Stormpath.
 
 If the account is valid and the password is correct, Stormpath will generate
 an Access and Refresh Token for the user.  Your server gets these tokens from Stormpath
 and then sends them down to your mobile application.
 
 The mobile application then stores the tokens in a secure location, and
-uses them for future requests to your ASP.NET Web API application.
+uses them for future requests to your |framework| application.
 
 When a user wants to login to your mobile application, the mobile application
-should make this request to your ASP.NET Web API application:
+should make this request to your application:
 
 .. code-block:: http
 
@@ -392,7 +392,7 @@ Your mobile application should store the tokens in a secure location.
 .. note::
   By default the Access Token is valid for 1 hour and the Refresh Token is valid for 60 days. You can configure this in the Stormpath Admin Console; see :ref:`setting_token_expiration_time`.
 
-Each subsequent request the mobile application makes to your ASP.NET Web API should include the Access Token as a ``Bearer`` header:
+Each subsequent request the mobile application makes to your |framework| application should include the Access Token as a ``Bearer`` header:
 
 .. code-block:: http
 

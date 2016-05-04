@@ -5,7 +5,7 @@ Configuration
 =============
 
 The library provides several options that allow you to customize the authentication
-features of your ASP.NET application. We will cover the major options in this
+features of your |framework| application. We will cover the major options in this
 section, and more specific options in later sections of this guide.
 
 There are a few ways you can set these configuration options:
@@ -195,7 +195,7 @@ The Stormpath Client constructor ignores the ``stormpath.web`` node of the confi
 
 
 .. todo::
-  Add logging when it's added: https://github.com/stormpath/stormpath-aspnetcore/issues/2
+  Add logging when it's added to middleware and packages
 
 .. _Web Configuration Defaults: https://github.com/stormpath/stormpath-dotnet-config/blob/master/src/Stormpath.Configuration.Abstractions/Default.cs
 .. _Stormpath .NET SDK: https://github.com/stormpath/stormpath-sdk-dotnet

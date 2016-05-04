@@ -4,7 +4,7 @@
 Introduction
 ============
 
-Welcome! This page will give you an overview of Stormpath and the Stormpath ASP.NET library, to help you decide if it's right for your project.
+Welcome! This page will give you an overview of Stormpath and the Stormpath |framework| library, to help you decide if it's right for your project.
 
 If you're already using Stormpath, feel free to dive into any of the sections on the left for help with specific features.
 
@@ -12,7 +12,7 @@ If you're already using Stormpath, feel free to dive into any of the sections on
 What does this library do?
 --------------------------
 
-With a few lines of code, you can add a user database and authentication system to your ASP.NET application.
+With a few lines of code, you can add a user database and authentication system to your |framework| application.
 Out of the box, this library will provide a way for users to create accounts and log in to your application
 with a username and password.  Your users can also create API Keys and
 OAuth tokens (useful if you are creating an API service).
@@ -49,7 +49,7 @@ Stormpath is a great service, but it's not for everyone!
 You might want to use Stormpath if:
 
 - You want to make user creation, management, and security as simple as possible.
-  (You can get started in ASP.NET with only a couple of lines of code!)
+  (You can get started in |framework| with only a couple of lines of code!)
 - User security is a top priority. We're security experts so you don't have to be one.
 - Scaling your user base is a concern (Stormpath handles scaling transparently).
 - You need to store custom user data along with your user's basic information

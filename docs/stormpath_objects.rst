@@ -34,7 +34,7 @@ This type is available on every request.
 Stormpath Application
 ---------------------
 
-The ``IApplication`` type is a .NET representation of the Stormpath Application associated with your ASP.NET application. You can use this object to perform actions like creating and searching for user accounts programmatically.
+The ``IApplication`` type is a .NET representation of the Stormpath Application associated with your |framework| application. You can use this object to perform actions like creating and searching for user accounts programmatically.
 
 This type is available on every request.
 

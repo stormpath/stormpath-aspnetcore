@@ -3,7 +3,7 @@
 Email Verification
 ==================
 
-Stormpath provides a self-service email verification flow for new accounts, where users will need to verify their email address before their account is enabled. This library adds this functionality to your ASP.NET application automatically if it is enabled in your Stormpath Directory.
+Stormpath provides a self-service email verification flow for new accounts, where users will need to verify their email address before their account is enabled. This library adds this functionality to your |framework| application automatically if it is enabled in your Stormpath Directory.
 
 By default, this library will serve an Email Verification form and callback handler at ``/verify``, *if* the Verification Email workflow is enabled in Stormpath. You can change these URIs, or disable the feature entirely if you wish (see :ref:`email_verification_configuration`).
 
@@ -28,7 +28,7 @@ To enable email verification, you need to configure the Stormpath Directory. Fol
 How it Works
 ------------
 
-After enabling the workflow in Stormpath, restart your ASP.NET application. The behavior of the ``/register`` route will change:
+After enabling the workflow in Stormpath, restart your |framework| application. The behavior of the ``/register`` route will change:
 
 * New accounts will initially be in an **unverified** state, and the user will receive an email with a link.
 * Clicking that link will take the user to ``/verify``, which will automatically use the token provided in the email to verify their account.
