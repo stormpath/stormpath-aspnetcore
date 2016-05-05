@@ -149,11 +149,12 @@ of security to your site (it makes it harder for bots to create spam accounts).
 Email verification will be automatically enabled if the Verification Email workflow is enabled on the Stormpath Directory linked to your application; see the :ref:`email_verification` section.
 
 
+.. _auto_login:
+
 Auto Login
 ----------
 
-If you are *not* using email verification, you may log users in
-automatically when they register.  This can be achieved with this configuration:
+After registering, the default behavior is to require the user to enter their new credentials to log in. If you want users to be automatically logged in after they register, use this configuration:
 
 .. code-block:: yaml
 
@@ -164,6 +165,9 @@ automatically when they register.  This can be achieved with this configuration:
         nextUri: "/"
 
 By default the ``nextUri`` is to the ``/`` root page, but you can modify this to whatever destination you want.
+
+.. note::
+  The :ref:`email_verification` and :ref:`password_reset` features will observe this setting as well.
 
 
 .. todo::

@@ -45,7 +45,7 @@ This feature supports several options that you can configure using code or marku
 
 * **enabled**: Whether the feature is enabled. (Default: ``null``, see note below)
 * **uri**: The path for this feature. (Default: ``/verify``)
-* **nextUri**: The location to send the user after verifying their email. (Default: ``/login?status=verified``)
+* **nextUri**: The location to send the user after verifying their email. (Default: ``/login?status=verified``, but see :ref:`email_verification_auto_login`)
 * **view**: The view to render; see :ref:`templates`. (Default: ``verify``)
 
 .. note::
@@ -53,9 +53,6 @@ This feature supports several options that you can configure using code or marku
 
 .. note::
   Any unchanged options will retain their default values. See the :ref:`email_verification_default_configuration` section to view the defaults.
-
-.. todo::
-  Update autoLogin stuff.
 
 
 Configuration Example
@@ -74,26 +71,16 @@ You could, for example, change the endpoint path by setting this configuration (
   It's also possible to set this configuration via code. See the :ref:`configuration` section.
 
 
-.. todo::
+.. _email_verification_auto_login:
 
-  Auto Login
-  ----------
+Auto Login
+----------
 
-  Our library implements the most secure workflow by default: the user must
-  request a password reset link, then login again after changing their password.
+Our library implements the most secure workflow by default: the user must log in after verifying their account.
 
-  We recommend these settings for security purposes, but if you wish to automatically
-  log the user in after they reset their password, you can set this configuration:
+By default, the user is redirected to ``/login?status=verified`` (the value of ``verifyEmail.nextUri``), which renders the login form with a status message indicating that the account has been successfully verified.
 
-  .. code-block:: yaml
-
-    stormpath:
-      web:
-        changePassword:
-          autoLogin: true
-
-  .. todo::
-    Update to new autoLogin spec.
+If :ref:`auto_login` is enabled, the user will be automatically logged in after they reset their password. The user will **not** be redirected to ``verifyEmail.nextUri``, but instead will be redirected to ``register.nextUri``.
 
 
 Mobile/JSON API
@@ -164,8 +151,6 @@ For reference, the full default configuration for this route is shown as YAML be
 .. tip::
   You can also refer to the `Example Stormpath configuration`_ to see the entire default library configuration.
 
-.. todo::
-  Update to new autoLogin spec.
 
 .. _Stormpath Admin Console: https://api.stormpath.com
 .. _Example Stormpath configuration: https://github.com/stormpath/stormpath-framework-spec/blob/master/example-config.yaml

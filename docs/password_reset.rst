@@ -63,15 +63,12 @@ Change Route
 
 The second step in the password reset flow displays a form where the user can enter their new password, given a valid link. The configuration options for this route are in the section ``stormpath.web.changePassword``:
 
-* **enabled**: Whether the feature is enabled. (Default: ``null``, see below)
-* **autoLogin**: Whether the user is automatically logged in after changing their password. (Default: ``false``)
+* **enabled**: Whether the feature is enabled. (Default: ``null``, see note above)
 * **uri**: The path for this feature. (Default: ``/change``)
-* **nextUri**: Where to send the user after changing their password. (Default: ``/login?status=reset``)
+* **nextUri**: Where to send the user after changing their password. (Default: ``/login?status=reset``, but see :ref:`password_reset_auto_login`)
 * **view**: The view to render; see :ref:`templates`. (Default: ``change-password``)
 * **errorUri**: Where to send the user if the link is invalid. (Default: ``/forgot?status=invalid_sptoken``)
 
-.. todo::
-  Update autoLogin stuff.
 
 Configuration Example
 .....................
@@ -94,24 +91,16 @@ You could, for example, change the route paths for both endpoints by setting thi
   Any unchanged options will retain their default values. See the :ref:`password_reset_default_configuration` section to view the defaults.
 
 
+.. _password_reset_auto_login:
+
 Auto Login
 ----------
 
-Our library implements the most secure workflow by default: the user must
-request a password reset link, then login again after changing their password.
+Our library implements the most secure workflow by default: the user must request a password reset link, then log in again after changing their password.
 
-We recommend these settings for security purposes, but if you wish to automatically
-log the user in after they reset their password, you can set this configuration:
+By default, the user is redirected to ``/login?status=reset`` (the value of ``changePassword.nextUri``), which renders the login form with a status message indicating that the password has been reset successfully.
 
-.. code-block:: yaml
-
-  stormpath:
-    web:
-      changePassword:
-        autoLogin: true
-
-.. todo::
-  Update to new autoLogin spec.
+If :ref:`auto_login` is enabled, the user will be automatically logged in after they reset their password. The user will **not** be redirected to ``changePassword.nextUri``, but instead will be redirected to ``register.nextUri``.
 
 
 Mobile/JSON API
@@ -168,14 +157,10 @@ For reference, the full default configuration for these routes is shown as YAML 
 
       changePassword:
         enabled: null
-        autoLogin: false
         uri: "/change"
         nextUri: "/login?status=reset"
         view: "change-password"
         errorUri: "/forgot?status=invalid_sptoken"
-
-.. todo::
-  Update to new autoLogin spec.
 
 .. tip::
   You can also refer to the `Example Stormpath configuration`_ to see the entire default library configuration.
