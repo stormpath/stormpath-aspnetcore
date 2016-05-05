@@ -8,7 +8,7 @@ using Stormpath.SDK.Application;
 
 namespace Stormpath.AspNetCore.DocExamples.Controllers
 {
-    #region code/csharp/stormpath_objects/controller_fromservices.cs
+    #region code/request_objects/aspnetcore/controller_fromservices.cs
     public class ServicesController : Controller
     {
         [FromServices]
@@ -21,7 +21,7 @@ namespace Stormpath.AspNetCore.DocExamples.Controllers
     }
     #endregion
 
-    #region code/csharp/stormpath_objects/controller_injection.cs
+    #region code/request_objects/aspnetcore/controller_injection.cs
     public class InjectedServicesController : Controller
     {
         public IApplication StormpathApplication { get; private set; }
@@ -38,7 +38,7 @@ namespace Stormpath.AspNetCore.DocExamples.Controllers
     }
     #endregion
 
-    #region code/csharp/stormpath_objects/injecting_user.cs
+    #region code/request_objects/aspnetcore/injecting_user.cs
     public class UserController : Controller
     {
         [FromServices]
@@ -60,7 +60,7 @@ namespace Stormpath.AspNetCore.DocExamples.Controllers
 
     public class UserModificationController : Controller
     {
-        #region code/csharp/stormpath_objects/update_user_password.cs
+        #region code/request_objects/aspnetcore/update_user_password.cs
         [FromServices]
         public Lazy<IAccount> Account { get; set; }
 

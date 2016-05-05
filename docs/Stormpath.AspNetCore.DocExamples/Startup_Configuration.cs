@@ -8,7 +8,7 @@ namespace Stormpath.AspNetCore.DocExamples
 
         public void ConfigureServices_Model(IServiceCollection services)
         {
-            #region code/csharp/configuration/inline_config.cs
+            #region code/configuration/aspnetcore/inline_config.cs
             services.AddStormpath(new StormpathConfiguration()
             {
                 Application = new ApplicationConfiguration()
@@ -28,7 +28,7 @@ namespace Stormpath.AspNetCore.DocExamples
 
         public void ConfigureServices_AnonymousModel(IServiceCollection services)
         {
-            #region code/csharp/configuration/inline_config.cs
+            #region code/configuration/aspnetcore/anonymous_inline_config.cs
             services.AddStormpath(new
             {
                 application = new
@@ -48,7 +48,7 @@ namespace Stormpath.AspNetCore.DocExamples
 
         public void ConfigureServices_DisableDefaultFeatures(IServiceCollection services)
         {
-            #region code/csharp/configuration/disable_default_features.cs
+            #region code/configuration/aspnetcore/disable_default_features.cs
             services.AddStormpath(new StormpathConfiguration()
             {
                 Web = new WebConfiguration()
@@ -92,7 +92,7 @@ namespace Stormpath.AspNetCore.DocExamples
 
         public void ConfigureServices_ApiCredentials(IServiceCollection services)
         {
-            #region code/csharp/configuration/api_credentials.cs
+            #region code/configuration/aspnetcore/api_credentials.cs
             services.AddStormpath(new StormpathConfiguration()
             {
                 Client = new ClientConfiguration()
@@ -109,7 +109,7 @@ namespace Stormpath.AspNetCore.DocExamples
 
         public void ConfigureServices_DisableHtml(IServiceCollection services)
         {
-            #region code/csharp/configuration/disable_html_produces.cs
+            #region code/configuration/aspnetcore/disable_html_produces.cs
             services.AddStormpath(new StormpathConfiguration()
             {
                 Web = new WebConfiguration()

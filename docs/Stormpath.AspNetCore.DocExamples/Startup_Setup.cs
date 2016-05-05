@@ -7,7 +7,7 @@ namespace Stormpath.AspNetCore.DocExamples
 {
     public class Startup_Setup
     {
-        #region code/csharp/setup/configure_services.cs
+        #region code/quickstart/aspnetcore/configure_services.cs
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddStormpath();
@@ -16,7 +16,7 @@ namespace Stormpath.AspNetCore.DocExamples
         }
         #endregion
 
-        #region code/csharp/setup/configure.cs
+        #region code/quickstart/aspnetcore/configure.cs
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             // Logging and static file middleware (if applicable)
