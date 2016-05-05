@@ -240,9 +240,6 @@ Here's an example view model that shows you an application that has the default 
     }
   }
 
-.. todo::
-  Update form with new visible flag and enabled value
-
 .. note::
 
   You may have to explicitly tell your client library that you want a JSON
