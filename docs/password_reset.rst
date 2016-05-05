@@ -117,7 +117,7 @@ log the user in after they reset their password, you can set this configuration:
 Mobile/JSON API
 ---------------
 
-If you are using this library from a client framework like Angular or React, you'll interact with these endpoints via GET and POST requests, instead of letting the middleware render HTML forms.
+If you are using this library from a mobile application, or a client framework like Angular or React, you'll interact with this endpoint via GET and POST requests.
 
 To start the password reset flow, send a POST request to ``/forgot``:
 

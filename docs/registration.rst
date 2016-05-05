@@ -262,7 +262,7 @@ By default the ``nextUri`` is to the ``/`` root page, but you can modify this to
 Mobile/JSON API
 ---------------------
 
-If you are using this library from a client framework like Angular or React, you will interact with the registration endpoint via GET and POST requests, instead of letting the middleware render an HTML view.
+If you are using this library from a mobile application, or a client framework like Angular or React, you'll interact with this endpoint via GET and POST requests.
 
 
 Getting the Form View Model

@@ -163,7 +163,7 @@ If the login attempt is successful, the user will be redirected to ``/`` by defa
 Mobile/JSON API
 ---------------
 
-If you are using this library from a client framework like Angular or React, you will interact with the login endpoint via GET and POST requests, instead of letting the middleware render an HTML view.
+If you are using this library from a mobile application, or a client framework like Angular or React, you'll interact with this endpoint via GET and POST requests.
 
 
 Making a Login Attempt
