@@ -144,7 +144,7 @@ The validation strategy can be changed via :ref:`Configuration`. The default con
 .. todo::
 
   Issuing API Keys
-  ----------------
+  .. ----------------
 
   If you are building an API service, you will need to distribute API keys to your
   developers.  They will then use these keys to authenticate with your API, either
@@ -174,7 +174,7 @@ The validation strategy can be changed via :ref:`Configuration`. The default con
 .. todo::
 
   HTTP Basic Authentication
-  -------------------------
+  .. -------------------------
 
   This strategy makes sense if you are building a simple API service that does
   not have complex needs around authorization and resource control.  This strategy
@@ -223,7 +223,7 @@ The validation strategy can be changed via :ref:`Configuration`. The default con
 .. todo::
 
   OAuth2 Client Credentials
-  -------------------------
+  .. -------------------------
 
   If you are building an API service and you have complex needs around
   authorization and security, this strategy should be used.  In this situation

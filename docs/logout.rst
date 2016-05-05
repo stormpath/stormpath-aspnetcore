@@ -38,7 +38,7 @@ You can easily change the logout route URI and post-logout location by changing 
   .. _post_logout_handler:
 
   Post Logout Handler
-  -------------------
+  .. -------------------
 
   Want to run some custom code after a user has logged out of your site?
   By defining a ``postLogoutHandler`` you're able to do just that!

@@ -73,7 +73,7 @@ If the login attempt is successful, the user will be redirected to ``/`` by defa
   .. _pre_login_handler:
 
   Pre Login Handler
-  -----------------
+  .. -----------------
 
   Want to validate or modify the form data before it's handled by us? Then this is
   the handler that you want to use!
@@ -117,7 +117,7 @@ If the login attempt is successful, the user will be redirected to ``/`` by defa
   .. _post_login_handler:
 
   Post Login Handler
-  ------------------
+  .. ------------------
 
   Want to run some custom code after a user logs into your site?  By defining a ``postLoginHandler`` you're able achieve tasks like:
 

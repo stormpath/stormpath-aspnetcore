@@ -174,7 +174,7 @@ By default the ``nextUri`` is to the ``/`` root page, but you can modify this to
   .. _pre_registration_handler:
 
   Pre Registration Handler
-  ------------------------
+  .. ------------------------
 
   Want to validate or modify the form data before it's handled by Stormpath? Then this is
   the handler that you want to use!
@@ -218,7 +218,7 @@ By default the ``nextUri`` is to the ``/`` root page, but you can modify this to
   .. _post_registration_handler:
 
   Post Registration Handler
-  -------------------------
+  .. -------------------------
 
   Want to run some custom code after a user registers for your site?  If so, this
   is the event you want to handle!
