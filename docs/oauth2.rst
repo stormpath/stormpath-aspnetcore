@@ -54,8 +54,24 @@ To change the token endpoint URI and use remote (Stormpath API) validation of th
         password:
           validationStrategy: "stormpath"
 
-.. tip::
-  It's also possible to set this configuration via code. See the :ref:`configuration` section.
+You could also set this configuration via code:
+
+.. only:: aspnetcore
+
+  .. literalinclude:: code/oauth2/aspnetcore/configure_uri_and_strategy.cs
+    :language: csharp
+
+.. only:: aspnet
+
+  .. todo::
+    Add code
+
+.. only:: nancy
+
+  .. todo::
+    Add code
+
+See the :ref:`configuration` section for more details on how configuration works, or :ref:`oauth2_default_configuration` to see the default values.
 
 
 .. _oauth2_default_configuration:

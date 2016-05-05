@@ -19,9 +19,12 @@ This feature supports several options that you can configure using code or marku
 * **expand**: Whether to expand Account resource links; see :ref:`me_expansion`.
 
 .. note::
-  Any unchanged options will retain their default values. See the :ref:`me_default_configuration` section to view the defaults.
+  Any unchanged options will retain their default values. See the :ref:`me_api_default_configuration` section to view the defaults.
 
-You can easily change the path to this route by changing the ``uri`` option (or disable it entirely by setting ``enabled = false``). An alternate URI configuration is shown in YAML below:
+Configuration Example
+.....................
+
+You can easily change the path to this route by changing the ``uri`` option (or disable it entirely by setting ``enabled = false``), as shown in YAML below:
 
 .. code-block:: yaml
 
@@ -30,8 +33,24 @@ You can easily change the path to this route by changing the ``uri`` option (or 
       me:
         uri: "/userDetails"
 
-.. tip::
-  It's also possible to set this configuration via code. See the :ref:`configuration` section.
+You could also set this configuration via code:
+
+.. only:: aspnetcore
+
+  .. literalinclude:: code/me_api/aspnetcore/configure_uri.cs
+    :language: csharp
+
+.. only:: aspnet
+
+  .. todo::
+    Add code
+
+.. only:: nancy
+
+  .. todo::
+    Add code
+
+See the :ref:`configuration` section for more details on how configuration works, or :ref:`me_api_default_configuration` to see the default values.
 
 
 Using the Endpoint
@@ -98,7 +117,7 @@ The following YAML configuration will opt-in to expanding the Account's Custom D
           groups: true
 
 
-.. _me_default_configuration:
+.. _me_api_default_configuration:
 
 Default Configuration
 ---------------------

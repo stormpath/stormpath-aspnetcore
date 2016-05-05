@@ -69,6 +69,8 @@ The second step in the password reset flow displays a form where the user can en
 * **view**: The view to render; see :ref:`templates`. (Default: ``change-password``)
 * **errorUri**: Where to send the user if the link is invalid. (Default: ``/forgot?status=invalid_sptoken``)
 
+.. note::
+  Any unchanged options will retain their default values. See the :ref:`password_reset_default_configuration` section to view the defaults.
 
 Configuration Example
 .....................
@@ -84,11 +86,24 @@ You could, for example, change the route paths for both endpoints by setting thi
       changePassword:
         uri: "/change-password"
 
-.. tip::
-  It's also possible to set this configuration via code. See the :ref:`configuration` section.
+You could also set this configuration via code:
 
-.. note::
-  Any unchanged options will retain their default values. See the :ref:`password_reset_default_configuration` section to view the defaults.
+.. only:: aspnetcore
+
+  .. literalinclude:: code/password_reset/aspnetcore/configure_uris.cs
+    :language: csharp
+
+.. only:: aspnet
+
+  .. todo::
+    Add code
+
+.. only:: nancy
+
+  .. todo::
+    Add code
+
+See the :ref:`configuration` section for more details on how configuration works, or :ref:`password_reset_default_configuration` to see the default values.
 
 
 .. _password_reset_auto_login:

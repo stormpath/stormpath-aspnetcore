@@ -26,6 +26,38 @@ This feature supports several options that you can configure using code or marku
 .. note::
   Any unchanged options will retain their default values. See the :ref:`register_default_configuration` section to view the defaults.
 
+Configuration Example
+.....................
+
+You could, for example, change the endpoint path by setting this configuration (shown as YAML):
+
+.. code-block:: yaml
+
+  stormpath:
+    web:
+      register:
+        uri: "/createAccount"
+
+You could also set this configuration via code:
+
+.. only:: aspnetcore
+
+  .. literalinclude:: code/registration/aspnetcore/configure_uri.cs
+    :language: csharp
+
+.. only:: aspnet
+
+  .. todo::
+    Add code
+
+.. only:: nancy
+
+  .. todo::
+    Add code
+
+See the :ref:`configuration` section for more details on how configuration works, or :ref:`register_default_configuration` to see the default values.
+
+
 .. _register_customizing_form:
 
 Customizing the Form
@@ -40,7 +72,7 @@ The registration form will render these fields by default, and they will be requ
 
 You can customize the form by simply changing the configuration. For example, while email and password will always be required, you could make first and last name optional. Or, you can ask the user for both an email address and a username. You can also specify your own custom fields!
 
-Each field item in ``web.register.form.fields`` has these configurable properties:
+Each field item in ``stormpath.web.register.form.fields`` has these configurable properties:
 
 * **enabled**: Whether the field exists on the form is and accepted in POST requests.
 * **visible**: Whether the field is visible on the form.
@@ -67,8 +99,22 @@ If you would like to show a field, but not require it, set the ``required`` prop
             surname:
               required: false
 
-.. tip::
-  It's also possible to set this configuration via code. See the :ref:`configuration` section.
+Or, in code:
+
+.. only:: aspnetcore
+
+  .. literalinclude:: code/registration/aspnetcore/configure_form_fields_required.cs
+    :language: csharp
+
+.. only:: aspnet
+
+  .. todo::
+    Add code
+
+.. only:: nancy
+
+  .. todo::
+    Add code
 
 If you would like to remove a field from the form entirely, set the ``visible`` or ``enabled`` properties to ``false``. The behavior is slightly different:
 
@@ -95,15 +141,30 @@ successfully.  You can create a custom field by defining a new field configurati
       register:
         form:
           fields:
-            // Other fields
-            // ...
             favoriteColor:
               enabled: true
+              visible: true
               label: "Favorite Color"
-              name: "favoriteColor"
               placeholder: "e.g. red, blue"
               required: true
               type: "text"
+
+Or, in code:
+
+.. only:: aspnetcore
+
+  .. literalinclude:: code/registration/aspnetcore/configure_custom_form_field.cs
+    :language: csharp
+
+.. only:: aspnet
+
+  .. todo::
+    Add code
+
+.. only:: nancy
+
+  .. todo::
+    Add code
 
 
 Changing Field Order
@@ -124,7 +185,24 @@ If you want to change the order of the fields, you can do so by specifying the
             - "email"
             - "password"
 
-Any visible fields that are omitted from the `fieldOrder` array will be placed at the end of the form.
+Or, in code:
+
+.. only:: aspnetcore
+
+  .. literalinclude:: code/registration/aspnetcore/configure_field_order.cs
+    :language: csharp
+
+.. only:: aspnet
+
+  .. todo::
+    Add code
+
+.. only:: nancy
+
+  .. todo::
+    Add code
+
+Any visible fields that are omitted from the ``fieldOrder`` array will be placed at the end of the form.
 
 
 Password Strength Requirements

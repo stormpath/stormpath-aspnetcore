@@ -67,8 +67,25 @@ You could, for example, change the endpoint path by setting this configuration (
       verifyEmail:
         uri: "/verifyEmail"
 
-.. tip::
-  It's also possible to set this configuration via code. See the :ref:`configuration` section.
+You could also set this configuration via code:
+
+.. only:: aspnetcore
+
+  .. literalinclude:: code/email_verification/aspnetcore/configure_uri.cs
+    :language: csharp
+
+.. only:: aspnet
+
+  .. todo::
+    Add code
+
+.. only:: nancy
+
+  .. todo::
+    Add code
+
+
+See the :ref:`configuration` section for more details on how configuration works, or :ref:`email_verification_default_configuration` to see the default values.
 
 
 .. _email_verification_auto_login:

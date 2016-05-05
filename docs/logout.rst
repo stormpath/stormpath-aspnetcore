@@ -20,6 +20,10 @@ This feature supports several options that you can configure using code or marku
 .. note::
   Any unchanged options will retain their default values. See the :ref:`logout_default_configuration` section to view the defaults.
 
+
+Configuration Example
+.....................
+
 You can easily change the logout route URI and post-logout location by changing the configuration, as shown in YAML below:
 
 .. code-block:: yaml
@@ -30,8 +34,25 @@ You can easily change the logout route URI and post-logout location by changing 
         uri: "/logMeOut"
         nextUri: "/goodbye"
 
-.. tip::
-  It's also possible to set this configuration via code. See the :ref:`configuration` section.
+You could also set this configuration via code:
+
+.. only:: aspnetcore
+
+  .. literalinclude:: code/logout/aspnetcore/configure_uris.cs
+    :language: csharp
+
+.. only:: aspnet
+
+  .. todo::
+    Add code
+
+.. only:: nancy
+
+  .. todo::
+    Add code
+
+See the :ref:`configuration` section for more details on how configuration works, or :ref:`logout_default_configuration` to see the default values.
+
 
 .. todo::
 

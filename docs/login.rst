@@ -26,6 +26,38 @@ This feature supports several options that you can configure using code or marku
 .. note::
   Any unchanged options will retain their default values. See the :ref:`login_default_configuration` section to view the defaults.
 
+Configuration Example
+.....................
+
+You could, for example, change the endpoint path by setting this configuration (shown as YAML):
+
+.. code-block:: yaml
+
+  stormpath:
+    web:
+      login:
+        uri: "/logMeIn"
+
+You could also set this configuration via code:
+
+.. only:: aspnetcore
+
+  .. literalinclude:: code/login/aspnetcore/configure_uri.cs
+    :language: csharp
+
+.. only:: aspnet
+
+  .. todo::
+    Add code
+
+.. only:: nancy
+
+  .. todo::
+    Add code
+
+
+See the :ref:`configuration` section for more details on how configuration works, or :ref:`login_default_configuration` to see the default values.
+
 
 .. _login_customizing_form:
 
@@ -50,10 +82,24 @@ You can change the label and placeholder text that is displayed by changing the 
               label: "Email"
               placeholder: "you@yourdomain.com"
             password:
-              placeholder: "use a strong password!"
+              placeholder: "Tip: Use a strong password!"
 
-.. tip::
-  It's also possible to set this configuration via code. See the :ref:`configuration` section.
+Or, through code:
+
+.. only:: aspnetcore
+
+  .. literalinclude:: code/login/aspnetcore/configure_labels.cs
+    :language: csharp
+
+.. only:: aspnet
+
+  .. todo::
+    Add code
+
+.. only:: nancy
+
+  .. todo::
+    Add code
 
 
 Next URI
