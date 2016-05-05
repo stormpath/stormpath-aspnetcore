@@ -81,6 +81,10 @@ For example, this YAML configuration will disable the default ``/register`` and 
           enabled: false
 
 
+.. tip::
+  You can also refer to the `Example Stormpath configuration`_ to see the entire default library configuration in YAML.
+
+
 API Credentials File
 --------------------------
 
@@ -250,3 +254,4 @@ The Stormpath Client constructor ignores the ``stormpath.web`` node of the confi
 
 .. _Web Configuration Defaults: https://github.com/stormpath/stormpath-dotnet-config/blob/master/src/Stormpath.Configuration.Abstractions/Default.cs
 .. _Stormpath .NET SDK: https://github.com/stormpath/stormpath-sdk-dotnet
+.. _Example Stormpath configuration: https://github.com/stormpath/stormpath-framework-spec/blob/master/example-config.yaml
