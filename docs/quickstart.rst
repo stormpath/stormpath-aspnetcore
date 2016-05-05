@@ -73,7 +73,7 @@ Now that your API credentials and Stormpath Application are ready, you're set to
 
 
 Example Projects
---------------
+----------------
 
 If you're feeling lazy (as all good programmers should!), you can download one of our example projects to get up and running super fast:
 
