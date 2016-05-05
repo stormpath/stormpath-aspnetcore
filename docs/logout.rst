@@ -92,3 +92,9 @@ For reference, the full default configuration for this route is shown as YAML be
         enabled: true
         uri: "/logout"
         nextUri: "/"
+
+.. tip::
+  You can also refer to the `Example Stormpath configuration`_ to see the entire default library configuration.
+
+
+.. _Example Stormpath configuration: https://github.com/stormpath/stormpath-framework-spec/blob/master/example-config.yaml

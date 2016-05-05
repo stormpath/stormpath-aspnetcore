@@ -149,7 +149,7 @@ Default Configuration
 
 Options that are not overridden by explicit configuration (see :ref:`configuration`) will retain their default values.
 
-For reference, the full default configuration for these routes is shown as YAML below:
+For reference, the full default configuration for this route is shown as YAML below:
 
 .. code-block:: yaml
 
@@ -161,7 +161,11 @@ For reference, the full default configuration for these routes is shown as YAML 
         nextUri: "/login?status=verified"
         view: "verify"
 
+.. tip::
+  You can also refer to the `Example Stormpath configuration`_ to see the entire default library configuration.
+
 .. todo::
   Update to new autoLogin spec.
 
 .. _Stormpath Admin Console: https://api.stormpath.com
+.. _Example Stormpath configuration: https://github.com/stormpath/stormpath-framework-spec/blob/master/example-config.yaml

@@ -177,5 +177,10 @@ For reference, the full default configuration for these routes is shown as YAML 
 .. todo::
   Update to new autoLogin spec.
 
+.. tip::
+  You can also refer to the `Example Stormpath configuration`_ to see the entire default library configuration.
+
+
+.. _Example Stormpath configuration: https://github.com/stormpath/stormpath-framework-spec/blob/master/example-config.yaml
 .. _Stormpath Admin Console: https://api.stormpath.com
 .. _pre-built view templates: https://github.com/stormpath/stormpath-dotnet-owin-middleware/tree/master/src/Stormpath.Owin.Views

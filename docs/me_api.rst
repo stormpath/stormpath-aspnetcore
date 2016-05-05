@@ -124,7 +124,11 @@ For reference, the full default configuration for this route is shown as YAML be
           providerData: false
           tenant: false
 
+.. tip::
+  You can also refer to the `Example Stormpath configuration`_ to see the entire default library configuration.
 
+
+.. _Example Stormpath configuration: https://github.com/stormpath/stormpath-framework-spec/blob/master/example-config.yaml
 .. _apiKeys: https://docs.stormpath.com/rest/product-guide/latest/reference.html#account-api-keys
 .. _applications: https://docs.stormpath.com/rest/product-guide/latest/reference.html#application
 .. _customData: https://docs.stormpath.com/rest/product-guide/latest/reference.html#custom-data

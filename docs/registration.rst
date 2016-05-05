@@ -475,6 +475,11 @@ For reference, the full default configuration for this route is shown as YAML be
             - "password"
             - "confirmPassword"
 
+.. tip::
+  You can also refer to the `Example Stormpath configuration`_ to see the entire default library configuration.
+
+
+.. _Example Stormpath configuration: https://github.com/stormpath/stormpath-framework-spec/blob/master/example-config.yaml
 .. _Custom Data: http://docs.stormpath.com/rest/product-guide/latest/accnt_mgmt.html#how-to-store-additional-user-information-as-custom-data
 .. _pre-built view templates: https://github.com/stormpath/stormpath-dotnet-owin-middleware/tree/master/src/Stormpath.Owin.Views
 
