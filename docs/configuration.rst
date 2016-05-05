@@ -98,12 +98,12 @@ Inline Options
 If you wish to define your configuration in code, you
 can do so in the ``services.AddStormpath()`` call, like this:
 
-.. literalinclude:: code/csharp/configuration/inline_config.cs
+.. literalinclude:: code/configuration/aspnetcore/inline_config.cs
     :language: csharp
 
 You can also use an anonymous object with the same (case-insensitive) names:
 
-.. literalinclude:: code/csharp/configuration/anonymous_inline_config.cs
+.. literalinclude:: code/configuration/aspnetcore/anonymous_inline_config.cs
     :language: csharp
 
 Both of these examples will use the Stormpath Application called "My Application" and disable the default ``/register`` route.
@@ -156,13 +156,52 @@ The library enables many features by default, but you might not want to use all 
 For example, if you wanted to disable all the default features, you could use
 this configuration in code:
 
-.. literalinclude:: code/csharp/configuration/disable_default_features.cs
-    :language: csharp
+.. only:: aspnetcore
+
+  .. literalinclude:: code/configuration/aspnetcore/disable_default_features.cs
+      :language: csharp
+
+.. only:: aspnet
+
+  .. todo::
+    Add code
+
+.. only:: nancy
+
+  .. todo::
+    Add code
 
 The equivalent ``stormpath.yaml`` looks like this:
 
-.. literalinclude:: code/configuration/disable_default_features.yaml
-    :language: yaml
+.. code-block:: yaml
+
+  ---
+  stormpath:
+    web:
+      forgotPassword:
+        enabled: false
+
+      changePassword:
+        enabled: false
+
+      login:
+        enabled: false
+
+      logout:
+        enabled: false
+
+      me:
+        enabled: false
+
+      oauth2:
+        enabled: false
+
+      register:
+        enabled: false
+
+      verifyEmail:
+        enabled: false
+
 
 You could also achieve the same result using environment variables, by setting ``STORMPATH_WEB_LOGIN_ENABLED = 'false'`` and so on.
 
@@ -173,8 +212,20 @@ By default, the routes provided by this library can handle requests from both br
 
 It's possible to disable either of these modes by changing the values in ``stormpath.web.produces``. For example, if you want to build a pure API that will never send HTML responses, use this configuration:
 
-.. literalinclude:: code/csharp/configuration/disable_html_produces.cs
-    :language: csharp
+.. only:: aspnetcore
+
+  .. literalinclude:: code/configuration/aspnetcore/disable_html_produces.cs
+      :language: csharp
+
+.. only:: aspnet
+
+  .. todo::
+    Add code
+
+.. only:: nancy
+
+  .. todo::
+    Add code
 
 Stormpath Client Options
 ------------------------
@@ -187,7 +238,7 @@ Any options you set when initializing the Stormpath middleware library are also 
 
 For example, to hardcode the Stormpath API credentials (not recommended!), you could use this configuration:
 
-.. literalinclude:: code/csharp/configuration/api_credentials.cs
+.. literalinclude:: code/configuration/aspnetcore/api_credentials.cs
     :language: csharp
 
 The Stormpath Client constructor ignores the ``stormpath.web`` node of the configuration. For more information about setting options on the SDK Client object, please see the

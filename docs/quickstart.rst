@@ -148,12 +148,12 @@ Initialize the Middleware
 
   Once the package is installed, you can add it to your application in ``Startup.cs``. First, add the required services in ``ConfigureServices()``:
 
-  .. literalinclude:: code/csharp/setup/configure_services.cs
+  .. literalinclude:: code/quickstart/aspnetcore/configure_services.cs
       :language: csharp
 
   Next, add Stormpath to your middleware pipeline in ``Configure()``:
 
-  .. literalinclude:: code/csharp/setup/configure.cs
+  .. literalinclude:: code/quickstart/aspnetcore/configure.cs
       :language: csharp
 
 .. only:: aspnet

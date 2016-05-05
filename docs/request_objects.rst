@@ -13,12 +13,12 @@ Request Objects
 
   You can request any of these objects from the container using the ``[FromServices]`` attribute:
 
-  .. literalinclude:: code/csharp/stormpath_objects/controller_fromservices.cs
+  .. literalinclude:: code/request_objects/aspnetcore/controller_fromservices.cs
       :language: csharp
 
   Or, if you prefer, you can use constructor injection:
 
-  .. literalinclude:: code/csharp/stormpath_objects/controller_injection.cs
+  .. literalinclude:: code/request_objects/aspnetcore/controller_injection.cs
       :language: csharp
 
 .. only:: aspnet
@@ -81,11 +81,11 @@ The Stormpath middleware automatically checks incoming requests for authenticati
 .. tip::
   If you want to *require* authentication for a route or action, see the :ref:`authentication` section.
 
-.. only:: (aspnetcore or aspnet)
+.. only:: aspnetcore
 
   A subset of the user's Stormpath Account details are automatically placed in the ``ClaimsPrincipal`` object for the request. This makes it possible to quickly do things like update a view if the user is logged in:
 
-  .. literalinclude:: code/csharp/stormpath_objects/user_iprincipal.cshtml
+  .. literalinclude:: code/request_objects/aspnetcore/user_iprincipal.cshtml
       :language: html
 
   The full list of claims populated in ``Context.User`` are:
@@ -101,7 +101,7 @@ The Stormpath middleware automatically checks incoming requests for authenticati
 
     If you want full access to the Stormpath ``IAccount`` object, inject a ``Lazy<IAccount>`` in your controller:
 
-    .. literalinclude:: code/csharp/stormpath_objects/injecting_user.cs
+    .. literalinclude:: code/request_objects/aspnetcore/injecting_user.cs
         :language: csharp
 
     If the request is unauthenticated, the lazy value will resolve to ``null``. If the request represents a valid user, you'll get an ``IAccount`` instance representing the user's Stormpath Account.
@@ -111,13 +111,13 @@ The Stormpath middleware automatically checks incoming requests for authenticati
 
     You can also use the ``@inject`` directive to do the same injection directly in your views:
 
-    .. literalinclude:: code/csharp/stormpath_objects/injecting_user_view.cshtml
+    .. literalinclude:: code/request_objects/aspnetcore/injecting_user_view.cshtml
         :language: html
 
-  .. only:: aspnet
+.. only:: aspnet
 
-    .. todo::
-      Add detail here.
+  .. todo::
+    Add detail here.
 
 .. only:: nancy
 
@@ -136,7 +136,7 @@ To update the user's password, for example:
 
 .. only:: aspnetcore
 
-  .. literalinclude:: code/csharp/stormpath_objects/update_user_password.cs
+  .. literalinclude:: code/request_objects/aspnetcore/update_user_password.cs
       :language: csharp
 
 .. only:: aspnet

@@ -28,7 +28,7 @@ Single Page Application (such as Angular/React), this library will handle cookie
 
 To use cookie authentication, simply use the ``[Authorize]`` attribute on MVC or Web API routes:
 
-.. literalinclude:: code/csharp/authentication/protected_route.cs
+.. literalinclude:: code/authentication/aspnetcore/protected_route.cs
     :language: csharp
 
 If the user is not logged in, they will be redirected to the built-in login route (``/login`` by default) to log in or register. After authenticating, they will be redirected back to the original route automatically.
