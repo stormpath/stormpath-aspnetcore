@@ -75,7 +75,7 @@ You can add Stormpath to a new or existing ASP.NET Core project with only two li
  {
      Application = new ApplicationConfiguration
      {
-         Name = "My Application"
+         Href = "your-application-href"
      }
  }
  ```
