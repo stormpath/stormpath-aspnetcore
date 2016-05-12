@@ -17,9 +17,11 @@ You can add Stormpath to a new or existing ASP.NET Core project with only two li
 
 1. **[Sign up](https://api.stormpath.com/register) for Stormpath**
 
-2. **Get your key file**
+2. **Get your API credentials**
 
-  [Download your key file](https://support.stormpath.com/hc/en-us/articles/203697276-Where-do-I-find-my-API-key-) from the Stormpath Console.
+  1. Log in to the [Stormpath Admin Console](https://api.stormpath.com/).
+  2. Click the **Create API Key** or **Manage Existing Keys** under Developer Tools on the right side of the page. 
+  3. Scroll down to Security Credentials and click **Create API Key**. This will generate your API Key and download it to your computer as an `apiKey.properties` file.
 
 3. **Store your key as environment variables**
 
