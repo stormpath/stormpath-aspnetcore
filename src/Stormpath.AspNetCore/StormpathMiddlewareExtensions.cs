@@ -18,6 +18,7 @@ using System;
 using System.Reflection;
 using Microsoft.AspNet.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Stormpath.Owin.Abstractions;
 using Stormpath.Owin.Middleware;
 
@@ -75,13 +76,18 @@ namespace Stormpath.AspNetCore
             }
 
             var suppliedConfiguration = app.ApplicationServices.GetRequiredService<UserConfigurationContainer>();
+            var loggerFactory = app.ApplicationServices.GetRequiredService<ILoggerFactory>();
+
             var hostingAssembly = app.GetType().GetTypeInfo().Assembly;
+
+            var loggerAdapter = new LoggerAdapter(loggerFactory);
 
             var stormpathMiddleware = StormpathMiddleware.Create(new StormpathMiddlewareOptions()
             {
                 LibraryUserAgent = GetLibraryUserAgent(hostingAssembly),
                 Configuration = suppliedConfiguration.Configuration,
                 ViewRenderer = new PrecompiledDeferringViewRenderer(new RazorViewRenderer()),
+                Logger = loggerAdapter
             });
 
             app.UseOwin(addToPipeline =>
@@ -93,8 +99,8 @@ namespace Stormpath.AspNetCore
                 });
             });
 
-            app.UseMiddleware<StormpathAuthenticationMiddleware>(new StormpathAuthenticationOptions() { AuthenticationScheme = "Cookie" });
-            app.UseMiddleware<StormpathAuthenticationMiddleware>(new StormpathAuthenticationOptions() { AuthenticationScheme = "Bearer" });
+            app.UseMiddleware<StormpathAuthenticationMiddleware>(new StormpathAuthenticationOptions() { AuthenticationScheme = "Cookie" }, loggerAdapter);
+            app.UseMiddleware<StormpathAuthenticationMiddleware>(new StormpathAuthenticationOptions() { AuthenticationScheme = "Bearer" }, loggerAdapter);
 
             return app;
         }

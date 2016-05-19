@@ -24,11 +24,14 @@ namespace Stormpath.AspNetCore
 {
     public sealed class StormpathAuthenticationMiddleware : AuthenticationMiddleware<StormpathAuthenticationOptions>
     {
+        private readonly SDK.Logging.ILogger stormpathLogger;
+
         public StormpathAuthenticationMiddleware(
             RequestDelegate next,
             ILoggerFactory loggerFactory,
             IUrlEncoder encoder,
-            StormpathAuthenticationOptions options)
+            StormpathAuthenticationOptions options,
+            SDK.Logging.ILogger stormpathLogger)
             : base(next, options, loggerFactory, encoder)
         {
             if (next == null)
@@ -50,10 +53,12 @@ namespace Stormpath.AspNetCore
             {
                 throw new ArgumentNullException(nameof(options));
             }
+
+            this.stormpathLogger = stormpathLogger;
         }
         protected override AuthenticationHandler<StormpathAuthenticationOptions> CreateHandler()
         {
-            return new StormpathAuthenticationHandler();
+            return new StormpathAuthenticationHandler(this.stormpathLogger);
         }
     }
 }
