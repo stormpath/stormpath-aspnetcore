@@ -18,7 +18,7 @@ namespace Stormpath.AspNetCore.DocExamples
                 {
                     Login = new WebLoginRouteConfiguration
                     {
-                        View = "~/ Views / Login / MyLogin.cshtml"
+                        View = "~/Views/Login/MyLogin.cshtml"
                     }
                 }
             });
