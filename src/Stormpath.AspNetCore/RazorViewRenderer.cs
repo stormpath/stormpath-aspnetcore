@@ -17,12 +17,12 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Mvc.Abstractions;
-using Microsoft.AspNet.Mvc.Rendering;
-using Microsoft.AspNet.Mvc.ViewEngines;
-using Microsoft.AspNet.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.DependencyInjection;
 using Stormpath.Owin.Abstractions;
 
@@ -30,7 +30,7 @@ namespace Stormpath.AspNetCore
 {
     public class RazorViewRenderer : IViewRenderer
     {
-        private static readonly string MicrosoftHttpContextKey = "Microsoft.AspNet.Http.HttpContext";
+        private static readonly string MicrosoftHttpContextKey = "Microsoft.AspNetCore.Http.HttpContext";
 
         public async Task RenderAsync(string viewName, object viewModel, IOwinEnvironment context, CancellationToken cancellationToken)
         {
@@ -50,11 +50,11 @@ namespace Stormpath.AspNetCore
                 ? viewName
                 : $"~/Views/{viewName}.cshtml";
 
-            var viewDataDictionary = new ViewDataDictionary(new Microsoft.AspNet.Mvc.ModelBinding.EmptyModelMetadataProvider(), new Microsoft.AspNet.Mvc.ModelBinding.ModelStateDictionary());
-            var actionContext = new ActionContext(httpContextAccessor.HttpContext, new Microsoft.AspNet.Routing.RouteData(), new ActionDescriptor());
+            var viewDataDictionary = new ViewDataDictionary(new Microsoft.AspNetCore.Mvc.ModelBinding.EmptyModelMetadataProvider(), new Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary());
+            var actionContext = new ActionContext(httpContextAccessor.HttpContext, new Microsoft.AspNetCore.Routing.RouteData(), new ActionDescriptor());
             viewDataDictionary.Model = viewModel;
 
-            var viewResult = viewEngine.FindView(actionContext, path);
+            var viewResult = viewEngine.FindView(actionContext, path, isMainPage: true);
 
             if (!viewResult.Success)
             {
@@ -63,7 +63,13 @@ namespace Stormpath.AspNetCore
 
             using (var writer = new System.IO.StreamWriter(context.Response.Body))
             {
-                var viewContext = new ViewContext(actionContext, viewResult.View, viewDataDictionary, new TempDataDictionary(httpContextAccessor, tempDataProvider), writer, new HtmlHelperOptions());
+                var viewContext = new ViewContext(
+                    actionContext,
+                    viewResult.View,
+                    viewDataDictionary,
+                    new TempDataDictionary(httpContextAccessor.HttpContext, tempDataProvider),
+                    writer,
+                    new HtmlHelperOptions());
 
                 cancellationToken.ThrowIfCancellationRequested();
                 await viewResult.View.RenderAsync(viewContext);

@@ -25,7 +25,7 @@ namespace Stormpath.AspNetCore
         {
             if (level == SDK.Logging.LogLevel.Trace)
             {
-                return Microsoft.Extensions.Logging.LogLevel.Verbose;
+                return Microsoft.Extensions.Logging.LogLevel.Trace;
             }
 
             if (level == SDK.Logging.LogLevel.Info)

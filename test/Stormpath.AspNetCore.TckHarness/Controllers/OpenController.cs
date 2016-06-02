@@ -16,22 +16,25 @@
 
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Stormpath.AspNetCore.TestHarness.Controllers
 {
     [Route("api/[controller]")]
     public class OpenController : Controller
     {
-        [FromServices]
-        public SDK.Client.IClient StormpathClient { get; set; }
+        private readonly SDK.Client.IClient stormpathClient;
+        private readonly Lazy<SDK.Account.IAccount> stormpathAccountSafe;
 
-        [FromServices]
-        public Lazy<SDK.Account.IAccount> StormpathAccountSafe { get; set; }
+        public OpenController(SDK.Client.IClient client, Lazy<SDK.Account.IAccount> account)
+        {
+            this.stormpathClient = client;
+            this.stormpathAccountSafe = account;
+        }
 
         public async Task<string> Get()
         {
-            var tenant = await StormpathClient.GetCurrentTenantAsync();
+            var tenant = await stormpathClient.GetCurrentTenantAsync();
 
             return "Hello world";
         }

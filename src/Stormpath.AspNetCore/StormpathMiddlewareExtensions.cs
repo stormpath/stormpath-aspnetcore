@@ -16,7 +16,7 @@
 
 using System;
 using System.Reflection;
-using Microsoft.AspNet.Builder;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Stormpath.Owin.Abstractions;
@@ -32,7 +32,7 @@ namespace Stormpath.AspNetCore
         /// <param name="services">The <see cref="IServiceCollection" />.</param>
         /// <param name="configuration">Configuration options for Stormpath.</param>
         /// <returns>A reference to this instance after the operation has completed.</returns>
-        /// <exception cref="InitializationException">There was a problem initializing Stormpath.</exception>
+        /// <exception cref="Stormpath.Owin.InitializationException">There was a problem initializing Stormpath.</exception>
         public static IServiceCollection AddStormpath(this IServiceCollection services, object configuration = null)
         {
             if (services == null)
@@ -40,7 +40,7 @@ namespace Stormpath.AspNetCore
                 throw new ArgumentNullException(nameof(services));
             }
 
-            services.AddInstance(new UserConfigurationContainer(configuration));
+            services.AddSingleton(new UserConfigurationContainer(configuration));
 
             services.AddScoped<ScopedClientAccessor>();
             services.AddScoped<ScopedLazyUserAccessor>();
@@ -107,8 +107,13 @@ namespace Stormpath.AspNetCore
 
         private static string GetLibraryUserAgent(Assembly hostingAssembly)
         {
-            var hostingVersion = hostingAssembly.GetName().Version;
-            return $"aspnetcore/{hostingVersion.Major}.{hostingVersion.Minor}.{hostingVersion.Build}";
+            var libraryVersion = typeof(StormpathMiddleware).GetTypeInfo().Assembly.GetName().Version;
+            var libraryToken = $"stormpath-aspnetcore/{libraryVersion.Major}.{libraryVersion.Minor}.{libraryVersion.Build}";
+
+            var hostVersion = hostingAssembly.GetName().Version;
+            var hostToken = $"aspnetcore/{hostVersion.Major}.{hostVersion.Minor}.{hostVersion.Build}";
+
+            return string.Join(" ", libraryToken, hostToken);
         }
     }
 }

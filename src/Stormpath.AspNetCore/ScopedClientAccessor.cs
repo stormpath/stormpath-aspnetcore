@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-using Microsoft.AspNet.Http;
+using Microsoft.AspNetCore.Http;
 using Stormpath.Owin.Abstractions;
 using Stormpath.SDK.Client;
 

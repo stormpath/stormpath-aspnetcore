@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-using Microsoft.AspNet.Authentication;
+using Microsoft.AspNetCore.Builder;
 
 namespace Stormpath.AspNetCore
 {

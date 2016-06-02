@@ -1,4 +1,4 @@
-﻿// <copyright file="SecretController.cs" company="Stormpath, Inc.">
+﻿// <copyright file="Program.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,29 +14,22 @@
 // limitations under the License.
 // </copyright>
 
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Stormpath.SDK.Client;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
-namespace Stormpath.AspNetCore.TestHarness.Controllers
+namespace Stormpath.AspNetCore.TestHarness
 {
-    [Route("api/[controller]")]
-    [Authorize]
-    public class ProtectedController
+    public class Program
     {
-        private readonly IClient client;
-
-        public ProtectedController(IClient client)
+        public static void Main(string[] args)
         {
-            this.client = client;
-        }
+            var host = new WebHostBuilder()
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseStartup<Startup>()
+                .Build();
 
-        public async Task<string> Get()
-        {
-            var tenant = await client.GetCurrentTenantAsync();
-
-            return "Hello secure world";
+            host.Run();
         }
     }
 }

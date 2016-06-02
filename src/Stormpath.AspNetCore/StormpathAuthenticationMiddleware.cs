@@ -15,10 +15,11 @@
 // </copyright>
 
 using System;
-using Microsoft.AspNet.Authentication;
-using Microsoft.AspNet.Builder;
+using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.WebEncoders;
+using Microsoft.Extensions.Options;
 
 namespace Stormpath.AspNetCore
 {
@@ -29,8 +30,8 @@ namespace Stormpath.AspNetCore
         public StormpathAuthenticationMiddleware(
             RequestDelegate next,
             ILoggerFactory loggerFactory,
-            IUrlEncoder encoder,
-            StormpathAuthenticationOptions options,
+            UrlEncoder encoder,
+            IOptions<StormpathAuthenticationOptions> options,
             SDK.Logging.ILogger stormpathLogger)
             : base(next, options, loggerFactory, encoder)
         {

@@ -19,10 +19,10 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Authentication;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Http.Authentication;
-using Microsoft.AspNet.Http.Features.Authentication;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Authentication;
+using Microsoft.AspNetCore.Http.Features.Authentication;
 using Stormpath.Configuration.Abstractions.Immutable;
 using Stormpath.Owin.Abstractions;
 using Stormpath.Owin.Middleware;
@@ -72,7 +72,7 @@ namespace Stormpath.AspNetCore
                 return Task.FromResult(AuthenticateResult.Success(ticket));
             }
             
-            return Task.FromResult(AuthenticateResult.Failed("Request is not properly authenticated."));
+            return Task.FromResult(AuthenticateResult.Fail("Request is not properly authenticated."));
         }
 
         protected override Task<bool> HandleUnauthorizedAsync(ChallengeContext context)
