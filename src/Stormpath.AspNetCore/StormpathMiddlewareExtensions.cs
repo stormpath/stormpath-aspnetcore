@@ -19,6 +19,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Stormpath.Owin.Abstractions;
 using Stormpath.Owin.Middleware;
 
@@ -99,8 +100,8 @@ namespace Stormpath.AspNetCore
                 });
             });
 
-            app.UseMiddleware<StormpathAuthenticationMiddleware>(new StormpathAuthenticationOptions() { AuthenticationScheme = "Cookie" }, loggerAdapter);
-            app.UseMiddleware<StormpathAuthenticationMiddleware>(new StormpathAuthenticationOptions() { AuthenticationScheme = "Bearer" }, loggerAdapter);
+            app.UseMiddleware<StormpathAuthenticationMiddleware>(Options.Create(new StormpathAuthenticationOptions() { AuthenticationScheme = "Cookie" }), loggerAdapter);
+            app.UseMiddleware<StormpathAuthenticationMiddleware>(Options.Create(new StormpathAuthenticationOptions() { AuthenticationScheme = "Bearer" }), loggerAdapter);
 
             return app;
         }
