@@ -29,7 +29,7 @@ namespace Stormpath.AspNetCore.TestHarness
         {
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json")
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
