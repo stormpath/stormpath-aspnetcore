@@ -18,7 +18,7 @@
     },
     "Stormpath.AspNetCore": {
       "target": "project",
-      "version": "0.2.0-beta1"
+      "version": "0.2.0"
     }
   },
   "frameworks": {
@@ -35,5 +35,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.AspNetCore.TestHarness"
   },
-  "version": "0.2.0-beta1"
+  "version": "0.2.0"
 }
