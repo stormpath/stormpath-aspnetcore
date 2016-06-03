@@ -11,7 +11,7 @@ Head over to the [stormpath-aspnetcore-example](https://github.com/stormpath/sto
 
 ## Quickstart
 
-You can add Stormpath to a new or existing ASP.NET Core project with only two lines of code! Follow along with the [Stormpath ASP.NET Core Quickstart](http://docs.stormpath.com/dotnet/aspnet/latest/quickstart.html).
+You can add Stormpath to a new or existing ASP.NET Core project with only two lines of code! Follow along with the [Stormpath ASP.NET Core Quickstart](http://docs.stormpath.com/dotnet/aspnetcore/latest/quickstart.html).
 
 
 ## Getting Help
