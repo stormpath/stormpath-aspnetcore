@@ -5,7 +5,7 @@ This library makes it incredibly simple to add user authentication features to y
 
 :bulb: If you're using ASP.NET 4.5+, grab our [ASP.NET library](https://github.com/stormpath/stormpath-aspnet) instead.
 
-## Example Project
+## Example Application
 
 Head over to the [stormpath-aspnetcore-example](https://github.com/stormpath/stormpath-aspnetcore-example) repository to see a working example of ASP.NET Core + Stormpath in action. :+1:
 
