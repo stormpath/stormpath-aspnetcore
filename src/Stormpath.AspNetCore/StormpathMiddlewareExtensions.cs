@@ -17,7 +17,9 @@
 using System;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Stormpath.Owin.Abstractions;
@@ -43,6 +45,7 @@ namespace Stormpath.AspNetCore
 
             services.AddSingleton(new UserConfigurationContainer(configuration));
 
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<ScopedClientAccessor>();
             services.AddScoped<ScopedLazyUserAccessor>();
 
