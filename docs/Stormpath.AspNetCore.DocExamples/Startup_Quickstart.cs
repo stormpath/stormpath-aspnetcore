@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Stormpath.AspNetCore.DocExamples
 {
-    public class Startup_Setup
+    public class Startup_Quickstart
     {
         #region code/quickstart/aspnetcore/configure_services.cs
         public void ConfigureServices(IServiceCollection services)
@@ -17,7 +17,7 @@ namespace Stormpath.AspNetCore.DocExamples
         #endregion
 
         #region code/quickstart/aspnetcore/configure.cs
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             // Logging and static file middleware (if applicable)
 
