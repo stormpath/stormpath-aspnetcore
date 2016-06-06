@@ -6,7 +6,7 @@
     },
     "Stormpath.AspNetCore": {
       "target": "project",
-      "version": "0.2.0-beta1"
+      "version": "0.2.1"
     }
   },
   "frameworks": {
@@ -17,5 +17,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.AspNetCore.DocExamples"
   },
-  "version": "0.2.0-beta1"
+  "version": "0.2.1"
 }
