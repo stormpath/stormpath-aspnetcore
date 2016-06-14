@@ -40,7 +40,6 @@ namespace Stormpath.AspNetCore
 
         private readonly ICompositeViewEngine _viewEngine;
         private readonly ITempDataProvider _tempDataProvider;
-        //private readonly IServiceProvider _serviceProvider;
         private readonly ILogger _logger;
 
         public RazorViewRenderer(
@@ -51,7 +50,6 @@ namespace Stormpath.AspNetCore
         {
             _viewEngine = viewEngine;
             _tempDataProvider = tempDataProvider;
-            //_serviceProvider = serviceProvider;
             _logger = logger;
         }
 
@@ -65,7 +63,7 @@ namespace Stormpath.AspNetCore
             }
 
             var actionContext = GetActionContext(httpContext);
-            var viewEngineResult = _viewEngine.FindView(actionContext, name, false);
+            var viewEngineResult = _viewEngine.FindView(actionContext, name, true);
 
             if (!viewEngineResult.Success)
             {
