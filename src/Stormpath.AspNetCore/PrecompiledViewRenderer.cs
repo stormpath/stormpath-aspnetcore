@@ -1,4 +1,4 @@
-﻿// <copyright file="RazorViewRenderer.cs" company="Stormpath, Inc.">
+﻿// <copyright file="PrecompiledViewRenderer.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,30 +18,34 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.Owin.Abstractions;
 using Stormpath.Owin.Views.Precompiled;
+using Stormpath.SDK.Logging;
 
 namespace Stormpath.AspNetCore
 {
-    public class PrecompiledDeferringViewRenderer : IViewRenderer
+    public class PrecompiledViewRenderer : IViewRenderer
     {
-        private readonly IViewRenderer backupRenderer;
+        private readonly ILogger _logger;
 
-        // TODO: In RC2+, this class will be refactored to actually use Razor for rendering everything. For now, this is a hack
-        // that tries to use the precompiled views first, then defers to Razor.
-        public PrecompiledDeferringViewRenderer(IViewRenderer useIfLookupFails)
+        public PrecompiledViewRenderer(ILogger logger)
         {
-            this.backupRenderer = useIfLookupFails;
+            _logger = logger;
         }
 
-        public Task RenderAsync(string viewName, object viewModel, IOwinEnvironment context, CancellationToken cancellationToken)
+        public async Task<bool> RenderAsync(string name, object model, IOwinEnvironment context, CancellationToken cancellationToken)
         {
-            var view = ViewResolver.GetView(viewName);
+            var view = ViewResolver.GetView(name);
             if (view == null)
             {
-                return this.backupRenderer.RenderAsync(viewName, viewModel, context, cancellationToken);
+                _logger.Trace($"View '{name}' is not a precompiled view", nameof(PrecompiledViewRenderer));
+                return false;
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            return view.ExecuteAsync(viewModel, context.Response.Body);
+
+            _logger.Trace($"Rendering precompiled view '{name}'", nameof(PrecompiledViewRenderer));
+
+            await view.ExecuteAsync(model, context.Response.Body);
+            return true;
         }
     }
 }

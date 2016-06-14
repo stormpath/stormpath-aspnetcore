@@ -43,11 +43,17 @@ namespace Stormpath.AspNetCore
                 throw new ArgumentNullException(nameof(services));
             }
 
+            services.AddLogging();
+            services.AddSingleton<SDK.Logging.ILogger>(
+                provider => new LoggerAdapter(provider.GetRequiredService<ILoggerFactory>()));
+
             services.AddSingleton(new UserConfigurationContainer(configuration));
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<ScopedClientAccessor>();
             services.AddScoped<ScopedLazyUserAccessor>();
+
+            services.AddSingleton<RazorViewRenderer>();
 
             services.AddScoped(provider => provider.GetRequiredService<ScopedClientAccessor>().GetItem());
             services.AddScoped(provider => provider.GetRequiredService<ScopedLazyUserAccessor>().GetItem());
@@ -80,18 +86,18 @@ namespace Stormpath.AspNetCore
             }
 
             var suppliedConfiguration = app.ApplicationServices.GetRequiredService<UserConfigurationContainer>();
-            var loggerFactory = app.ApplicationServices.GetRequiredService<ILoggerFactory>();
+            var logger = app.ApplicationServices.GetRequiredService<SDK.Logging.ILogger>();
 
             var hostingAssembly = app.GetType().GetTypeInfo().Assembly;
-
-            var loggerAdapter = new LoggerAdapter(loggerFactory);
 
             var stormpathMiddleware = StormpathMiddleware.Create(new StormpathMiddlewareOptions()
             {
                 LibraryUserAgent = GetLibraryUserAgent(hostingAssembly),
                 Configuration = suppliedConfiguration.Configuration,
-                ViewRenderer = new PrecompiledDeferringViewRenderer(new RazorViewRenderer()),
-                Logger = loggerAdapter
+                ViewRenderer = new CompositeViewRenderer(logger,
+                    new PrecompiledViewRenderer(logger),
+                    app.ApplicationServices.GetRequiredService<RazorViewRenderer>()),
+                Logger = logger
             });
 
             app.UseOwin(addToPipeline =>
@@ -103,8 +109,8 @@ namespace Stormpath.AspNetCore
                 });
             });
 
-            app.UseMiddleware<StormpathAuthenticationMiddleware>(Options.Create(new StormpathAuthenticationOptions() { AuthenticationScheme = "Cookie" }), loggerAdapter);
-            app.UseMiddleware<StormpathAuthenticationMiddleware>(Options.Create(new StormpathAuthenticationOptions() { AuthenticationScheme = "Bearer" }), loggerAdapter);
+            app.UseMiddleware<StormpathAuthenticationMiddleware>(Options.Create(new StormpathAuthenticationOptions() { AuthenticationScheme = "Cookie" }), logger);
+            app.UseMiddleware<StormpathAuthenticationMiddleware>(Options.Create(new StormpathAuthenticationOptions() { AuthenticationScheme = "Bearer" }), logger);
 
             return app;
         }

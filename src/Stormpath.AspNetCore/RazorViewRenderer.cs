@@ -15,16 +15,19 @@
 // </copyright>
 
 using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Routing;
 using Stormpath.Owin.Abstractions;
+using Stormpath.SDK.Logging;
 
 namespace Stormpath.AspNetCore
 {
@@ -32,49 +35,68 @@ namespace Stormpath.AspNetCore
     {
         private static readonly string MicrosoftHttpContextKey = "Microsoft.AspNetCore.Http.HttpContext";
 
-        public async Task RenderAsync(string viewName, object viewModel, IOwinEnvironment context, CancellationToken cancellationToken)
+        private readonly ICompositeViewEngine _viewEngine;
+        private readonly ITempDataProvider _tempDataProvider;
+        //private readonly IServiceProvider _serviceProvider;
+        private readonly ILogger _logger;
+
+        public RazorViewRenderer(
+            ICompositeViewEngine viewEngine,
+            ITempDataProvider tempDataProvider,
+            IServiceProvider serviceProvider,
+            ILogger logger)
+        {
+            _viewEngine = viewEngine;
+            _tempDataProvider = tempDataProvider;
+            //_serviceProvider = serviceProvider;
+            _logger = logger;
+        }
+
+        public async Task<bool> RenderAsync(string name, object model, IOwinEnvironment context, CancellationToken cancellationToken)
         {
             var httpContext = context.Request[MicrosoftHttpContextKey] as HttpContext;
-
             if (httpContext == null)
             {
-                throw new InvalidOperationException($"Request dictionary must include item '{MicrosoftHttpContextKey}'");
+                _logger.Error($"Request dictionary does not contain '{MicrosoftHttpContextKey}'", nameof(RazorViewRenderer));
+                return false;
             }
 
-            var viewEngine = httpContext.RequestServices.GetRequiredService<ICompositeViewEngine>();
-            var tempDataProvider = httpContext.RequestServices.GetRequiredService<ITempDataProvider>();
-            var httpContextAccessor = httpContext.RequestServices.GetRequiredService<IHttpContextAccessor>();
+            var actionContext = GetActionContext(httpContext);
+            var viewEngineResult = _viewEngine.FindView(actionContext, name, false);
 
-            bool isFullyQualifiedViewPath = viewName.Contains("/");
-            var path = isFullyQualifiedViewPath
-                ? viewName
-                : $"~/Views/{viewName}.cshtml";
-
-            var viewDataDictionary = new ViewDataDictionary(new Microsoft.AspNetCore.Mvc.ModelBinding.EmptyModelMetadataProvider(), new Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary());
-            var actionContext = new ActionContext(httpContextAccessor.HttpContext, new Microsoft.AspNetCore.Routing.RouteData(), new ActionDescriptor());
-            viewDataDictionary.Model = viewModel;
-
-            var viewResult = viewEngine.FindView(actionContext, path, isMainPage: true);
-
-            if (!viewResult.Success)
+            if (!viewEngineResult.Success)
             {
-                return;
+                _logger.Trace($"Could not find Razor view '{name}'", nameof(RazorViewRenderer));
+                return false;
             }
 
-            using (var writer = new System.IO.StreamWriter(context.Response.Body))
+            var view = viewEngineResult.View;
+
+            using (var writer = new StreamWriter(context.Response.Body))
             {
+                var viewDataDictionary = new ViewDataDictionary(
+                    new EmptyModelMetadataProvider(),
+                    new ModelStateDictionary())
+                {
+                    Model = model
+                };
+
                 var viewContext = new ViewContext(
                     actionContext,
-                    viewResult.View,
+                    view,
                     viewDataDictionary,
-                    new TempDataDictionary(httpContextAccessor.HttpContext, tempDataProvider),
+                    new TempDataDictionary(actionContext.HttpContext, _tempDataProvider),
                     writer,
                     new HtmlHelperOptions());
 
                 cancellationToken.ThrowIfCancellationRequested();
-                await viewResult.View.RenderAsync(viewContext);
-                writer.Flush();
+                await view.RenderAsync(viewContext);
+
+                return true;
             }
         }
+
+        private static ActionContext GetActionContext(HttpContext httpContext)
+            => new ActionContext(httpContext, new RouteData(), new ActionDescriptor());
     }
 }
