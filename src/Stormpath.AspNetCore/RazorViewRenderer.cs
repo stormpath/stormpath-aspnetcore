@@ -15,6 +15,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,6 +24,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
@@ -34,6 +36,7 @@ namespace Stormpath.AspNetCore
     public class RazorViewRenderer : IViewRenderer
     {
         private static readonly string MicrosoftHttpContextKey = "Microsoft.AspNetCore.Http.HttpContext";
+        private static readonly string ControllerKey = "controller";
 
         private readonly ICompositeViewEngine _viewEngine;
         private readonly ITempDataProvider _tempDataProvider;
@@ -97,6 +100,16 @@ namespace Stormpath.AspNetCore
         }
 
         private static ActionContext GetActionContext(HttpContext httpContext)
-            => new ActionContext(httpContext, new RouteData(), new ActionDescriptor());
+        {
+            var routeData = new RouteData();
+            routeData.Values.Add(ControllerKey, "Stormpath");
+
+            var actionDescriptor = new ActionDescriptor()
+            {
+                RouteConstraints = new List<RouteDataActionConstraint>()
+            };
+
+            return new ActionContext(httpContext, routeData, actionDescriptor);
+        }
     }
 }
