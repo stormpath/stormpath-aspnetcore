@@ -24,6 +24,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Stormpath.Owin.Abstractions;
 using Stormpath.Owin.Middleware;
+using Stormpath.Owin.Views.Precompiled;
 
 namespace Stormpath.AspNetCore
 {
@@ -90,13 +91,15 @@ namespace Stormpath.AspNetCore
 
             var hostingAssembly = app.GetType().GetTypeInfo().Assembly;
 
+            var viewRenderer = new CompositeViewRenderer(logger,
+                new PrecompiledViewRenderer(logger),
+                app.ApplicationServices.GetRequiredService<RazorViewRenderer>());
+
             var stormpathMiddleware = StormpathMiddleware.Create(new StormpathMiddlewareOptions()
             {
                 LibraryUserAgent = GetLibraryUserAgent(hostingAssembly),
                 Configuration = suppliedConfiguration.Configuration,
-                ViewRenderer = new CompositeViewRenderer(logger,
-                    new PrecompiledViewRenderer(logger),
-                    app.ApplicationServices.GetRequiredService<RazorViewRenderer>()),
+                ViewRenderer = viewRenderer,
                 Logger = logger
             });
 
