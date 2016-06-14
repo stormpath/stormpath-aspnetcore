@@ -1,6 +1,7 @@
 {
   "buildOptions": {
-    "emitEntryPoint": true
+    "emitEntryPoint": true,
+    "preserveCompilationContext": true
   },
   "dependencies": {
     "Microsoft.AspNetCore.Mvc": "1.0.0-rc2-final",
@@ -18,7 +19,7 @@
     },
     "Stormpath.AspNetCore": {
       "target": "project",
-      "version": "0.2.0"
+      "version": "0.2.2-beta1"
     }
   },
   "frameworks": {
@@ -30,10 +31,13 @@
     "exclude": [
       "**.user",
       "**.vspscc"
+    ],
+    "include": [
+      "Views"
     ]
   },
   "tooling": {
     "defaultNamespace": "Stormpath.AspNetCore.TestHarness"
   },
-  "version": "0.2.0"
+  "version": "0.2.2-beta1"
 }
