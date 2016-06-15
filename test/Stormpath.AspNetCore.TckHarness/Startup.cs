@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Stormpath.Configuration.Abstractions;
 
 namespace Stormpath.AspNetCore.TestHarness
 {
@@ -41,12 +42,12 @@ namespace Stormpath.AspNetCore.TestHarness
         public void ConfigureServices(IServiceCollection services)
         {
             // Add Stormpath services
-            var stormpathConfiguration = new
+            var stormpathConfiguration = new StormpathConfiguration()
             {
-                application = new
+                Application = new ApplicationConfiguration()
                 {
-                    name = "My Application"
-                }
+                    Name = "My Application"
+                },
             };
             services.AddStormpath(stormpathConfiguration);
 
