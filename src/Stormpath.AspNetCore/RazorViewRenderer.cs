@@ -35,8 +35,8 @@ namespace Stormpath.AspNetCore
 {
     public class RazorViewRenderer : IViewRenderer
     {
-        private static readonly string MicrosoftHttpContextKey = "Microsoft.AspNetCore.Http.HttpContext";
-        private static readonly string ControllerKey = "controller";
+        private const string MicrosoftHttpContextKey = "Microsoft.AspNetCore.Http.HttpContext";
+        private const string ControllerKey = "controller";
 
         private readonly ICompositeViewEngine _viewEngine;
         private readonly ITempDataProvider _tempDataProvider;
@@ -63,7 +63,18 @@ namespace Stormpath.AspNetCore
             }
 
             var actionContext = GetActionContext(httpContext);
-            var viewEngineResult = _viewEngine.FindView(actionContext, name, true);
+
+            ViewEngineResult viewEngineResult = null;
+            if (IsApplicationRelativePath(name))
+            {
+                var basePath = Directory.GetCurrentDirectory();
+                _logger.Trace($"Getting view '{name}' relative to '{basePath}'");
+                viewEngineResult = _viewEngine.GetView(basePath, name, true);
+            }
+            else
+            {
+                viewEngineResult = _viewEngine.FindView(actionContext, name, true);
+            }
 
             if (!viewEngineResult.Success)
             {
@@ -108,6 +119,16 @@ namespace Stormpath.AspNetCore
             };
 
             return new ActionContext(httpContext, routeData, actionDescriptor);
+        }
+
+        private static bool IsApplicationRelativePath(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return false;
+            }
+
+            return name[0] == '~' || name[0] == '/';
         }
     }
 }
