@@ -95,7 +95,7 @@ namespace Stormpath.AspNetCore
                 new PrecompiledViewRenderer(logger),
                 app.ApplicationServices.GetRequiredService<RazorViewRenderer>());
 
-            var stormpathMiddleware = StormpathMiddleware.Create(new StormpathMiddlewareOptions()
+            var stormpathMiddleware = StormpathMiddleware.Create(new StormpathOwinOptions()
             {
                 LibraryUserAgent = GetLibraryUserAgent(hostingAssembly),
                 Configuration = suppliedConfiguration.Configuration,
