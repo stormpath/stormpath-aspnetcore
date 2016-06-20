@@ -16,8 +16,6 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -64,15 +62,15 @@ namespace Stormpath.AspNetCore
                 redirectAction,
                 this.stormpathLogger);
 
-            if (this.handler.IsAuthenticated(scheme, Options.AuthenticationScheme, account))
+            if (!this.handler.IsAuthenticated(scheme, Options.AuthenticationScheme, account))
             {
-                var principal = CreatePrincipal(account, scheme);
-                var ticket = new AuthenticationTicket(principal, new AuthenticationProperties(), scheme);
-
-                return Task.FromResult(AuthenticateResult.Success(ticket));
+                return Task.FromResult(AuthenticateResult.Fail("Request is not properly authenticated."));
             }
-            
-            return Task.FromResult(AuthenticateResult.Fail("Request is not properly authenticated."));
+
+            var principal = AccountIdentityTransformer.CreatePrincipal(account, scheme);
+            var ticket = new AuthenticationTicket(principal, new AuthenticationProperties(), scheme);
+
+            return Task.FromResult(AuthenticateResult.Success(ticket));
         }
 
         protected override Task<bool> HandleUnauthorizedAsync(ChallengeContext context)
@@ -85,20 +83,6 @@ namespace Stormpath.AspNetCore
             return Task.FromResult(true);
         }
 
-        private static ClaimsPrincipal CreatePrincipal(IAccount account, string scheme)
-        {
-            var claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, account.Href));
-            claims.Add(new Claim(ClaimTypes.Email, account.Email));
-            claims.Add(new Claim(ClaimTypes.Name, account.Username));
-            claims.Add(new Claim(ClaimTypes.GivenName, account.GivenName));
-            claims.Add(new Claim(ClaimTypes.Surname, account.Surname));
-            claims.Add(new Claim("FullName", account.FullName));
 
-            var identity = new ClaimsIdentity(claims, scheme);
-            var principal = new ClaimsPrincipal(identity);
-
-            return principal;
-        }
     }
 }

@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -28,7 +29,10 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
+using Stormpath.Configuration.Abstractions.Immutable;
 using Stormpath.Owin.Abstractions;
+using Stormpath.Owin.Middleware;
+using Stormpath.SDK.Account;
 using Stormpath.SDK.Logging;
 
 namespace Stormpath.AspNetCore
@@ -45,7 +49,6 @@ namespace Stormpath.AspNetCore
         public RazorViewRenderer(
             ICompositeViewEngine viewEngine,
             ITempDataProvider tempDataProvider,
-            IServiceProvider serviceProvider,
             ILogger logger)
         {
             _viewEngine = viewEngine;
@@ -61,6 +64,10 @@ namespace Stormpath.AspNetCore
                 _logger.Error($"Request dictionary does not contain '{MicrosoftHttpContextKey}'", nameof(RazorViewRenderer));
                 return false;
             }
+
+            // TODO ideally this would be done by the existing middleware pipeline
+            // if authentication and view rendering were split up
+            GetUserIdentity(httpContext, _logger);
 
             var actionContext = GetActionContext(httpContext);
 
@@ -105,6 +112,26 @@ namespace Stormpath.AspNetCore
                 await view.RenderAsync(viewContext);
 
                 return true;
+            }
+        }
+
+        private static void GetUserIdentity(HttpContext httpContext, ILogger logger)
+        {
+            var config = httpContext.Items.Get<StormpathConfiguration>(OwinKeys.StormpathConfiguration);
+            var scheme = httpContext.Items.Get<string>(OwinKeys.StormpathUserScheme);
+            var account = httpContext.Items.Get<IAccount>(OwinKeys.StormpathUser);
+
+            var handler = new RouteProtector(config.Web, null, null, null, logger);
+            var isAuthenticatedRequest = handler.IsAuthenticated(scheme, scheme, account);
+
+            if (isAuthenticatedRequest)
+            {
+                httpContext.User = AccountIdentityTransformer.CreatePrincipal(account, scheme);
+            }
+
+            if (httpContext.User == null)
+            {
+                httpContext.User = new GenericPrincipal(new GenericIdentity(""), new string[0]);
             }
         }
 
