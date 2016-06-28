@@ -140,10 +140,7 @@ namespace Stormpath.AspNetCore
             var routeData = new RouteData();
             routeData.Values.Add(ControllerKey, "Stormpath");
 
-            var actionDescriptor = new ActionDescriptor()
-            {
-                RouteConstraints = new List<RouteDataActionConstraint>()
-            };
+            var actionDescriptor = new ActionDescriptor();
 
             return new ActionContext(httpContext, routeData, actionDescriptor);
         }

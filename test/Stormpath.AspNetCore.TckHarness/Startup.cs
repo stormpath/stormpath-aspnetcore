@@ -47,7 +47,7 @@ namespace Stormpath.AspNetCore.TestHarness
                 Application = new ApplicationConfiguration()
                 {
                     Name = "My Application"
-                },
+                }
             };
             services.AddStormpath(stormpathConfiguration);
 

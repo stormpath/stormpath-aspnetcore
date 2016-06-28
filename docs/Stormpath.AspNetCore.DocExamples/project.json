@@ -2,11 +2,11 @@
   "dependencies": {
     "Microsoft.NETCore.App": {
       "type": "platform",
-      "version": "1.0.0-rc2-3002702"
+      "version": "1.0.0"
     },
     "Stormpath.AspNetCore": {
       "target": "project",
-      "version": "0.2.1"
+      "version": "0.3.0-beta1"
     }
   },
   "frameworks": {
@@ -17,5 +17,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.AspNetCore.DocExamples"
   },
-  "version": "0.2.1"
+  "version": "0.3.0-beta1"
 }
