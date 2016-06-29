@@ -14,7 +14,6 @@
 // limitations under the License.
 // </copyright>
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Principal;
@@ -25,7 +24,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
@@ -40,7 +38,6 @@ namespace Stormpath.AspNetCore
     public class RazorViewRenderer : IViewRenderer
     {
         private const string MicrosoftHttpContextKey = "Microsoft.AspNetCore.Http.HttpContext";
-        private const string ControllerKey = "controller";
 
         private readonly ICompositeViewEngine _viewEngine;
         private readonly ITempDataProvider _tempDataProvider;
@@ -71,7 +68,7 @@ namespace Stormpath.AspNetCore
 
             var actionContext = GetActionContext(httpContext);
 
-            ViewEngineResult viewEngineResult = null;
+            ViewEngineResult viewEngineResult;
             if (IsApplicationRelativePath(name))
             {
                 var basePath = Directory.GetCurrentDirectory();
@@ -135,12 +132,20 @@ namespace Stormpath.AspNetCore
             }
         }
 
+        // TODO need to pass the action name
         private static ActionContext GetActionContext(HttpContext httpContext)
         {
             var routeData = new RouteData();
-            routeData.Values.Add(ControllerKey, "Stormpath");
+            routeData.Values.Add(ActionRouter.ControllerKey, "Stormpath");
+            routeData.Routers.Add(ActionRouter.Instance);
 
-            var actionDescriptor = new ActionDescriptor();
+            var actionDescriptor = new ActionDescriptor()
+            {
+                RouteValues = new Dictionary<string, string>()
+                {
+                    [ActionRouter.ControllerKey] = "Stormpath",
+                }
+            };
 
             return new ActionContext(httpContext, routeData, actionDescriptor);
         }
