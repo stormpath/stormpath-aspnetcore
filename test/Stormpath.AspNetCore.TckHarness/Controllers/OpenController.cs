@@ -17,6 +17,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Stormpath.SDK.Application;
 
 namespace Stormpath.AspNetCore.TestHarness.Controllers
 {
@@ -25,18 +26,20 @@ namespace Stormpath.AspNetCore.TestHarness.Controllers
     {
         private readonly SDK.Client.IClient stormpathClient;
         private readonly Lazy<SDK.Account.IAccount> stormpathAccountSafe;
+        private readonly IApplication stormpathApplication;
 
-        public OpenController(SDK.Client.IClient client, Lazy<SDK.Account.IAccount> account)
+        public OpenController(SDK.Client.IClient client, IApplication application, Lazy<SDK.Account.IAccount> account)
         {
             this.stormpathClient = client;
+            this.stormpathApplication = application;
             this.stormpathAccountSafe = account;
         }
 
         public async Task<string> Get()
         {
-            var tenant = await stormpathClient.GetCurrentTenantAsync();
+            await stormpathClient.GetCurrentTenantAsync();
 
-            return "Hello world";
+            return $"Hello world from {stormpathApplication.Name}";
         }
     }
 }

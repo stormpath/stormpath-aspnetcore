@@ -1,4 +1,4 @@
-﻿// <copyright file="ScopedClientAccessor.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ScopedApplicationAccessor.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,24 +15,30 @@
 // </copyright>
 
 using Microsoft.AspNetCore.Http;
+using Stormpath.Configuration.Abstractions.Immutable;
 using Stormpath.Owin.Abstractions;
+using Stormpath.SDK.Application;
 using Stormpath.SDK.Client;
+using Stormpath.SDK.Sync;
 
 namespace Stormpath.AspNetCore
 {
-    internal sealed class ScopedClientAccessor
+    internal sealed class ScopedApplicationAccessor
     {
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public ScopedClientAccessor(IHttpContextAccessor httpContextAccessor)
+        public ScopedApplicationAccessor(IHttpContextAccessor httpContextAccessor)
         {
             this.httpContextAccessor = httpContextAccessor;
         }
 
-        public IClient GetItem()
+        public IApplication GetItem()
         {
             var context = this.httpContextAccessor.HttpContext;
-            return context.Items[OwinKeys.StormpathClient] as IClient;
+            var client = context.Items[OwinKeys.StormpathClient] as IClient;
+            var configuration = context.Items[OwinKeys.StormpathConfiguration] as StormpathConfiguration;
+
+            return client.GetApplication(configuration.Application.Href);
         }
     }
 }

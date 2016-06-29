@@ -25,6 +25,7 @@ using Microsoft.Extensions.Options;
 using Stormpath.Owin.Abstractions;
 using Stormpath.Owin.Middleware;
 using Stormpath.Owin.Views.Precompiled;
+using Stormpath.SDK.Application;
 
 namespace Stormpath.AspNetCore
 {
@@ -51,14 +52,16 @@ namespace Stormpath.AspNetCore
             services.AddSingleton(new UserConfigurationContainer(configuration));
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddScoped<ScopedClientAccessor>();
+            services.AddScoped<ScopedApplicationAccessor>();
             services.AddScoped<ScopedLazyUserAccessor>();
-
-            services.AddSingleton<RazorViewRenderer>();
-
             services.AddScoped(provider => provider.GetRequiredService<ScopedClientAccessor>().GetItem());
+            services.AddScoped(provider => provider.GetRequiredService<ScopedApplicationAccessor>().GetItem());
             services.AddScoped(provider => provider.GetRequiredService<ScopedLazyUserAccessor>().GetItem());
             services.AddScoped(provider => provider.GetRequiredService<ScopedLazyUserAccessor>().GetItem().Value);
+
+            services.AddSingleton<RazorViewRenderer>();
 
             services.AddAuthentication();
             services.AddAuthorization(options =>
