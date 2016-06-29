@@ -44,9 +44,12 @@ namespace Stormpath.AspNetCore.TestHarness
             // Add Stormpath services
             var stormpathConfiguration = new StormpathConfiguration()
             {
-                Application = new ApplicationConfiguration()
+                Web = new WebConfiguration()
                 {
-                    Name = "My Application"
+                    Login = new WebLoginRouteConfiguration()
+                    {
+                        View = "~/Views/Stormpath/MyLogin.cshtml"
+                    }
                 }
             };
             services.AddStormpath(stormpathConfiguration);
