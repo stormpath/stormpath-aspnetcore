@@ -21,6 +21,7 @@
   },
   "description": "Stormpath middleware for ASP.NET Core. Easily adds authentication and authorization to ASP.NET Core applications.",
   "frameworks": {
+    "net451": {},
     "netstandard1.6": {
       "imports": "dotnet"
     }
