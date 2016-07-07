@@ -66,10 +66,10 @@ namespace Stormpath.AspNetCore
             services.AddAuthentication();
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("Stormpath.Bearer", 
-                    policy => policy.AddAuthenticationSchemes(RequestAuthenticationScheme.Bearer).RequireAuthenticatedUser());
-                options.AddPolicy("Stormpath.Cookie",
-                    policy => policy.AddAuthenticationSchemes(RequestAuthenticationScheme.Cookie).RequireAuthenticatedUser());
+                //options.AddPolicy("Stormpath.Bearer", 
+                //    policy => policy.AddAuthenticationSchemes(RequestAuthenticationScheme.Bearer).RequireAuthenticatedUser());
+                //options.AddPolicy("Stormpath.Cookie",
+                //    policy => policy.AddAuthenticationSchemes(RequestAuthenticationScheme.Cookie).RequireAuthenticatedUser());
             });
 
             return services;
@@ -115,8 +115,11 @@ namespace Stormpath.AspNetCore
                 });
             });
 
-            app.UseMiddleware<StormpathAuthenticationMiddleware>(Options.Create(new StormpathAuthenticationOptions() { AuthenticationScheme = "Cookie" }), logger);
-            app.UseMiddleware<StormpathAuthenticationMiddleware>(Options.Create(new StormpathAuthenticationOptions() { AuthenticationScheme = "Bearer" }), logger);
+            app.UseMiddleware<StormpathAuthenticationMiddleware>(
+                Options.Create(new StormpathAuthenticationOptions() { AllowedAuthenticationSchemes = new [] { "Cookie", "Bearer" } }),
+                stormpathMiddleware.Configuration,
+                logger);
+            //app.UseMiddleware<StormpathAuthenticationMiddleware>(Options.Create(new StormpathAuthenticationOptions() { AuthenticationScheme = "Bearer" }), logger);
 
             return app;
         }

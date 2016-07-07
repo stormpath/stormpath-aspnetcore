@@ -20,11 +20,13 @@ namespace Stormpath.AspNetCore
 {
     public sealed class StormpathAuthenticationOptions : AuthenticationOptions
     {
-        public StormpathAuthenticationOptions() 
-            : base()
+        public StormpathAuthenticationOptions()
         {
             AutomaticAuthenticate = true;
             AutomaticChallenge = true;
+            AuthenticationScheme = "Stormpath";
         }
+
+        public string[] AllowedAuthenticationSchemes { get; set; }
     }
 }

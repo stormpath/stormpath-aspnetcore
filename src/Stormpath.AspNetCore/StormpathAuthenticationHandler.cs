@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Http.Features.Authentication;
 using Stormpath.Configuration.Abstractions.Immutable;
 using Stormpath.Owin.Abstractions;
+using Stormpath.Owin.Abstractions.Configuration;
 using Stormpath.Owin.Middleware;
 using Stormpath.SDK.Account;
 
@@ -31,19 +32,43 @@ namespace Stormpath.AspNetCore
     public sealed class StormpathAuthenticationHandler : AuthenticationHandler<StormpathAuthenticationOptions>
     {
         private readonly SDK.Logging.ILogger stormpathLogger;
-        private RouteProtector handler;
+        private readonly RouteProtector protector;
 
-        public StormpathAuthenticationHandler(SDK.Logging.ILogger stormpathLogger)
+        public StormpathAuthenticationHandler(IntegrationConfiguration integrationConfiguration, SDK.Logging.ILogger stormpathLogger)
         {
             this.stormpathLogger = stormpathLogger;
+
+            this.protector = CreateRouteProtector(integrationConfiguration);
         }
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            var config = Context.Items.Get<StormpathConfiguration>(OwinKeys.StormpathConfiguration);
             var scheme = Context.Items.Get<string>(OwinKeys.StormpathUserScheme);
             var account = Context.Items.Get<IAccount>(OwinKeys.StormpathUser);
 
+            foreach (var potentialScheme in Options.AllowedAuthenticationSchemes)
+            {
+                if (!protector.IsAuthenticated(scheme, potentialScheme, account))
+                {
+                    continue;
+                }
+
+                var principal = AccountIdentityTransformer.CreatePrincipal(account, scheme);
+                var ticket = new AuthenticationTicket(principal, new AuthenticationProperties(), scheme);
+                return Task.FromResult(AuthenticateResult.Success(ticket));
+            }
+
+            return Task.FromResult(AuthenticateResult.Fail("Request is not properly authenticated."));
+        }
+
+        protected override Task<bool> HandleUnauthorizedAsync(ChallengeContext context)
+        {
+            protector.OnUnauthorized(Request.Headers["Accept"], Request.Path);
+            return Task.FromResult(true);
+        }
+
+        private RouteProtector CreateRouteProtector(IntegrationConfiguration config)
+        {
             var deleteCookieAction = new Action<WebCookieConfiguration>(cookie =>
             {
                 Response.Cookies.Delete(cookie.Name, new CookieOptions()
@@ -52,37 +77,16 @@ namespace Stormpath.AspNetCore
                     Path = cookie.Path
                 });
             });
+
             var setStatusCodeAction = new Action<int>(code => Response.StatusCode = code);
             var redirectAction = new Action<string>(location => Response.Redirect(location));
 
-            this.handler = new RouteProtector(
+            return new RouteProtector(
                 config.Web,
                 deleteCookieAction,
                 setStatusCodeAction,
                 redirectAction,
                 this.stormpathLogger);
-
-            if (!this.handler.IsAuthenticated(scheme, Options.AuthenticationScheme, account))
-            {
-                return Task.FromResult(AuthenticateResult.Fail("Request is not properly authenticated."));
-            }
-
-            var principal = AccountIdentityTransformer.CreatePrincipal(account, scheme);
-            var ticket = new AuthenticationTicket(principal, new AuthenticationProperties(), scheme);
-
-            return Task.FromResult(AuthenticateResult.Success(ticket));
         }
-
-        protected override Task<bool> HandleUnauthorizedAsync(ChallengeContext context)
-        {
-            if (this.handler != null)
-            {
-                handler.OnUnauthorized(Request.Headers["Accept"], Request.Path);
-            }
-            
-            return Task.FromResult(true);
-        }
-
-
     }
 }
