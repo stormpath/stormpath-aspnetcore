@@ -67,6 +67,12 @@ namespace Stormpath.AspNetCore
             return Task.FromResult(true);
         }
 
+        protected override Task<bool> HandleForbiddenAsync(ChallengeContext context)
+        {
+            protector.OnUnauthorized(Request.Headers["Accept"], Request.Path);
+            return Task.FromResult(true);
+        }
+
         private RouteProtector CreateRouteProtector(IntegrationConfiguration config)
         {
             var deleteCookieAction = new Action<WebCookieConfiguration>(cookie =>

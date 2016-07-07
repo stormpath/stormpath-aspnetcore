@@ -15,6 +15,7 @@
 // </copyright>
 
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -49,7 +50,7 @@ namespace Stormpath.AspNetCore.TestHarness
                     ServerUri = "http://localhost:5000",
                     Login = new WebLoginRouteConfiguration()
                     {
-                        //View = "~/Views/Stormpath/MyLogin.cshtml"
+                        View = "~/Views/Stormpath/MyLogin.cshtml"
                     }
                 }
             };

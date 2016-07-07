@@ -66,6 +66,7 @@ namespace Stormpath.AspNetCore
             _config = integrationConfiguration;
             _stormpathLogger = stormpathLogger;
         }
+
         protected override AuthenticationHandler<StormpathAuthenticationOptions> CreateHandler()
         {
             return new StormpathAuthenticationHandler(_config, _stormpathLogger);
