@@ -47,11 +47,11 @@ namespace Stormpath.AspNetCore.TestHarness
             {
                 Web = new WebConfiguration()
                 {
-                    ServerUri = "http://localhost:5000",
+                    ServerUri = "http://localhost:8080",
                     Login = new WebLoginRouteConfiguration()
-                    {
-                        View = "~/Views/Stormpath/MyLogin.cshtml"
-                    }
+                    //{
+                    //    View = "~/Views/Stormpath/MyLogin.cshtml"
+                    //}
                 }
             };
             services.AddStormpath(stormpathConfiguration);
