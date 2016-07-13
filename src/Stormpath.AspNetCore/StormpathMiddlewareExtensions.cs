@@ -22,10 +22,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Stormpath.Owin.Abstractions;
 using Stormpath.Owin.Middleware;
 using Stormpath.Owin.Views.Precompiled;
-using Stormpath.SDK.Application;
 
 namespace Stormpath.AspNetCore
 {
@@ -64,13 +62,6 @@ namespace Stormpath.AspNetCore
             services.AddSingleton<RazorViewRenderer>();
 
             services.AddAuthentication();
-            services.AddAuthorization(options =>
-            {
-                //options.AddPolicy("Stormpath.Bearer", 
-                //    policy => policy.AddAuthenticationSchemes(RequestAuthenticationScheme.Bearer).RequireAuthenticatedUser());
-                //options.AddPolicy("Stormpath.Cookie",
-                //    policy => policy.AddAuthenticationSchemes(RequestAuthenticationScheme.Cookie).RequireAuthenticatedUser());
-            });
 
             return services;
         }
@@ -116,10 +107,9 @@ namespace Stormpath.AspNetCore
             });
 
             app.UseMiddleware<StormpathAuthenticationMiddleware>(
-                Options.Create(new StormpathAuthenticationOptions() { AllowedAuthenticationSchemes = new [] { "Cookie", "Bearer" } }),
+                Options.Create(new StormpathAuthenticationOptions { AllowedAuthenticationSchemes = new [] { "Cookie", "Bearer" } }),
                 stormpathMiddleware.Configuration,
                 logger);
-            //app.UseMiddleware<StormpathAuthenticationMiddleware>(Options.Create(new StormpathAuthenticationOptions() { AuthenticationScheme = "Bearer" }), logger);
 
             return app;
         }
