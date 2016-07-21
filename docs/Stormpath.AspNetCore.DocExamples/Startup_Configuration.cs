@@ -121,6 +121,19 @@ namespace Stormpath.AspNetCore.DocExamples
             #endregion
         }
 
+        public void ConfigureServices_ServerUri(IServiceCollection services)
+        {
+            #region code/configuration/aspnetcore/server_uri.cs
+            services.AddStormpath(new StormpathConfiguration()
+            {
+                Web = new WebConfiguration()
+                {
+                    ServerUri = "http://localhost:5000"
+                }
+            });
+            #endregion
+        }
+
         public void ConfigureServices_VerifyEmailUri(IServiceCollection services)
         {
             #region code/email_verification/aspnetcore/configure_uri.cs
