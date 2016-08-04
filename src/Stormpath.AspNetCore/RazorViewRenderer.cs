@@ -41,15 +41,18 @@ namespace Stormpath.AspNetCore
 
         private readonly ICompositeViewEngine _viewEngine;
         private readonly ITempDataProvider _tempDataProvider;
+        private readonly IIdentityTransformer _identityTransformer;
         private readonly ILogger _logger;
 
         public RazorViewRenderer(
             ICompositeViewEngine viewEngine,
             ITempDataProvider tempDataProvider,
+            IIdentityTransformer identityTransformer,
             ILogger logger)
         {
             _viewEngine = viewEngine;
             _tempDataProvider = tempDataProvider;
+            _identityTransformer = identityTransformer;
             _logger = logger;
         }
 
@@ -112,18 +115,19 @@ namespace Stormpath.AspNetCore
             }
         }
 
-        private static void GetUserIdentity(HttpContext httpContext, ILogger logger)
+        private void GetUserIdentity(HttpContext httpContext, ILogger logger)
         {
             var config = httpContext.Items.Get<StormpathConfiguration>(OwinKeys.StormpathConfiguration);
             var scheme = httpContext.Items.Get<string>(OwinKeys.StormpathUserScheme);
             var account = httpContext.Items.Get<IAccount>(OwinKeys.StormpathUser);
+            var client = httpContext.Items.Get<IIdentityTransformer>(OwinKeys.StormpathClient);
 
             var handler = new RouteProtector(config.Web, null, null, null, logger);
             var isAuthenticatedRequest = handler.IsAuthenticated(scheme, scheme, account);
 
             if (isAuthenticatedRequest)
             {
-                httpContext.User = AccountIdentityTransformer.CreatePrincipal(account, scheme);
+                httpContext.User = await _identityTransformer.CreatePrincipalAsync(client, account, scheme);
             }
 
             if (httpContext.User == null)

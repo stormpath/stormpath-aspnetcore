@@ -26,50 +26,57 @@ using Stormpath.Owin.Abstractions;
 using Stormpath.Owin.Abstractions.Configuration;
 using Stormpath.Owin.Middleware;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Client;
 
 namespace Stormpath.AspNetCore
 {
     public sealed class StormpathAuthenticationHandler : AuthenticationHandler<StormpathAuthenticationOptions>
     {
-        private readonly SDK.Logging.ILogger stormpathLogger;
-        private readonly RouteProtector protector;
+        private readonly SDK.Logging.ILogger _stormpathLogger;
+        private readonly IIdentityTransformer _identityTransformer;
+        private readonly RouteProtector _protector;
 
-        public StormpathAuthenticationHandler(IntegrationConfiguration integrationConfiguration, SDK.Logging.ILogger stormpathLogger)
+        public StormpathAuthenticationHandler(
+            IntegrationConfiguration integrationConfiguration,
+            SDK.Logging.ILogger stormpathLogger,
+            IIdentityTransformer identityTransformer)
         {
-            this.stormpathLogger = stormpathLogger;
+            _stormpathLogger = stormpathLogger;
+            _identityTransformer = identityTransformer ?? new DefaultIdentityTransformer();
 
-            this.protector = CreateRouteProtector(integrationConfiguration);
+            _protector = CreateRouteProtector(integrationConfiguration);
         }
 
-        protected override Task<AuthenticateResult> HandleAuthenticateAsync()
+        protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
             var scheme = Context.Items.Get<string>(OwinKeys.StormpathUserScheme);
             var account = Context.Items.Get<IAccount>(OwinKeys.StormpathUser);
+            var client = Context.Items.Get<IClient>(OwinKeys.StormpathClient);
 
             foreach (var potentialScheme in Options.AllowedAuthenticationSchemes)
             {
-                if (!protector.IsAuthenticated(scheme, potentialScheme, account))
+                if (!_protector.IsAuthenticated(scheme, potentialScheme, account))
                 {
                     continue;
                 }
 
-                var principal = AccountIdentityTransformer.CreatePrincipal(account, scheme);
+                var principal = await _identityTransformer.CreatePrincipalAsync(client, account, scheme);
                 var ticket = new AuthenticationTicket(principal, new AuthenticationProperties(), scheme);
-                return Task.FromResult(AuthenticateResult.Success(ticket));
+                return AuthenticateResult.Success(ticket);
             }
 
-            return Task.FromResult(AuthenticateResult.Fail("Request is not properly authenticated."));
+            return AuthenticateResult.Fail("Request is not properly authenticated.");
         }
 
         protected override Task<bool> HandleUnauthorizedAsync(ChallengeContext context)
         {
-            protector.OnUnauthorized(Request.Headers["Accept"], Request.Path);
+            _protector.OnUnauthorized(Request.Headers["Accept"], Request.Path);
             return Task.FromResult(true);
         }
 
         protected override Task<bool> HandleForbiddenAsync(ChallengeContext context)
         {
-            protector.OnUnauthorized(Request.Headers["Accept"], Request.Path);
+            _protector.OnUnauthorized(Request.Headers["Accept"], Request.Path);
             return Task.FromResult(true);
         }
 
@@ -92,7 +99,7 @@ namespace Stormpath.AspNetCore
                 deleteCookieAction,
                 setStatusCodeAction,
                 redirectAction,
-                this.stormpathLogger);
+                this._stormpathLogger);
         }
     }
 }
