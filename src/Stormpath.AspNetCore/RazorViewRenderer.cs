@@ -118,7 +118,7 @@ namespace Stormpath.AspNetCore
             var scheme = httpContext.Items.Get<string>(OwinKeys.StormpathUserScheme);
             var account = httpContext.Items.Get<IAccount>(OwinKeys.StormpathUser);
 
-            var handler = new RouteProtector(config.Web, null, null, null, logger);
+            var handler = new RouteProtector(config.Application, config.Web, null, null, null, null, logger);
             var isAuthenticatedRequest = handler.IsAuthenticated(scheme, scheme, account);
 
             if (isAuthenticatedRequest)

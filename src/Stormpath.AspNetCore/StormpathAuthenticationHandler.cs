@@ -85,12 +85,15 @@ namespace Stormpath.AspNetCore
             });
 
             var setStatusCodeAction = new Action<int>(code => Response.StatusCode = code);
+            var setHeaderAction = new Action<string, string>((key, value) => Response.Headers.Add(key, value));
             var redirectAction = new Action<string>(location => Response.Redirect(location));
 
             return new RouteProtector(
+                config.Application,
                 config.Web,
                 deleteCookieAction,
                 setStatusCodeAction,
+                setHeaderAction,
                 redirectAction,
                 this.stormpathLogger);
         }

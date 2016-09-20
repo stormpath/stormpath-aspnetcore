@@ -22,6 +22,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Stormpath.Configuration.Abstractions;
 using Stormpath.Owin.Middleware;
 using Stormpath.Owin.Views.Precompiled;
 
@@ -33,10 +34,81 @@ namespace Stormpath.AspNetCore
         /// Adds services required for Stormpath.
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection" />.</param>
-        /// <param name="configuration">Configuration options for Stormpath.</param>
         /// <returns>A reference to this instance after the operation has completed.</returns>
         /// <exception cref="Stormpath.Owin.InitializationException">There was a problem initializing Stormpath.</exception>
-        public static IServiceCollection AddStormpath(this IServiceCollection services, object configuration = null)
+        public static IServiceCollection AddStormpath(
+            this IServiceCollection services)
+        {
+            return AddStormpath(services, new StormpathOwinOptions());
+        }
+
+        /// <summary>
+        /// Adds services required for Stormpath.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection" />.</param>
+        /// <param name="configuration">Configuration for the Stormpath middleware.</param>
+        /// <returns>A reference to this instance after the operation has completed.</returns>
+        /// <exception cref="Stormpath.Owin.InitializationException">There was a problem initializing Stormpath.</exception>
+        public static IServiceCollection AddStormpath(
+            this IServiceCollection services,
+            StormpathConfiguration configuration)
+        {
+            return AddStormpath(services, new StormpathOwinOptions
+            {
+                Configuration = configuration
+            });
+        }
+
+        /// <summary>
+        /// Adds services required for Stormpath.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection" />.</param>
+        /// <param name="anonymousConfiguration">Configuration for the Stormpath middleware.</param>
+        /// <returns>A reference to this instance after the operation has completed.</returns>
+        /// <exception cref="Stormpath.Owin.InitializationException">There was a problem initializing Stormpath.</exception>
+        public static IServiceCollection AddStormpath(
+            this IServiceCollection services,
+            object anonymousConfiguration)
+        {
+            return AddStormpath(services, new StormpathOwinOptions
+            {
+                Configuration = anonymousConfiguration
+            });
+        }
+
+        /// <summary>
+        /// Adds services required for Stormpath.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection" />.</param>
+        /// <param name="options">Extended configuration for the Stormpath middleware.</param>
+        /// <returns>A reference to this instance after the operation has completed.</returns>
+        /// <exception cref="Stormpath.Owin.InitializationException">There was a problem initializing Stormpath.</exception>
+        public static IServiceCollection AddStormpath(
+            this IServiceCollection services,
+            StormpathOptions options)
+        {
+            var owinOptions = new StormpathOwinOptions
+            {
+                Configuration = options?.Configuration,
+                CacheProvider = options?.CacheProvider,
+                PostChangePasswordHandler = options?.PostChangePasswordHandler,
+                PostLoginHandler = options?.PostLoginHandler,
+                PostLogoutHandler = options?.PostLogoutHandler,
+                PostRegistrationHandler = options?.PostRegistrationHandler,
+                PostVerifyEmailHandler = options?.PostVerifyEmailHandler,
+                PreChangePasswordHandler = options?.PreChangePasswordHandler,
+                PreLoginHandler = options?.PreLoginHandler,
+                PreLogoutHandler = options?.PreLogoutHandler,
+                PreRegistrationHandler = options?.PreRegistrationHandler,
+                PreVerifyEmailHandler = options?.PreVerifyEmailHandler,
+            };
+
+            return AddStormpath(services, owinOptions);
+        }
+
+        private static IServiceCollection AddStormpath(
+            IServiceCollection services,
+            StormpathOwinOptions options)
         {
             if (services == null)
             {
@@ -47,7 +119,7 @@ namespace Stormpath.AspNetCore
             services.AddSingleton<SDK.Logging.ILogger>(
                 provider => new LoggerAdapter(provider.GetRequiredService<ILoggerFactory>()));
 
-            services.AddSingleton(new UserConfigurationContainer(configuration));
+            services.AddSingleton(new OptionsContainer(options));
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -69,7 +141,7 @@ namespace Stormpath.AspNetCore
         /// <summary>
         /// Adds the Stormpath middleware to the pipeline.
         /// </summary>
-        /// <remarks>You must call <see cref="AddStormpath(IServiceCollection, object)"/> before calling this method.</remarks>
+        /// <remarks>You must call <c>AddStormpath</c> before calling this method.</remarks>
         /// <param name="app">The <see cref="IApplicationBuilder" />.</param>
         /// <returns>A reference to this instance after the operation has completed.</returns>
         /// <exception cref="InvalidOperationException">The Stormpath services have not been added to the service collection.</exception>
@@ -80,7 +152,7 @@ namespace Stormpath.AspNetCore
                 throw new ArgumentNullException(nameof(app));
             }
 
-            var suppliedConfiguration = app.ApplicationServices.GetRequiredService<UserConfigurationContainer>();
+            var suppliedConfiguration = app.ApplicationServices.GetRequiredService<OptionsContainer>();
             var logger = app.ApplicationServices.GetRequiredService<SDK.Logging.ILogger>();
 
             var hostingAssembly = app.GetType().GetTypeInfo().Assembly;
@@ -89,13 +161,12 @@ namespace Stormpath.AspNetCore
                 new PrecompiledViewRenderer(logger),
                 app.ApplicationServices.GetRequiredService<RazorViewRenderer>());
 
-            var stormpathMiddleware = StormpathMiddleware.Create(new StormpathOwinOptions()
-            {
-                LibraryUserAgent = GetLibraryUserAgent(hostingAssembly),
-                Configuration = suppliedConfiguration.Configuration,
-                ViewRenderer = viewRenderer,
-                Logger = logger
-            });
+            var options = suppliedConfiguration.Options;
+            options.LibraryUserAgent = GetLibraryUserAgent(hostingAssembly);
+            options.ViewRenderer = viewRenderer;
+            options.Logger = logger;
+
+            var stormpathMiddleware = StormpathMiddleware.Create(options);
 
             app.UseOwin(addToPipeline =>
             {

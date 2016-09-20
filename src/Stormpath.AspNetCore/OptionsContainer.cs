@@ -14,15 +14,17 @@
 // limitations under the License.
 // </copyright>
 
+using Stormpath.Owin.Middleware;
+
 namespace Stormpath.AspNetCore
 {
-    internal sealed class UserConfigurationContainer
+    internal sealed class OptionsContainer
     {
-        public UserConfigurationContainer(object configuration = null)
+        public OptionsContainer(StormpathOwinOptions options = null)
         {
-            this.Configuration = configuration;
+            Options = options;
         }
 
-        public object Configuration { get; private set; }
+        public StormpathOwinOptions Options { get; private set; }
     }
 }
