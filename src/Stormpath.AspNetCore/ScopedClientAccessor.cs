@@ -22,16 +22,16 @@ namespace Stormpath.AspNetCore
 {
     internal sealed class ScopedClientAccessor
     {
-        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public ScopedClientAccessor(IHttpContextAccessor httpContextAccessor)
         {
-            this.httpContextAccessor = httpContextAccessor;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public IClient GetItem()
         {
-            var context = this.httpContextAccessor.HttpContext;
+            var context = _httpContextAccessor.HttpContext;
             return context.Items[OwinKeys.StormpathClient] as IClient;
         }
     }

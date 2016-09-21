@@ -16,6 +16,7 @@
 
 using System;
 using System.Reflection;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -134,6 +135,9 @@ namespace Stormpath.AspNetCore
             services.AddSingleton<RazorViewRenderer>();
 
             services.AddAuthentication();
+            services.AddAuthorization();
+            services.AddSingleton<IAuthorizationHandler, StormpathGroupsHandler>();
+            services.AddSingleton<IAuthorizationHandler, StormpathCustomDataHandler>();
 
             return services;
         }

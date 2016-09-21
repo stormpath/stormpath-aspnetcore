@@ -21,19 +21,19 @@ using Stormpath.SDK.Account;
 
 namespace Stormpath.AspNetCore
 {
-    internal sealed class ScopedLazyUserAccessor
+    public sealed class ScopedLazyUserAccessor
     {
-        private readonly Lazy<IAccount> account;
+        private readonly Lazy<IAccount> _account;
 
         public ScopedLazyUserAccessor(IHttpContextAccessor httpContextAccessor)
         {
-            this.account = new Lazy<IAccount>(() =>
+            _account = new Lazy<IAccount>(() =>
             {
                 var context = httpContextAccessor.HttpContext;
                 return context.Items[OwinKeys.StormpathUser] as IAccount;
             });
         }
 
-        public Lazy<IAccount> GetItem() => this.account;
+        public Lazy<IAccount> GetItem() => _account;
     }
 }
