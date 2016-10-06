@@ -125,9 +125,11 @@ namespace Stormpath.AspNetCore
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddScoped<ScopedClientAccessor>();
+            services.AddScoped<ScopedConfigurationAccessor>();
             services.AddScoped<ScopedApplicationAccessor>();
             services.AddScoped<ScopedLazyUserAccessor>();
             services.AddScoped(provider => provider.GetRequiredService<ScopedClientAccessor>().GetItem());
+            services.AddScoped(provider => provider.GetRequiredService<ScopedConfigurationAccessor>().GetItem());
             services.AddScoped(provider => provider.GetRequiredService<ScopedApplicationAccessor>().GetItem());
             services.AddScoped(provider => provider.GetRequiredService<ScopedLazyUserAccessor>().GetItem());
             services.AddScoped(provider => provider.GetRequiredService<ScopedLazyUserAccessor>().GetItem().Value);
