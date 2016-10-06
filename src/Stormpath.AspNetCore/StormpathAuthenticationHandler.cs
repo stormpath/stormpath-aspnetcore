@@ -26,19 +26,24 @@ using Stormpath.Owin.Abstractions;
 using Stormpath.Owin.Abstractions.Configuration;
 using Stormpath.Owin.Middleware;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Client;
 
 namespace Stormpath.AspNetCore
 {
     public sealed class StormpathAuthenticationHandler : AuthenticationHandler<StormpathAuthenticationOptions>
     {
-        private readonly SDK.Logging.ILogger stormpathLogger;
-        private readonly RouteProtector protector;
+        private readonly IClient _client;
+        private readonly SDK.Logging.ILogger _stormpathLogger;
+        private readonly RouteProtector _protector;
 
-        public StormpathAuthenticationHandler(IntegrationConfiguration integrationConfiguration, SDK.Logging.ILogger stormpathLogger)
+        public StormpathAuthenticationHandler(
+            IClient client,
+            IntegrationConfiguration integrationConfiguration, 
+            SDK.Logging.ILogger stormpathLogger)
         {
-            this.stormpathLogger = stormpathLogger;
-
-            this.protector = CreateRouteProtector(integrationConfiguration);
+            _client = client;
+            _stormpathLogger = stormpathLogger;
+            _protector = CreateRouteProtector(integrationConfiguration);
         }
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
@@ -48,7 +53,7 @@ namespace Stormpath.AspNetCore
 
             foreach (var potentialScheme in Options.AllowedAuthenticationSchemes)
             {
-                if (!protector.IsAuthenticated(scheme, potentialScheme, account))
+                if (!_protector.IsAuthenticated(scheme, potentialScheme, account))
                 {
                     continue;
                 }
@@ -63,13 +68,13 @@ namespace Stormpath.AspNetCore
 
         protected override Task<bool> HandleUnauthorizedAsync(ChallengeContext context)
         {
-            protector.OnUnauthorized(Request.Headers["Accept"], Request.Path);
+            _protector.OnUnauthorized(Request.Headers["Accept"], Request.Path);
             return Task.FromResult(true);
         }
 
         protected override Task<bool> HandleForbiddenAsync(ChallengeContext context)
         {
-            protector.OnUnauthorized(Request.Headers["Accept"], Request.Path);
+            _protector.OnUnauthorized(Request.Headers["Accept"], Request.Path);
             return Task.FromResult(true);
         }
 
@@ -89,13 +94,13 @@ namespace Stormpath.AspNetCore
             var redirectAction = new Action<string>(location => Response.Redirect(location));
 
             return new RouteProtector(
-                config.Application,
-                config.Web,
+                _client,
+                config,
                 deleteCookieAction,
                 setStatusCodeAction,
                 setHeaderAction,
                 redirectAction,
-                this.stormpathLogger);
+                _stormpathLogger);
         }
     }
 }

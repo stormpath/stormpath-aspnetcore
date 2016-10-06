@@ -183,6 +183,7 @@ namespace Stormpath.AspNetCore
 
             app.UseMiddleware<StormpathAuthenticationMiddleware>(
                 Options.Create(new StormpathAuthenticationOptions { AllowedAuthenticationSchemes = new [] { "Cookie", "Bearer" } }),
+                stormpathMiddleware.GetClient(),
                 stormpathMiddleware.Configuration,
                 logger);
 

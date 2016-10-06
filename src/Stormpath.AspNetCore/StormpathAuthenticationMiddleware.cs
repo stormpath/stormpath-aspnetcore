@@ -21,11 +21,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Stormpath.Owin.Abstractions.Configuration;
+using Stormpath.SDK.Client;
 
 namespace Stormpath.AspNetCore
 {
     public sealed class StormpathAuthenticationMiddleware : AuthenticationMiddleware<StormpathAuthenticationOptions>
     {
+        private readonly IClient _client; // TODO remove when refactoring JWT stuff
         private readonly IntegrationConfiguration _config;
         private readonly SDK.Logging.ILogger _stormpathLogger;
 
@@ -34,6 +36,7 @@ namespace Stormpath.AspNetCore
             ILoggerFactory loggerFactory,
             UrlEncoder encoder,
             IOptions<StormpathAuthenticationOptions> options,
+            IClient client,
             IntegrationConfiguration integrationConfiguration,
             SDK.Logging.ILogger stormpathLogger)
             : base(next, options, loggerFactory, encoder)
@@ -63,13 +66,19 @@ namespace Stormpath.AspNetCore
                 throw new ArgumentNullException(nameof(integrationConfiguration));
             }
 
+            if (client == null)
+            {
+                throw new ArgumentNullException(nameof(client));
+            }
+
+            _client = client;
             _config = integrationConfiguration;
             _stormpathLogger = stormpathLogger;
         }
 
         protected override AuthenticationHandler<StormpathAuthenticationOptions> CreateHandler()
         {
-            return new StormpathAuthenticationHandler(_config, _stormpathLogger);
+            return new StormpathAuthenticationHandler(_client, _config, _stormpathLogger);
         }
     }
 }

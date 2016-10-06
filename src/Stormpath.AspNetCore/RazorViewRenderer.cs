@@ -31,6 +31,7 @@ using Stormpath.Configuration.Abstractions.Immutable;
 using Stormpath.Owin.Abstractions;
 using Stormpath.Owin.Middleware;
 using Stormpath.SDK.Account;
+using Stormpath.SDK.Client;
 using Stormpath.SDK.Logging;
 
 namespace Stormpath.AspNetCore
@@ -114,11 +115,12 @@ namespace Stormpath.AspNetCore
 
         private static void GetUserIdentity(HttpContext httpContext, ILogger logger)
         {
+            var client = httpContext.Items.Get<IClient>(OwinKeys.StormpathClient);
             var config = httpContext.Items.Get<StormpathConfiguration>(OwinKeys.StormpathConfiguration);
             var scheme = httpContext.Items.Get<string>(OwinKeys.StormpathUserScheme);
             var account = httpContext.Items.Get<IAccount>(OwinKeys.StormpathUser);
 
-            var handler = new RouteProtector(config.Application, config.Web, null, null, null, null, logger);
+            var handler = new RouteProtector(client, config, null, null, null, null, logger);
             var isAuthenticatedRequest = handler.IsAuthenticated(scheme, scheme, account);
 
             if (isAuthenticatedRequest)
