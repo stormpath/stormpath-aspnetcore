@@ -15,30 +15,34 @@
 // </copyright>
 
 using Microsoft.AspNetCore.Http;
-using Stormpath.Configuration.Abstractions.Immutable;
-using Stormpath.Owin.Abstractions;
 using Stormpath.SDK.Application;
-using Stormpath.SDK.Client;
 using Stormpath.SDK.Sync;
 
 namespace Stormpath.AspNetCore
 {
     internal sealed class ScopedApplicationAccessor
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
         public ScopedApplicationAccessor(IHttpContextAccessor httpContextAccessor)
         {
-            this._httpContextAccessor = httpContextAccessor;
+            var clientAccessor = new ScopedClientAccessor(httpContextAccessor);
+            var client = clientAccessor.Item;
+
+            if (client == null)
+            {
+                return;
+            }
+
+            var configurationAccessor = new ScopedConfigurationAccessor(httpContextAccessor);
+            var config = configurationAccessor.Item;
+
+            if (config == null)
+            {
+                return;
+            }
+
+            Item = client.GetApplication(config.Application.Href);
         }
 
-        public IApplication GetItem()
-        {
-            var context = _httpContextAccessor.HttpContext;
-            var client = context.Items[OwinKeys.StormpathClient] as IClient;
-            var configuration = context.Items[OwinKeys.StormpathConfiguration] as StormpathConfiguration;
-
-            return configuration == null ? null : client.GetApplication(configuration.Application.Href);
-        }
+        public IApplication Item { get; }
     }
 }

@@ -128,11 +128,11 @@ namespace Stormpath.AspNetCore
             services.AddScoped<ScopedConfigurationAccessor>();
             services.AddScoped<ScopedApplicationAccessor>();
             services.AddScoped<ScopedLazyUserAccessor>();
-            services.AddScoped(provider => provider.GetRequiredService<ScopedClientAccessor>().GetItem());
-            services.AddScoped(provider => provider.GetRequiredService<ScopedConfigurationAccessor>().GetItem());
-            services.AddScoped(provider => provider.GetRequiredService<ScopedApplicationAccessor>().GetItem());
-            services.AddScoped(provider => provider.GetRequiredService<ScopedLazyUserAccessor>().GetItem());
-            services.AddScoped(provider => provider.GetRequiredService<ScopedLazyUserAccessor>().GetItem().Value);
+            services.AddScoped(provider => provider.GetRequiredService<ScopedClientAccessor>().Item);
+            services.AddScoped(provider => provider.GetRequiredService<ScopedConfigurationAccessor>().Item);
+            services.AddScoped(provider => provider.GetRequiredService<ScopedApplicationAccessor>().Item);
+            services.AddScoped(provider => provider.GetRequiredService<ScopedLazyUserAccessor>().Item);
+            services.AddScoped(provider => provider.GetRequiredService<ScopedLazyUserAccessor>().Item.Value);
 
             services.AddSingleton<RazorViewRenderer>();
 

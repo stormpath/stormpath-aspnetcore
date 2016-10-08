@@ -1,4 +1,4 @@
-﻿// <copyright file="ScopedClientAccessor.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ScopedConfigurationAccessor.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,17 +22,12 @@ namespace Stormpath.AspNetCore
 {
     internal sealed class ScopedConfigurationAccessor
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
         public ScopedConfigurationAccessor(IHttpContextAccessor httpContextAccessor)
         {
-            _httpContextAccessor = httpContextAccessor;
+            var safeAccessor = new SafeContextAccessor(httpContextAccessor, OwinKeys.StormpathConfiguration);
+            Item = safeAccessor.Item as StormpathConfiguration;
         }
 
-        public StormpathConfiguration GetItem()
-        {
-            var context = _httpContextAccessor.HttpContext;
-            return context.Items[OwinKeys.StormpathConfiguration] as StormpathConfiguration;
-        }
+        public StormpathConfiguration Item { get; }
     }
 }

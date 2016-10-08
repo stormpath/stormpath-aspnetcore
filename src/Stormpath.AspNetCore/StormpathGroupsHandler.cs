@@ -16,7 +16,7 @@ namespace Stormpath.AspNetCore
 
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, StormpathGroupsRequirement requirement)
         {
-            var account = _userAccessor.GetItem()?.Value;
+            var account = _userAccessor.Item?.Value;
             var filter = new RequireGroupsFilter(requirement.Groups);
             var result = await filter.IsAuthorizedAsync(account, CancellationToken.None);
 
