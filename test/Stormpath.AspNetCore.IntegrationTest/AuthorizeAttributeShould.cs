@@ -65,18 +65,13 @@ namespace Stormpath.AspNetCore.IntegrationTest
                     "Changeme123!!");
                 cleanup.MarkForDeletion(account);
 
-                var grantRequest = OauthRequests.NewPasswordGrantRequest()
-                    .SetAccountStore(_fixture.TestDirectory)
-                    .SetLogin(email)
-                    .SetPassword("Changeme123!!")
-                    .Build();
-                var grantResponse = await _fixture.TestApplication.NewPasswordGrantAuthenticator()
-                    .AuthenticateAsync(grantRequest);
+                var accessToken = await _fixture.GetAccessToken(account, "Changeme123!!");
 
-                // Act
                 var request = new HttpRequestMessage(HttpMethod.Get, "/protected");
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/html"));
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", grantResponse.AccessTokenString);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+                // Act
                 var response = await server.SendAsync(request);
 
                 // Assert
@@ -94,24 +89,19 @@ namespace Stormpath.AspNetCore.IntegrationTest
             {
                 var email = $"its-{_fixture.TestKey}@example.com";
                 var account = await _fixture.TestApplication.CreateAccountAsync(
-                    nameof(AllowBrowserRequestAuthorizedWithHeader),
+                    nameof(AllowBrowserRequestAuthorizedWithCookie),
                     nameof(AuthorizeAttributeShould),
                     email,
                     "Changeme123!!");
                 cleanup.MarkForDeletion(account);
 
-                var grantRequest = OauthRequests.NewPasswordGrantRequest()
-                    .SetAccountStore(_fixture.TestDirectory)
-                    .SetLogin(email)
-                    .SetPassword("Changeme123!!")
-                    .Build();
-                var grantResponse = await _fixture.TestApplication.NewPasswordGrantAuthenticator()
-                    .AuthenticateAsync(grantRequest);
+                var accessToken = await _fixture.GetAccessToken(account, "Changeme123!!");
 
-                // Act
                 var request = new HttpRequestMessage(HttpMethod.Get, "/protected");
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/html"));
-                request.Headers.Add("Cookie", $"access_token={grantResponse.AccessTokenString}");
+                request.Headers.Add("Cookie", $"access_token={accessToken}");
+
+                // Act
                 var response = await server.SendAsync(request);
 
                 // Assert
@@ -129,24 +119,19 @@ namespace Stormpath.AspNetCore.IntegrationTest
             {
                 var email = $"its-{_fixture.TestKey}@example.com";
                 var account = await _fixture.TestApplication.CreateAccountAsync(
-                    nameof(AllowBrowserRequestAuthorizedWithHeader),
+                    nameof(AllowJsonRequestAuthorizedWithHeader),
                     nameof(AuthorizeAttributeShould),
                     email,
                     "Changeme123!!");
                 cleanup.MarkForDeletion(account);
 
-                var grantRequest = OauthRequests.NewPasswordGrantRequest()
-                    .SetAccountStore(_fixture.TestDirectory)
-                    .SetLogin(email)
-                    .SetPassword("Changeme123!!")
-                    .Build();
-                var grantResponse = await _fixture.TestApplication.NewPasswordGrantAuthenticator()
-                    .AuthenticateAsync(grantRequest);
+                var accessToken = await _fixture.GetAccessToken(account, "Changeme123!!");
 
-                // Act
                 var request = new HttpRequestMessage(HttpMethod.Get, "/protected");
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", grantResponse.AccessTokenString);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+                // Act
                 var response = await server.SendAsync(request);
 
                 // Assert
@@ -164,24 +149,19 @@ namespace Stormpath.AspNetCore.IntegrationTest
             {
                 var email = $"its-{_fixture.TestKey}@example.com";
                 var account = await _fixture.TestApplication.CreateAccountAsync(
-                    nameof(AllowBrowserRequestAuthorizedWithHeader),
+                    nameof(AllowJsonRequestAuthorizedWithCookie),
                     nameof(AuthorizeAttributeShould),
                     email,
                     "Changeme123!!");
                 cleanup.MarkForDeletion(account);
 
-                var grantRequest = OauthRequests.NewPasswordGrantRequest()
-                    .SetAccountStore(_fixture.TestDirectory)
-                    .SetLogin(email)
-                    .SetPassword("Changeme123!!")
-                    .Build();
-                var grantResponse = await _fixture.TestApplication.NewPasswordGrantAuthenticator()
-                    .AuthenticateAsync(grantRequest);
+                var accessToken = await _fixture.GetAccessToken(account, "Changeme123!!");
 
-                // Act
                 var request = new HttpRequestMessage(HttpMethod.Get, "/protected");
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                request.Headers.Add("Cookie", $"access_token={grantResponse.AccessTokenString}");
+                request.Headers.Add("Cookie", $"access_token={accessToken}");
+
+                // Act
                 var response = await server.SendAsync(request);
 
                 // Assert
@@ -199,28 +179,22 @@ namespace Stormpath.AspNetCore.IntegrationTest
             {
                 var email = $"its-{_fixture.TestKey}@example.com";
                 var account = await _fixture.TestApplication.CreateAccountAsync(
-                    nameof(AllowBrowserRequestAuthorizedWithHeader),
+                    nameof(HandleConcurrentRequests),
                     nameof(AuthorizeAttributeShould),
                     email,
                     "Changeme123!!");
                 cleanup.MarkForDeletion(account);
 
-                var grantRequest = OauthRequests.NewPasswordGrantRequest()
-                    .SetAccountStore(_fixture.TestDirectory)
-                    .SetLogin(email)
-                    .SetPassword("Changeme123!!")
-                    .Build();
-                var grantResponse = await _fixture.TestApplication.NewPasswordGrantAuthenticator()
-                    .AuthenticateAsync(grantRequest);
+                var accessToken = await _fixture.GetAccessToken(account, "Changeme123!!");
 
-                // Act
                 var request1 = new HttpRequestMessage(HttpMethod.Get, "/protected");
                 request1.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/html"));
-                request1.Headers.Add("Cookie", $"access_token={grantResponse.AccessTokenString}");
+                request1.Headers.Add("Cookie", $"access_token={accessToken}");
 
                 var request2 = new HttpRequestMessage(HttpMethod.Get, "/protected");
                 request2.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/html"));
 
+                // Act
                 var responses = await Task.WhenAll(
                     server.SendAsync(request1),
                     server.SendAsync(request2));
