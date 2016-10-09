@@ -20,22 +20,29 @@ namespace Stormpath.AspNetCore
 {
     internal sealed class SafeContextAccessor
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly string _key;
+
         public SafeContextAccessor(IHttpContextAccessor httpContextAccessor, string key)
         {
-            var context = httpContextAccessor?.HttpContext;
-
-            if (context == null)
-            {
-                return;
-            }
-
-            object rawItem;
-            if (context.Items.TryGetValue(key, out rawItem))
-            {
-                Item = rawItem;
-            }
+            _httpContextAccessor = httpContextAccessor;
+            _key = key;
         }
 
-        public object Item { get; }
+        public object Item
+        {
+            get
+            {
+                var context = _httpContextAccessor?.HttpContext;
+
+                object rawItem;
+                if (context != null && context.Items.TryGetValue(_key, out rawItem))
+                {
+                    return rawItem;
+                }
+
+                return null;
+            }
+        }
     }
 }

@@ -22,27 +22,29 @@ namespace Stormpath.AspNetCore
 {
     internal sealed class ScopedApplicationAccessor
     {
+        private readonly ScopedClientAccessor _clientAccessor;
+        private readonly ScopedConfigurationAccessor _configAccessor;
+
         public ScopedApplicationAccessor(IHttpContextAccessor httpContextAccessor)
         {
-            var clientAccessor = new ScopedClientAccessor(httpContextAccessor);
-            var client = clientAccessor.Item;
-
-            if (client == null)
-            {
-                return;
-            }
-
-            var configurationAccessor = new ScopedConfigurationAccessor(httpContextAccessor);
-            var config = configurationAccessor.Item;
-
-            if (config == null)
-            {
-                return;
-            }
-
-            Item = client.GetApplication(config.Application.Href);
+            _clientAccessor = new ScopedClientAccessor(httpContextAccessor);
+            _configAccessor = new ScopedConfigurationAccessor(httpContextAccessor);
         }
 
-        public IApplication Item { get; }
+        public IApplication Item
+        {
+            get
+            {
+                var client = _clientAccessor.Item;
+                var config = _configAccessor.Item;
+
+                if (client == null || config == null)
+                {
+                    return null;
+                }
+
+                return client.GetApplication(config.Application.Href);
+            }
+        }
     }
 }

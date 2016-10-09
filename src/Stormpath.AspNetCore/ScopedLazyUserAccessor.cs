@@ -1,4 +1,4 @@
-﻿// <copyright file="StormpathContextLazyUserAccessor.cs" company="Stormpath, Inc.">
+﻿// <copyright file="ScopedLazyUserAccessor.cs" company="Stormpath, Inc.">
 // Copyright (c) 2016 Stormpath, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,14 +23,20 @@ namespace Stormpath.AspNetCore
 {
     public sealed class ScopedLazyUserAccessor
     {
+        private readonly SafeContextAccessor _contextAccessor;
+
         public ScopedLazyUserAccessor(IHttpContextAccessor httpContextAccessor)
         {
-            var safeAccessor = new SafeContextAccessor(httpContextAccessor, OwinKeys.StormpathUser);
-            var account = safeAccessor.Item as IAccount;
-
-            Item = new Lazy<IAccount>(() => account, true);
+            _contextAccessor = new SafeContextAccessor(httpContextAccessor, OwinKeys.StormpathUser);
         }
 
-        public Lazy<IAccount> Item { get; }
+        public Lazy<IAccount> Item
+        {
+            get
+            {
+                var account = _contextAccessor.Item as IAccount;
+                return new Lazy<IAccount>(() => account);
+            }
+        }
     }
 }

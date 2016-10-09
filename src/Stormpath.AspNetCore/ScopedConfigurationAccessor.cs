@@ -22,12 +22,13 @@ namespace Stormpath.AspNetCore
 {
     internal sealed class ScopedConfigurationAccessor
     {
+        private readonly SafeContextAccessor _contextAccessor;
+
         public ScopedConfigurationAccessor(IHttpContextAccessor httpContextAccessor)
         {
-            var safeAccessor = new SafeContextAccessor(httpContextAccessor, OwinKeys.StormpathConfiguration);
-            Item = safeAccessor.Item as StormpathConfiguration;
+            _contextAccessor = new SafeContextAccessor(httpContextAccessor, OwinKeys.StormpathConfiguration);
         }
 
-        public StormpathConfiguration Item { get; }
+        public StormpathConfiguration Item => _contextAccessor.Item as StormpathConfiguration;
     }
 }
