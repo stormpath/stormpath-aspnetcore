@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
+﻿using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Xunit;
@@ -11,11 +6,11 @@ using Xunit;
 namespace Stormpath.AspNetCore.IntegrationTest
 {
     [Collection(nameof(IntegrationTestCollection))]
-    public class GetClientShould
+    public class GetConfigShould
     {
         private readonly StandaloneTestFixture _fixture;
 
-        public GetClientShould(StandaloneTestFixture fixture)
+        public GetConfigShould(StandaloneTestFixture fixture)
         {
             _fixture = fixture;
         }
@@ -27,13 +22,12 @@ namespace Stormpath.AspNetCore.IntegrationTest
             var server = TestServerInstance.Create(_fixture);
 
             // Act
-            var response = await server.GetAsync("/client");
+            var response = await server.GetAsync("/config");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var expectedTenant = await _fixture.TestApplication.GetTenantAsync();
-            (await response.Content.ReadAsStringAsync()).Should().Be(expectedTenant.Href);
+            (await response.Content.ReadAsStringAsync()).Should().Be(_fixture.TestApplication.Name);
         }
     }
 }
