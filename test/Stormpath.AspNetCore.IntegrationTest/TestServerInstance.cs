@@ -12,8 +12,8 @@ namespace Stormpath.AspNetCore.IntegrationTest
     {
         public static HttpClient Create(
             StandaloneTestFixture fixture, 
-            Action<IServiceCollection> customConfigureServices,
-            Action<IApplicationBuilder> customConfigureApp)
+            Action<IServiceCollection> customConfigureServices = null,
+            Action<IApplicationBuilder> customConfigureApp = null)
         {
             return new TestServer(new WebHostBuilder()
                 .ConfigureServices(services =>
@@ -26,12 +26,14 @@ namespace Stormpath.AspNetCore.IntegrationTest
                         }
                     });
                     services.AddMvc();
-                    customConfigureServices(services);
+
+                    customConfigureServices?.Invoke(services);
                 })
                 .Configure(app =>
                 {
                     app.UseStormpath();
-                    customConfigureApp(app);
+                    app.UseMvc();
+                    customConfigureApp?.Invoke(app);
                 }))
                 .CreateClient();
         }
