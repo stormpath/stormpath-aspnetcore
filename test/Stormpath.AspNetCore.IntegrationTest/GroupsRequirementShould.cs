@@ -36,7 +36,7 @@ namespace Stormpath.AspNetCore.IntegrationTest
             {
                 var email = $"its-{_fixture.TestKey}@example.com";
                 var account = await _fixture.TestApplication.CreateAccountAsync(
-                    nameof(AllowBrowserRequestWithCorrectGroup),
+                    nameof(RedirectBrowserRequestWithoutGroup),
                     nameof(GroupsRequirementShould),
                     email,
                     "Changeme123!!");
@@ -74,7 +74,7 @@ namespace Stormpath.AspNetCore.IntegrationTest
             {
                 var email = $"its-{_fixture.TestKey}@example.com";
                 var account = await _fixture.TestApplication.CreateAccountAsync(
-                    nameof(AllowBrowserRequestWithCorrectGroup),
+                    nameof(ReturnUnauthorizedForJsonRequestWithoutGroup),
                     nameof(GroupsRequirementShould),
                     email,
                     "Changeme123!!");
@@ -158,7 +158,7 @@ namespace Stormpath.AspNetCore.IntegrationTest
 
                 var email = $"its-{_fixture.TestKey}@example.com";
                 var account = await _fixture.TestApplication.CreateAccountAsync(
-                    nameof(AllowBrowserRequestWithCorrectGroup),
+                    nameof(AllowJsonRequestWithCorrectGroup),
                     nameof(GroupsRequirementShould),
                     email,
                     "Changeme123!!");
