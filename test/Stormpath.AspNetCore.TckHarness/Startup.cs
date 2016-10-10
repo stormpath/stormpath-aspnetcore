@@ -59,8 +59,8 @@ namespace Stormpath.AspNetCore.TestHarness
             // Configure authorization policies here, which can include Stormpath requirements.
             services.AddAuthorization(opt =>
             {
-                opt.AddPolicy("AdminGroup", policy => policy.AddRequirements(new StormpathGroupsRequirement("admin")));
-                opt.AddPolicy("FavoriteIsCyan", policy => policy.AddRequirements(new StormpathCustomDataRequirement("favoriteColor", "cyan")));
+                opt.AddPolicy("CustomDataIT", policy => policy.AddRequirements(new StormpathCustomDataRequirement("testing", "rocks!")));
+                opt.AddPolicy("AdminITGroup", policy => policy.AddRequirements(new StormpathGroupsRequirement("adminIT")));
             });
 
             // Add framework services.

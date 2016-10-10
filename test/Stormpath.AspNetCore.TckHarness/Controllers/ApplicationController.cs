@@ -1,13 +1,12 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Stormpath.SDK.Application;
 
-namespace Stormpath.AspNetCore.IntegrationTest.Controllers
+namespace Stormpath.AspNetCore.TestHarness.Controllers
 {
     [Route("/application")]
     public class ApplicationController : Controller
     {
-        public readonly IApplication _application;
+        private readonly IApplication _application;
 
         public ApplicationController(IApplication application)
         {

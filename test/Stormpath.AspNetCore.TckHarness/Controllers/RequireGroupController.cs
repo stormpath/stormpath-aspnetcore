@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Stormpath.AspNetCore.IntegrationTest.Controllers
+namespace Stormpath.AspNetCore.TestHarness.Controllers
 {
     [Route("/requireGroup")]
     [Authorize(Policy = "AdminITGroup")]

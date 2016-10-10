@@ -14,39 +14,18 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Stormpath.Configuration.Abstractions.Immutable;
-using Stormpath.SDK.Account;
-using Stormpath.SDK.Application;
-using Stormpath.SDK.Client;
 
 namespace Stormpath.AspNetCore.TestHarness.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("/protected")]
     [Authorize]
-    public class ProtectedController
+    public class ProtectedController : Controller
     {
-        private readonly IClient _client;
-        private readonly IApplication _application;
-        private readonly StormpathConfiguration _configuration;
-        private readonly IAccount _account;
-
-        public ProtectedController(IClient client, IApplication application, StormpathConfiguration config, Lazy<IAccount> lazyAccount)
+        public IActionResult Get()
         {
-            _client = client;
-            _application = application;
-            _configuration = config;
-            _account = lazyAccount.Value;
-        }
-
-        public async Task<string> Get()
-        {
-            var tenant = await _client.GetCurrentTenantAsync();
-
-            return "Hello secure world";
+            return Ok();
         }
     }
 }

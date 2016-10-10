@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Stormpath.SDK.Account;
 
-namespace Stormpath.AspNetCore.IntegrationTest.Controllers
+namespace Stormpath.AspNetCore.TestHarness.Controllers
 {
     [Route("/user")]
     public class UserController : Controller
     {
-        public readonly IAccount _account;
+        private readonly IAccount _account;
 
         public UserController(Lazy<IAccount> account)
         {

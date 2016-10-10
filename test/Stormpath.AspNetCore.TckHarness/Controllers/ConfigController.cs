@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Stormpath.Configuration.Abstractions.Immutable;
 
-namespace Stormpath.AspNetCore.IntegrationTest.Controllers
+namespace Stormpath.AspNetCore.TestHarness.Controllers
 {
     [Route("/config")]
     public class ConfigController : Controller
     {
-        public readonly StormpathConfiguration _config;
+        private readonly StormpathConfiguration _config;
 
         public ConfigController(StormpathConfiguration config)
         {

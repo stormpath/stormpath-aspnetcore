@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Stormpath.SDK.Client;
 
-namespace Stormpath.AspNetCore.IntegrationTest.Controllers
+namespace Stormpath.AspNetCore.TestHarness.Controllers
 {
     [Route("/client")]
     public class ClientController : Controller
     {
-        public readonly IClient _client;
+        private readonly IClient _client;
 
         public ClientController(IClient client)
         {
