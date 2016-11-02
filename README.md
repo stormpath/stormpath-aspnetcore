@@ -1,4 +1,4 @@
-# Stormpath Middleware for ASP.NET Core [![NuGet](https://img.shields.io/nuget/v/Stormpath.AspNetCore.svg)](https://www.nuget.org/packages/Stormpath.SDK) [![Slack Status](https://talkstormpath.shipit.xyz/badge.svg)](https://talkstormpath.shipit.xyz) 
+# Stormpath Middleware for ASP.NET Core [![Slack Status](https://talkstormpath.shipit.xyz/badge.svg)](https://talkstormpath.shipit.xyz) [![NuGet](https://img.shields.io/nuget/v/Stormpath.AspNetCore.svg)](https://www.nuget.org/packages/Stormpath.AspNetCore) 
 
 This library makes it incredibly simple to add user authentication features to your ASP.NET Core application, such as login, signup, authorization, and social login.
 
