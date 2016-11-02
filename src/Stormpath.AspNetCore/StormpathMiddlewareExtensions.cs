@@ -194,7 +194,7 @@ namespace Stormpath.AspNetCore
 
         private static string GetLibraryUserAgent(Assembly hostingAssembly)
         {
-            var libraryVersion = typeof(StormpathMiddleware).GetTypeInfo().Assembly.GetName().Version;
+            var libraryVersion = typeof(StormpathAuthenticationMiddleware).GetTypeInfo().Assembly.GetName().Version;
             var libraryToken = $"stormpath-aspnetcore/{libraryVersion.Major}.{libraryVersion.Minor}.{libraryVersion.Build}";
 
             var hostVersion = hostingAssembly.GetName().Version;
