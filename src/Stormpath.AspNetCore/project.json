@@ -16,7 +16,7 @@
     "Microsoft.AspNetCore.Mvc.ViewFeatures": "1.0.0",
     "Microsoft.AspNetCore.Owin": "1.0.0",
     "Microsoft.Extensions.Logging": "1.0.0",
-    "Stormpath.Owin.Middleware": "3.1.0",
+    "Stormpath.Owin.Middleware": "3.1.1",
     "Stormpath.Owin.Views.Precompiled": "0.4.3"
   },
   "description": "Stormpath middleware for ASP.NET Core. Easily add authentication and authorization to ASP.NET Core applications.",
@@ -40,5 +40,5 @@
   "tooling": {
     "defaultNamespace": "Stormpath.AspNetCore"
   },
-  "version": "0.8.0"
+  "version": "0.8.1"
 }
