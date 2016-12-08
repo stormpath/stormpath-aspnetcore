@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Stormpath.AspNetCore.DocExamples
 {
-    public class StartupDemo
+    public class GroupsStartup
     {
         public void ConfigureServicesSnippet()
         {
