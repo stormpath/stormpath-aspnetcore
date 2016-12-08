@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Stormpath.AspNetCore.DocExamples.Controllers
 {
-    #region code/authentication/aspnetcore/protected_route.cs
+    #region code/authorization/aspnetcore/protected_route.cs
     [Authorize]
     public class ProfileController : Controller
     {
