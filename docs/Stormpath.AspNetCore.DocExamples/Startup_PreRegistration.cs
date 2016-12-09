@@ -4,15 +4,15 @@ using Stormpath.Configuration.Abstractions;
 
 namespace Stormpath.AspNetCore.DocExamples
 {
-    public class Startup_PostLogin
+    public class Startup_PreRegistration
     {
         public void ConfigureServices_Basic(IServiceCollection services)
         {
-            #region code/login/aspnetcore/postlogin_handler.cs
+            #region code/registration/aspnetcore/preregistration_handler.cs
             services.AddStormpath(new StormpathOptions()
             {
                 Configuration = new StormpathConfiguration(), // existing config, if any
-                PostLoginHandler = (context, ct) =>
+                PreRegistrationHandler = (context, ct) =>
                 {
                     return Task.FromResult(0);
                 }
