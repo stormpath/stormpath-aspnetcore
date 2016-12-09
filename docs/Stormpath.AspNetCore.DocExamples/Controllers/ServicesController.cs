@@ -9,7 +9,7 @@ using Stormpath.SDK.Application;
 
 namespace Stormpath.AspNetCore.DocExamples.Controllers
 {
-    #region code/request_objects/aspnetcore/controller_injection.cs
+    #region code/request_context/aspnetcore/controller_injection.cs
     public class InjectedServicesController : Controller
     {
         private readonly IApplication stormpathApplication;
@@ -26,7 +26,7 @@ namespace Stormpath.AspNetCore.DocExamples.Controllers
     }
     #endregion
 
-    #region code/request_objects/aspnetcore/injecting_application.cs
+    #region code/request_context/aspnetcore/injecting_application.cs
     public class AccountsController : Controller
     {
         private readonly IApplication application;
@@ -55,7 +55,29 @@ namespace Stormpath.AspNetCore.DocExamples.Controllers
     }
     #endregion
 
-    #region code/request_objects/aspnetcore/update_user_password.cs
+    #region code/request_context/aspnetcore/injecting_lazy_account.cs
+    public class InjectLazyAccountController : Controller
+    {
+        private readonly IAccount _account;
+
+        public InjectLazyAccountController(Lazy<IAccount> lazyAccount)
+        {
+            _account = lazyAccount.Value;
+        }
+
+        public IActionResult Index()
+        {
+            if (_account != null)
+            {
+                // Do something with the Account
+            }
+
+            return View();
+        }
+    }
+    #endregion
+
+    #region code/request_context/aspnetcore/update_user_password.cs
     public class UserModificationController : Controller
     {
         private readonly Lazy<IAccount> account;
