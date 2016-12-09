@@ -9,14 +9,14 @@ using Stormpath.SDK.Application;
 
 namespace Stormpath.AspNetCore.DocExamples.Controllers
 {
-    #region code/request_objects/aspnetcore/controller_injection.cs
+    #region code/request_context/aspnetcore/controller_injection.cs
     public class InjectedServicesController : Controller
     {
-        private readonly IApplication stormpathApplication;
+        private readonly IApplication _stormpathApplication;
 
         public InjectedServicesController(IApplication stormpathApplication)
         {
-            this.stormpathApplication = stormpathApplication;
+            _stormpathApplication = stormpathApplication;
         }
 
         public IActionResult Index()
@@ -26,20 +26,20 @@ namespace Stormpath.AspNetCore.DocExamples.Controllers
     }
     #endregion
 
-    #region code/request_objects/aspnetcore/injecting_application.cs
+    #region code/request_context/aspnetcore/injecting_application.cs
     public class AccountsController : Controller
     {
-        private readonly IApplication application;
+        private readonly IApplication _application;
 
         public AccountsController(IApplication application)
         {
-            this.application = application;
+            _application = application;
         }
         
         [HttpGet]
         public async Task<IActionResult> FindAccountByEmail(string email)
         {
-            var foundAccount = await application.GetAccounts()
+            var foundAccount = await _application.GetAccounts()
                      .Where(a => a.Email == email)
                      .SingleOrDefaultAsync();
 
@@ -55,23 +55,45 @@ namespace Stormpath.AspNetCore.DocExamples.Controllers
     }
     #endregion
 
-    #region code/request_objects/aspnetcore/update_user_password.cs
+    #region code/request_context/aspnetcore/injecting_lazy_account.cs
+    public class InjectLazyAccountController : Controller
+    {
+        private readonly IAccount _account;
+
+        public InjectLazyAccountController(Lazy<IAccount> lazyAccount)
+        {
+            _account = lazyAccount.Value;
+        }
+
+        public IActionResult Index()
+        {
+            if (_account != null)
+            {
+                // Do something with the Account
+            }
+
+            return View();
+        }
+    }
+    #endregion
+
+    #region code/request_context/aspnetcore/update_user_password.cs
     public class UserModificationController : Controller
     {
-        private readonly Lazy<IAccount> account;
+        private readonly IAccount _account;
 
-        public UserModificationController(Lazy<IAccount> account)
+        public UserModificationController(Lazy<IAccount> lazyAccount)
         {
-            this.account = account;
+            _account = lazyAccount.Value;
         }
 
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> UpdatePassword(string newPassword)
         {
-            if (account.Value != null)
+            if (_account != null)
             {
-                var stormpathAccount = account.Value;
+                var stormpathAccount = _account;
                 stormpathAccount.SetPassword(newPassword);
                 await stormpathAccount.SaveAsync();
             }
