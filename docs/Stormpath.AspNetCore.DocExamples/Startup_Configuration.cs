@@ -362,5 +362,18 @@ namespace Stormpath.AspNetCore.DocExamples
             });
             #endregion
         }
+
+        public void ConfigureServices_BaseUrl(IServiceCollection services)
+        {
+            #region code/configuration/aspnetcore/stormpath_baseurl.cs
+            services.AddStormpath(new StormpathConfiguration()
+            {
+                Client = new ClientConfiguration()
+                {
+                    BaseUrl = "https://enterprise.stormpath.io/v1"
+                }
+            });
+            #endregion
+        }
     }
 }
