@@ -24,7 +24,8 @@
     "Stormpath.AspNetCore": {
       "target": "project",
       "version": "0.9.0"
-    }
+    },
+    "Stormpath.SDK": "0.96.0" 
   },
   "frameworks": {
     "netcoreapp1.0": {

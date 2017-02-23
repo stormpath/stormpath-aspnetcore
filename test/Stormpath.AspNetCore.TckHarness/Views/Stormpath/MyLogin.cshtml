@@ -1,28 +1,11 @@
-﻿<html lang="en" class="no-js">
-<head>
-    <meta charset="utf-8">
-    <title>Custom Log In</title>
-    <meta content="Log into your account!" name="description">
-    <meta content="width=device-width" name="viewport">
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,300,400italic,400,600italic,600,700italic,700,800italic,800" rel="stylesheet" type="text/css">
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="login">
-    <div class="container custom-container">
-        <div class="va-wrapper">
-            <div class="view login-view container">
-                <div class="box row">
-                    <form method="post" role="form" class="login-form form-horizontal">
-                        <input type="text" name="username" />
-                        <input type="password" name="password" />
-                        <div>
-                            <button type="submit" class="login btn btn-login btn-sp-green">Log In!</button>
-                        </div>
-                    </form>
-                </div>
+﻿@model Stormpath.Owin.Abstractions.ViewModel.LoginFormViewModel
+@using Stormpath.Owin.Abstractions
 
-            </div>
-        </div>
+<form method="post" role="form">
+    <input name="@StringConstants.StateTokenName" type="hidden" value="@Model.StateToken" />
+    <input type="text" name="login" />
+    <input type="password" name="password" />
+    <div>
+        <button type="submit">Log in</button>
     </div>
-</body>
-</html>
+</form>
