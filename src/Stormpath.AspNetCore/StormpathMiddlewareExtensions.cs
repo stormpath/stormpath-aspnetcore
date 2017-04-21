@@ -101,6 +101,7 @@ namespace Stormpath.AspNetCore
                 PreLogoutHandler = options?.PreLogoutHandler,
                 PreRegistrationHandler = options?.PreRegistrationHandler,
                 PreVerifyEmailHandler = options?.PreVerifyEmailHandler,
+                SendVerificationEmailHandler = options?.SendVerificationEmailHandler
             };
 
             return AddStormpath(services, owinOptions);

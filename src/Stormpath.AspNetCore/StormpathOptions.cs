@@ -29,5 +29,7 @@ namespace Stormpath.AspNetCore
         public Func<PreVerifyEmailContext, CancellationToken, Task> PreVerifyEmailHandler { get; set; }
 
         public Func<PostVerifyEmailContext, CancellationToken, Task> PostVerifyEmailHandler { get; set; }
+
+        public Func<SendVerificationEmailContext, CancellationToken, Task> SendVerificationEmailHandler { get; set; }
     }
 }
