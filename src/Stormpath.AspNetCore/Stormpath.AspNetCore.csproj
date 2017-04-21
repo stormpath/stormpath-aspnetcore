@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>Stormpath middleware for ASP.NET Core. Easily add authentication and authorization to ASP.NET Core applications.</Description>
     <Copyright>(c) 2016 Stormpath, Inc.</Copyright>
-    <VersionPrefix>0.9.0</VersionPrefix>
+    <VersionPrefix>4.0.0-rc1</VersionPrefix>
     <Authors>Nate Barbettini</Authors>
     <TargetFrameworks>net451;netstandard1.6</TargetFrameworks>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
