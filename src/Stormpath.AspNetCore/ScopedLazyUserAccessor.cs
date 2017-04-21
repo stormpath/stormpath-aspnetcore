@@ -17,7 +17,6 @@
 using System;
 using Microsoft.AspNetCore.Http;
 using Stormpath.Owin.Abstractions;
-using Stormpath.SDK.Account;
 
 namespace Stormpath.AspNetCore
 {
@@ -30,12 +29,12 @@ namespace Stormpath.AspNetCore
             _contextAccessor = new SafeContextAccessor(httpContextAccessor, OwinKeys.StormpathUser);
         }
 
-        public Lazy<IAccount> Item
+        public Lazy<ICompatibleOktaAccount> Item
         {
             get
             {
-                var account = _contextAccessor.Item as IAccount;
-                return new Lazy<IAccount>(() => account);
+                var account = _contextAccessor.Item as ICompatibleOktaAccount;
+                return new Lazy<ICompatibleOktaAccount>(() => account);
             }
         }
     }

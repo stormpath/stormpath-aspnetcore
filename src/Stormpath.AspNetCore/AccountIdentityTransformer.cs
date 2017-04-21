@@ -16,13 +16,13 @@
 
 using System.Collections.Generic;
 using System.Security.Claims;
-using Stormpath.SDK.Account;
+using Stormpath.Owin.Abstractions;
 
 namespace Stormpath.AspNetCore
 {
     public static class AccountIdentityTransformer
     {
-        public static ClaimsPrincipal CreatePrincipal(IAccount account, string scheme)
+        public static ClaimsPrincipal CreatePrincipal(ICompatibleOktaAccount account, string scheme)
         {
             var claims = new List<Claim>
             {

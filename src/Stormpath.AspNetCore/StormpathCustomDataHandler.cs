@@ -14,11 +14,11 @@ namespace Stormpath.AspNetCore
             _userAccessor = userAccessor;
         }
 
-        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, StormpathCustomDataRequirement requirement)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, StormpathCustomDataRequirement requirement)
         {
             var account = _userAccessor.Item?.Value;
             var filter = new RequireCustomDataFilter(requirement.Key, requirement.Value, requirement.Comparer);
-            var result = await filter.IsAuthorizedAsync(account, CancellationToken.None);
+            var result = filter.IsAuthorized(account);
 
             if (result)
             {
@@ -28,6 +28,8 @@ namespace Stormpath.AspNetCore
             {
                 context.Fail();
             }
+
+            return Task.FromResult(true);
         }
     }
 }

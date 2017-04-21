@@ -27,12 +27,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Logging;
 using Stormpath.Configuration.Abstractions.Immutable;
 using Stormpath.Owin.Abstractions;
+using Stormpath.Owin.Abstractions.Configuration;
 using Stormpath.Owin.Middleware;
-using Stormpath.SDK.Account;
-using Stormpath.SDK.Client;
-using Stormpath.SDK.Logging;
 
 namespace Stormpath.AspNetCore
 {
@@ -59,7 +58,7 @@ namespace Stormpath.AspNetCore
             var httpContext = context.Request[MicrosoftHttpContextKey] as HttpContext;
             if (httpContext == null)
             {
-                _logger.Error($"Request dictionary does not contain '{MicrosoftHttpContextKey}'", nameof(RazorViewRenderer));
+                _logger.LogError($"Request dictionary does not contain '{MicrosoftHttpContextKey}'", nameof(RazorViewRenderer));
                 return false;
             }
 
@@ -73,7 +72,7 @@ namespace Stormpath.AspNetCore
             if (IsApplicationRelativePath(name))
             {
                 var basePath = Directory.GetCurrentDirectory();
-                _logger.Trace($"Getting view '{name}' relative to '{basePath}'");
+                _logger.LogTrace($"Getting view '{name}' relative to '{basePath}'");
                 viewEngineResult = _viewEngine.GetView(basePath, name, true);
             }
             else
@@ -83,7 +82,7 @@ namespace Stormpath.AspNetCore
 
             if (!viewEngineResult.Success)
             {
-                _logger.Trace($"Could not find Razor view '{name}'", nameof(RazorViewRenderer));
+                _logger.LogTrace($"Could not find Razor view '{name}'", nameof(RazorViewRenderer));
                 return false;
             }
 
@@ -115,12 +114,11 @@ namespace Stormpath.AspNetCore
 
         private static void GetUserIdentity(HttpContext httpContext, ILogger logger)
         {
-            var client = httpContext.Items.Get<IClient>(OwinKeys.StormpathClient);
-            var config = httpContext.Items.Get<StormpathConfiguration>(OwinKeys.StormpathConfiguration);
+            var config = httpContext.Items.Get<IntegrationConfiguration>(OwinKeys.StormpathConfiguration);
             var scheme = httpContext.Items.Get<string>(OwinKeys.StormpathUserScheme);
-            var account = httpContext.Items.Get<IAccount>(OwinKeys.StormpathUser);
+            var account = httpContext.Items.Get<ICompatibleOktaAccount>(OwinKeys.StormpathUser);
 
-            var handler = new RouteProtector(client, config, null, null, null, null, logger);
+            var handler = new RouteProtector(config, null, null, null, null, logger);
             var isAuthenticatedRequest = handler.IsAuthenticated(scheme, scheme, account);
 
             if (isAuthenticatedRequest)

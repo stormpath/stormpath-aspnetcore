@@ -15,7 +15,7 @@ namespace Stormpath.AspNetCore.TestHarness.Controllers
 
         public IActionResult Get()
         {
-            return Ok(_config.Application.Name);
+            return Ok(_config.Application.Id);
         }
     }
 }

@@ -21,35 +21,30 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Http.Features.Authentication;
+using Microsoft.Extensions.Logging;
 using Stormpath.Configuration.Abstractions.Immutable;
 using Stormpath.Owin.Abstractions;
 using Stormpath.Owin.Abstractions.Configuration;
 using Stormpath.Owin.Middleware;
-using Stormpath.SDK.Account;
-using Stormpath.SDK.Client;
-
 namespace Stormpath.AspNetCore
 {
     public sealed class StormpathAuthenticationHandler : AuthenticationHandler<StormpathAuthenticationOptions>
     {
-        private readonly IClient _client;
-        private readonly SDK.Logging.ILogger _stormpathLogger;
+        private readonly ILogger _logger;
         private readonly RouteProtector _protector;
 
         public StormpathAuthenticationHandler(
-            IClient client,
-            IntegrationConfiguration integrationConfiguration, 
-            SDK.Logging.ILogger stormpathLogger)
+            IntegrationConfiguration integrationConfiguration,
+            ILogger logger)
         {
-            _client = client;
-            _stormpathLogger = stormpathLogger;
+            _logger = logger;
             _protector = CreateRouteProtector(integrationConfiguration);
         }
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
             var scheme = Context.Items.Get<string>(OwinKeys.StormpathUserScheme);
-            var account = Context.Items.Get<IAccount>(OwinKeys.StormpathUser);
+            var account = Context.Items.Get<ICompatibleOktaAccount>(OwinKeys.StormpathUser);
 
             foreach (var potentialScheme in Options.AllowedAuthenticationSchemes)
             {
@@ -94,13 +89,12 @@ namespace Stormpath.AspNetCore
             var redirectAction = new Action<string>(location => Response.Redirect(location));
 
             return new RouteProtector(
-                _client,
                 config,
                 deleteCookieAction,
                 setStatusCodeAction,
                 setHeaderAction,
                 redirectAction,
-                _stormpathLogger);
+                _logger);
         }
     }
 }

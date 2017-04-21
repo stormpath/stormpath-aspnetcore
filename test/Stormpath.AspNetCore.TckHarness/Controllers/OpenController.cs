@@ -15,31 +15,24 @@
 // </copyright>
 
 using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Stormpath.SDK.Application;
+using Stormpath.Owin.Abstractions;
 
 namespace Stormpath.AspNetCore.TestHarness.Controllers
 {
     [Route("api/[controller]")]
     public class OpenController : Controller
     {
-        private readonly SDK.Client.IClient stormpathClient;
-        private readonly Lazy<SDK.Account.IAccount> stormpathAccountSafe;
-        private readonly IApplication stormpathApplication;
+        private readonly Lazy<ICompatibleOktaAccount> stormpathAccountSafe;
 
-        public OpenController(SDK.Client.IClient client, IApplication application, Lazy<SDK.Account.IAccount> account)
+        public OpenController(Lazy<ICompatibleOktaAccount> accountAccessor)
         {
-            this.stormpathClient = client;
-            this.stormpathApplication = application;
-            this.stormpathAccountSafe = account;
+            this.stormpathAccountSafe = accountAccessor;
         }
 
-        public async Task<string> Get()
+        public string Get()
         {
-            await stormpathClient.GetCurrentTenantAsync();
-
-            return $"Hello world from {stormpathApplication.Name}";
+            return $"Hello world from Okta";
         }
     }
 }

@@ -17,8 +17,6 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Routing;
-using Stormpath.SDK.Shared.Extensions;
-
 namespace Stormpath.AspNetCore
 {
     /// <summary>
@@ -43,15 +41,15 @@ namespace Stormpath.AspNetCore
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var controller = string.Empty;
-            var action = string.Empty;
+            object controller = null;
+            object action = null;
 
             bool containsRouteData =
-                context.Values.TryGetValueAsString(ControllerKey, out controller)
-                && context.Values.TryGetValueAsString(ActionKey, out action);
+                context.Values.TryGetValue(ControllerKey, out controller)
+                && context.Values.TryGetValue(ActionKey, out action);
 
             return containsRouteData
-                ? new VirtualPathData(this, $"/{controller}/{action}")
+                ? new VirtualPathData(this, $"/{controller?.ToString()}/{action?.ToString()}")
                 : null;
         }
 
