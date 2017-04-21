@@ -116,6 +116,7 @@ namespace Stormpath.AspNetCore
             }
 
             services.AddLogging();
+            services.AddScoped<ILogger>(provider => provider.GetRequiredService<ILoggerFactory>().CreateLogger("Stormpath.AspNetCore"));
 
             services.AddSingleton(new OptionsContainer(options));
 

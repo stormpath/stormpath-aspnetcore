@@ -10,6 +10,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{381F2B9D-DBFF-4425-BF6D-1FD927D8D8EA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{01AB3FAC-8597-42FF-A84C-A6FC041F4D4F}"
+	ProjectSection(SolutionItems) = preProject
+		build.cake = build.cake
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stormpath.AspNetCore", "src\Stormpath.AspNetCore\Stormpath.AspNetCore.csproj", "{BFBC0BAE-281E-40E9-9BCA-6EFBF6DBBCF6}"
 EndProject
