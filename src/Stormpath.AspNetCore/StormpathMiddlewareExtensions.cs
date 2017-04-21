@@ -91,7 +91,6 @@ namespace Stormpath.AspNetCore
             var owinOptions = new StormpathOwinOptions
             {
                 Configuration = options?.Configuration,
-                CacheProvider = options?.CacheProvider,
                 PostChangePasswordHandler = options?.PostChangePasswordHandler,
                 PostLoginHandler = options?.PostLoginHandler,
                 PostLogoutHandler = options?.PostLogoutHandler,
@@ -117,20 +116,15 @@ namespace Stormpath.AspNetCore
             }
 
             services.AddLogging();
-            services.AddSingleton<SDK.Logging.ILogger>(
-                provider => new LoggerAdapter(provider.GetRequiredService<ILoggerFactory>()));
+            services.AddScoped<ILogger>(provider => provider.GetRequiredService<ILoggerFactory>().CreateLogger("Stormpath.AspNetCore"));
 
             services.AddSingleton(new OptionsContainer(options));
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.AddScoped<ScopedClientAccessor>();
             services.AddScoped<ScopedConfigurationAccessor>();
-            services.AddScoped<ScopedApplicationAccessor>();
             services.AddScoped<ScopedLazyUserAccessor>();
-            services.AddScoped(provider => provider.GetRequiredService<ScopedClientAccessor>().Item);
             services.AddScoped(provider => provider.GetRequiredService<ScopedConfigurationAccessor>().Item);
-            services.AddScoped(provider => provider.GetRequiredService<ScopedApplicationAccessor>().Item);
             services.AddScoped(provider => provider.GetRequiredService<ScopedLazyUserAccessor>().Item);
             services.AddScoped(provider => provider.GetRequiredService<ScopedLazyUserAccessor>().Item.Value);
 
@@ -159,7 +153,7 @@ namespace Stormpath.AspNetCore
             }
 
             var suppliedConfiguration = app.ApplicationServices.GetRequiredService<OptionsContainer>();
-            var logger = app.ApplicationServices.GetRequiredService<SDK.Logging.ILogger>();
+            var logger = app.ApplicationServices.GetRequiredService<ILogger>();
 
             var hostingAssembly = app.GetType().GetTypeInfo().Assembly;
 
@@ -185,7 +179,6 @@ namespace Stormpath.AspNetCore
 
             app.UseMiddleware<StormpathAuthenticationMiddleware>(
                 Options.Create(new StormpathAuthenticationOptions { AllowedAuthenticationSchemes = new [] { "Cookie", "Bearer" } }),
-                stormpathMiddleware.GetClient(),
                 stormpathMiddleware.Configuration,
                 logger);
 

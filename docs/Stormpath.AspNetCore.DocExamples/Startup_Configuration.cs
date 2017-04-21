@@ -12,9 +12,9 @@ namespace Stormpath.AspNetCore.DocExamples
             #region code/configuration/aspnetcore/inline_config.cs
             services.AddStormpath(new StormpathConfiguration()
             {
-                Application = new ApplicationConfiguration()
+                Application = new OktaApplicationConfiguration
                 {
-                    Name = "My Application"
+                    Id = "abc1234"
                 },
                 Web = new WebConfiguration()
                 {
@@ -96,14 +96,8 @@ namespace Stormpath.AspNetCore.DocExamples
             #region code/configuration/aspnetcore/api_credentials.cs
             services.AddStormpath(new StormpathConfiguration()
             {
-                Client = new ClientConfiguration()
-                {
-                    ApiKey = new ClientApiKeyConfiguration()
-                    {
-                        Id = "YOUR_API_KEY_ID",
-                        Secret = "YOUR_API_KEY_SECRET"
-                    }
-                }
+                Org = "https://dev-12345.oktapreview.com/",
+                ApiToken = "abc1234-4321cba"
             });
             #endregion
         }
@@ -358,19 +352,6 @@ namespace Stormpath.AspNetCore.DocExamples
                             }
                         }
                     }
-                }
-            });
-            #endregion
-        }
-
-        public void ConfigureServices_BaseUrl(IServiceCollection services)
-        {
-            #region code/configuration/aspnetcore/stormpath_baseurl.cs
-            services.AddStormpath(new StormpathConfiguration()
-            {
-                Client = new ClientConfiguration()
-                {
-                    BaseUrl = "https://enterprise.stormpath.io/v1"
                 }
             });
             #endregion

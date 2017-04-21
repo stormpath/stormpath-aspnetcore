@@ -3,15 +3,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Stormpath.Configuration.Abstractions;
 using Stormpath.Owin.Middleware;
-using Stormpath.SDK.Cache;
 
 namespace Stormpath.AspNetCore
 {
     public sealed class StormpathOptions
     {
         public StormpathConfiguration Configuration { get; set; }
-
-        public ICacheProviderBuilder CacheProvider { get; set; }
 
         public Func<PreChangePasswordContext, CancellationToken, Task> PreChangePasswordHandler { get; set; }
 

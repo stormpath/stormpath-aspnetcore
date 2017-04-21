@@ -1,24 +1,24 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{213BB7A9-5C1C-4917-BC65-0C20F0627CF2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{B26DCAB1-697E-47B3-9BD2-74B4B7839248}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.AspNetCore", "src\Stormpath.AspNetCore\Stormpath.AspNetCore.xproj", "{BFBC0BAE-281E-40E9-9BCA-6EFBF6DBBCF6}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.AspNetCore.TckHarness", "test\Stormpath.AspNetCore.TckHarness\Stormpath.AspNetCore.TckHarness.xproj", "{A71A985A-4CA6-42CB-B3A1-5C6B589FB6C3}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{381F2B9D-DBFF-4425-BF6D-1FD927D8D8EA}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Stormpath.AspNetCore.DocExamples", "docs\Stormpath.AspNetCore.DocExamples\Stormpath.AspNetCore.DocExamples.xproj", "{DC527158-AD13-4F47-AEFC-5F3127B4A795}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{01AB3FAC-8597-42FF-A84C-A6FC041F4D4F}"
 	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
+		build.cake = build.cake
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stormpath.AspNetCore", "src\Stormpath.AspNetCore\Stormpath.AspNetCore.csproj", "{BFBC0BAE-281E-40E9-9BCA-6EFBF6DBBCF6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stormpath.AspNetCore.TckHarness", "test\Stormpath.AspNetCore.TckHarness\Stormpath.AspNetCore.TckHarness.csproj", "{A71A985A-4CA6-42CB-B3A1-5C6B589FB6C3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stormpath.AspNetCore.DocExamples", "docs\Stormpath.AspNetCore.DocExamples\Stormpath.AspNetCore.DocExamples.csproj", "{DC527158-AD13-4F47-AEFC-5F3127B4A795}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
