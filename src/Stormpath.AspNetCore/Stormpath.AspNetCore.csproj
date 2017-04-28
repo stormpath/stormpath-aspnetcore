@@ -28,7 +28,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Owin" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="1.1.1" />
     <PackageReference Include="Stormpath.Owin.Middleware" Version="4.0.0-rc2-beta3" />
-    <PackageReference Include="Stormpath.Owin.Views.Precompiled" Version="1.0.0-beta1" />
+    <PackageReference Include="Stormpath.Owin.Views.Precompiled" Version="1.0.0-beta3" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
