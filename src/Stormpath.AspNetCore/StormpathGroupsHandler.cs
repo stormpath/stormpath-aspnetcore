@@ -1,24 +1,30 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Stormpath.Owin.Middleware;
 
 namespace Stormpath.AspNetCore
 {
     public sealed class StormpathGroupsHandler : AuthorizationHandler<StormpathGroupsRequirement>
     {
         private readonly ScopedLazyUserAccessor _userAccessor;
+        private readonly ScopedAuthorizationFilterFactoryAccessor _authzFilterFactoryAccessor;
 
-        public StormpathGroupsHandler(ScopedLazyUserAccessor userAccessor)
+        public StormpathGroupsHandler(
+            ScopedLazyUserAccessor userAccessor,
+            ScopedAuthorizationFilterFactoryAccessor authzFilterFactoryAccessor)
         {
             _userAccessor = userAccessor;
+            _authzFilterFactoryAccessor = authzFilterFactoryAccessor;
         }
 
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, StormpathGroupsRequirement requirement)
+        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, StormpathGroupsRequirement requirement)
         {
+            var filter = _authzFilterFactoryAccessor?.Item?.CreateGroupFilter(requirement.Groups);
+            if (filter == null) throw new InvalidOperationException("An internal error occurred. The AuhorizationFilterFactory was null.");
+
             var account = _userAccessor.Item?.Value;
-            var filter = new RequireGroupsFilter(requirement.Groups);
-            var result = filter.IsAuthorized(account);
+            var result = await filter.IsAuthorizedAsync(account, CancellationToken.None);
 
             if (result)
             {
@@ -28,8 +34,6 @@ namespace Stormpath.AspNetCore
             {
                 context.Fail();
             }
-
-            return Task.FromResult(true);
         }
     }
 }

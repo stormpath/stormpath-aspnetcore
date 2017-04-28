@@ -1,24 +1,30 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Stormpath.Owin.Middleware;
 
 namespace Stormpath.AspNetCore
 {
     public sealed class StormpathCustomDataHandler : AuthorizationHandler<StormpathCustomDataRequirement>
     {
         private readonly ScopedLazyUserAccessor _userAccessor;
+        private readonly ScopedAuthorizationFilterFactoryAccessor _authzFilterFactoryAccessor;
 
-        public StormpathCustomDataHandler(ScopedLazyUserAccessor userAccessor)
+        public StormpathCustomDataHandler(
+            ScopedLazyUserAccessor userAccessor,
+            ScopedAuthorizationFilterFactoryAccessor authzFilterFactoryAccessor)
         {
             _userAccessor = userAccessor;
+            _authzFilterFactoryAccessor = authzFilterFactoryAccessor;
         }
 
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, StormpathCustomDataRequirement requirement)
+        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, StormpathCustomDataRequirement requirement)
         {
+            var filter = _authzFilterFactoryAccessor?.Item?.CreateCustomDataFilter(requirement.Key, requirement.Value, requirement.Comparer);
+            if (filter == null) throw new InvalidOperationException("An internal error occurred. The AuhorizationFilterFactory was null.");
+
             var account = _userAccessor.Item?.Value;
-            var filter = new RequireCustomDataFilter(requirement.Key, requirement.Value, requirement.Comparer);
-            var result = filter.IsAuthorized(account);
+            var result = await filter.IsAuthorizedAsync(account, CancellationToken.None);
 
             if (result)
             {
@@ -28,8 +34,6 @@ namespace Stormpath.AspNetCore
             {
                 context.Fail();
             }
-
-            return Task.FromResult(true);
         }
     }
 }
