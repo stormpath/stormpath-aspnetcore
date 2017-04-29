@@ -43,15 +43,25 @@ namespace Stormpath.AspNetCore.TestHarness
         public void ConfigureServices(IServiceCollection services)
         {
             // Add Stormpath services
-            var stormpathConfiguration = new StormpathConfiguration()
+            var stormpathConfiguration = new StormpathConfiguration
             {
-                Web = new WebConfiguration()
+                Org = "https://dev-123456.oktapreview.com",
+                ApiToken = "your_token_here",
+                Application = new OktaApplicationConfiguration
                 {
-                    ServerUri = "http://localhost:8080",
-                    Login = new WebLoginRouteConfiguration()
-                    //{
-                    //    View = "~/Views/Stormpath/MyLogin.cshtml"
-                    //}
+                    Id = "abc123"
+                },
+                Web = new WebConfiguration
+                {
+                    ServerUri = "http://localhost:8080/",
+                    ChangePassword = new WebChangePasswordRouteConfiguration
+                    {
+                        Enabled = true
+                    },
+                    ForgotPassword = new WebForgotPasswordRouteConfiguration
+                    {
+                        Enabled = true
+                    }
                 }
             };
             services.AddStormpath(stormpathConfiguration);
