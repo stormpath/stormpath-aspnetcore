@@ -19,6 +19,7 @@ using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Stormpath.Owin.Abstractions.Configuration;
 
@@ -64,7 +65,7 @@ namespace Stormpath.AspNetCore
             }
 
             _config = integrationConfiguration;
-            _logger = logger;
+            _logger = logger ?? NullLogger.Instance;
         }
 
         protected override AuthenticationHandler<StormpathAuthenticationOptions> CreateHandler()
