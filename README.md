@@ -9,8 +9,6 @@ The latest version (4.0.0 and later) of this library supports migrating applicat
 
 For a full list of breaking changes, see the [changelog](https://github.com/stormpath/stormpath-dotnet-owin-middleware/blob/master/changelog.md).
 
-:bulb: If you're using ASP.NET 4.5.1+, grab our [ASP.NET library](https://github.com/stormpath/stormpath-aspnet) instead.
-
 ## Example Application
 
 Head over to the [stormpath-aspnetcore-example](https://github.com/stormpath/stormpath-aspnetcore-example) repository to see a working example of ASP.NET Core + Stormpath in action. :+1:
