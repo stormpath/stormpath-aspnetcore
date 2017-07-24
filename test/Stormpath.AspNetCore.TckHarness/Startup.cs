@@ -45,10 +45,13 @@ namespace Stormpath.AspNetCore.TestHarness
             // Add Stormpath services
             var stormpathConfiguration = new StormpathConfiguration
             {
+                // Replace with your Okta Base URL:
                 Org = "https://dev-123456.oktapreview.com",
+                // Replace with your Okta API token:
                 ApiToken = "your_token_here",
                 Application = new OktaApplicationConfiguration
                 {
+                    // Replace with your Okta migrated Application ID:
                     Id = "abc123"
                 },
                 Web = new WebConfiguration

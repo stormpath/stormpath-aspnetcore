@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>Stormpath middleware for ASP.NET Core. Easily add authentication and authorization to ASP.NET Core applications.</Description>
     <Copyright>(c) 2016 Stormpath, Inc.</Copyright>
-    <VersionPrefix>4.0.0-rc5</VersionPrefix>
+    <VersionPrefix>4.0.0</VersionPrefix>
     <Authors>Nate Barbettini</Authors>
     <TargetFrameworks>net451;netstandard1.6</TargetFrameworks>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
@@ -26,8 +26,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="1.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.Owin" Version="1.1.2" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="1.1.2" />
-    <PackageReference Include="Stormpath.Owin.Middleware" Version="4.0.0-rc5" />
-    <PackageReference Include="Stormpath.Owin.Views.Precompiled" Version="1.0.0-beta5" />
+    <PackageReference Include="Stormpath.Owin.Middleware" Version="4.0.0" />
+    <PackageReference Include="Stormpath.Owin.Views.Precompiled" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
