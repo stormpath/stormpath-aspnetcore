@@ -22,10 +22,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Http.Features.Authentication;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Stormpath.Configuration.Abstractions.Immutable;
 using Stormpath.Owin.Abstractions;
 using Stormpath.Owin.Abstractions.Configuration;
 using Stormpath.Owin.Middleware;
+
 namespace Stormpath.AspNetCore
 {
     public sealed class StormpathAuthenticationHandler : AuthenticationHandler<StormpathAuthenticationOptions>
@@ -37,7 +39,7 @@ namespace Stormpath.AspNetCore
             IntegrationConfiguration integrationConfiguration,
             ILogger logger)
         {
-            _logger = logger;
+            _logger = logger ?? NullLogger.Instance;
             _protector = CreateRouteProtector(integrationConfiguration);
         }
 

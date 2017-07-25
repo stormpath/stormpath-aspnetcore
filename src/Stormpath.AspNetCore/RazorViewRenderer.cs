@@ -28,6 +28,7 @@ using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Stormpath.Configuration.Abstractions.Immutable;
 using Stormpath.Owin.Abstractions;
 using Stormpath.Owin.Abstractions.Configuration;
@@ -50,7 +51,7 @@ namespace Stormpath.AspNetCore
         {
             _viewEngine = viewEngine;
             _tempDataProvider = tempDataProvider;
-            _logger = logger;
+            _logger = logger ?? NullLogger.Instance;
         }
 
         public async Task<bool> RenderAsync(string name, object model, IOwinEnvironment context, CancellationToken cancellationToken)
